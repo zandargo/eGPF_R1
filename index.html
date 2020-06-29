@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link
+			href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap"
+			rel="stylesheet"
+		/>
+		<meta charset="UTF-8" />
+		<title>CADsichter</title>
+		<!-- https://electronjs.org/docs/tutorial 
+                           /security#csp-meta-tag -->
+		<meta
+			http-equiv="Content-Security-Policy"
+			content="script-src 'self' 'unsafe-inline';"
+		/>
+		<!-- CSS GERAL -->
+		<link rel="stylesheet" type="text/css" href="./style/main.css" />
+	</head>
+	<body></body>
+
+	<!-- TITLE BAR -->
+	<script>
+		const customTitlebar = require('custom-electron-titlebar')
+		let usrTitleBar = new customTitlebar.Titlebar({
+			backgroundColor: customTitlebar.Color.fromHex('#333333'),
+			icon: `./assets/icons/SB_Icon-GPF1.svg`,
+			shadow: true,
+		})
+		usrTitleBar.updateTitle('CADsichter v0.1')
+	</script>
+</html>
