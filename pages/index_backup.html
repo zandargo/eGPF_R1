@@ -31,13 +31,64 @@
 		}
 	</style>
 
-	<body></body>
+	<body>
+		<!-- Navbar -->
+		<nav id="navbar">
+			<div class="nav-logo">
+				<img src="./assets/Logo_SB_bw.svg" height="56" alt="SB Logo" />
+			</div>
+			<div id="maintitle" class="nav-title">
+				<!-- Esquema Plansichter para G.P.F. -->
+			</div>
+		</nav>
+
+		<!-- Resumo do Esquema -->
+		<div id="navsum">
+			<div class="sumcontainer">
+				<!-- <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, laborum.</div> -->
+				<div class="div-hTotal">
+					<h1>H<sub>TOTAL</sub>&nbsp;=</h1>
+					<h1 id="hTotal"></h1>
+				</div>
+				<div id="nGav-container">
+					<h1>GPFs:</h1>
+					<input
+						type="range"
+						id="nGav-slider"
+						class="slider"
+						min="1"
+						max="32"
+						step="1"
+						value="28"
+					/>
+					<h1 id="nGavs">28</h1>
+				</div>
+			</div>
+		</div>
+
+		<!-- MAIN -->
+		<main>
+			<!-- Div dos códigos das gavetas -->
+			<div id="divCOD"></div>
+
+			<!-- SVG do Esquema -->
+			<div id="divESQ">
+				<svg id="svgESQ"></svg>
+			</div>
+
+			<!-- Altura das gavetas -->
+			<div id="divHCtrl"></div>
+		</main>
+
+		<script type="text/javascript" src="./js/gpf.js"></script>
+		<!-- <script type="text/javascript" src="/js/style.js"></script>  -->
+	</body>
 
 	<!-- TITLE BAR -->
 	<script>
 		const customTitlebar = require('custom-electron-titlebar')
 		let usrTitleBar = new customTitlebar.Titlebar({
-			backgroundColor: customTitlebar.Color.fromHex('#263238'),
+			backgroundColor: customTitlebar.Color.fromHex('#333333'),
 			icon: `./assets/icons/SB_Icon-GPF1.svg`,
 			shadow: true,
 			// menuPosition: 'bottom',

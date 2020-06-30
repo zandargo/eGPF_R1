@@ -26,34 +26,45 @@ function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		width : 1600,
 		height: 900,
+		minWidth: 600,
+		minHeight: 400,
 		frame: false,
+		show: false,
 		icon  : `${__dirname}/assets/icons/eGPF1-256x256.png`,
 		webPreferences: {
-			preload: path.join(__dirname, 'preload.js'),
+			// preload: path.join(__dirname, 'preload.js'),  //! ???
 			nodeIntegration: true,
+			enableRemoteModule: true,
 		},
+
 	})
 	
+	mainWindow.once('ready-to-show', () => {
+		mainWindow.show()
+	})
+
 	if (isDev) {
 		const devtools = new BrowserWindow({
 			width : 500,
 			height: 1000,
-			icon  : `${__dirname}/assets/icons/eGPF1-256x256.png`,
+			icon  : `${__dirname}/assets/icons/eGPF1.png`,
 			webPreferences: {
 				nodeIntegration: true,
+				enableRemoteModule: true,
 			},
 		})
+
 		mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
 		mainWindow.webContents.openDevTools({ mode: 'detach' })
 	}
 	mainWindow.loadFile('index.html')
-	console.log('Opening DevToools...')
+
+	mainWindow.webContents.send("log", [__dirname])
 
 }
 
 //* App initialize
 app.whenReady().then(createMainWindow)
-console.log('TESTE PÓS create mainwindow...')
 
 //* Closing
 app.on('window-all-closed', () => {

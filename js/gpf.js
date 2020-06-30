@@ -1869,16 +1869,3 @@ function rebuildGPF() {
 //
 //
 //
-
-// maintitle
-teste001()
-function teste001() {
-	// document.getElementById("maintitle").innerHTML = "Teste"
-	// $("maintitle").update("Teste")
-	var cn = new ActiveXObject('ADODB.Connection')
-	// var strConn =
-	// 	"Provider=Microsoft.Jet.OLEDB.4.0Data Source = Z:\\Publico\\Detec\\P&D\\DB\\SB_DB1.dbPersist Security Info=False"
-	var strConn =
-		'DRIVER=SQLite3 ODBC DriverDatabase= Z:\\Publico\\Detec\\P&D\\DB\\SB_DB1.dbLongNames=0Timeout=1000NoTXN=0SyncPragma=NORMALStepAPI=0'
-	cn.Open(strConn)
-}
