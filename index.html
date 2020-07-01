@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<!--Import Google Icon Font-->
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
 		<link
 			href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap"
 			rel="stylesheet"
@@ -16,11 +21,10 @@
 		<script src="./js/prototype/prototype.js"></script>
 		<!-- https://electronjs.org/docs/tutorial 
                            /security#csp-meta-tag -->
-		<meta
-			http-equiv="Content-Security-Policy"
-			content="script-src 'self' 'unsafe-inline';"
-		/>
-		<!-- CSS GERAL -->
+		<meta name="viewport" http-equiv="Content-Security-Policy" />
+
+		<!-- GENERAL STYLING -->
+		<!-- <link rel="stylesheet" type="text/css" href="./style/materialize.css" /> -->
 		<link rel="stylesheet" type="text/css" href="./style/main.css" />
 	</head>
 
@@ -31,7 +35,39 @@
 		}
 	</style>
 
-	<body></body>
+	<!-- FULL PAGE BODY -->
+	<body>
+		<!-- HEADER -->
+		<header></header>
+
+		<!-- MAIN BODY -->
+		<main>
+			<!-- SIDEBAR -->
+			<div class="sidebar blue-grey darken-3 white-text">
+				<section id="sidebar">
+					<div class="inner">
+						<nav>
+							<ul>
+								<li>teste..</li>
+								<li><a href="#intro">Welcome</a></li>
+								<li><a href="#one">Who we are</a></li>
+								<li><a href="#two">What we do</a></li>
+								<li><a href="#three">Get in touch</a></li>
+							</ul>
+						</nav>
+					</div>
+				</section>
+			</div>
+
+			<!-- EMPTY WRAPPER -->
+			<div id="wrapper"></div>
+		</main>
+
+		<!-- FOOTER -->
+		<footer class="page-footer blue-grey darken-4">
+			<p>Status bar</p>
+		</footer>
+	</body>
 
 	<!-- TITLE BAR -->
 	<script>
@@ -48,7 +84,7 @@
 	<!-- ZOOM -->
 	<script>
 		const { webFrame } = require('electron')
-		webFrame.setZoomFactor(1.1)
+		webFrame.setZoomFactor(1.2)
 	</script>
 
 	<!-- TESTE -->

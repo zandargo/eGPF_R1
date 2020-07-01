@@ -1,3 +1,25 @@
+$blue_grey: hsl(200, 15%, 50%);
+
+$color: $blue_grey;
+$color_d1: darken($color, 10%);
+$color_d2: darken($color, 20%);
+$color_d3: darken($color, 30%);
+$color_d4: darken($color, 40%);
+$color_d5: darken($color, 45%);
+
+$color_l1: lighten($color, 10%);
+$color_l2: lighten($color, 20%);
+$color_l3: lighten($color, 30%);
+$color_l4: lighten($color, 40%);
+$color_l5: lighten($color, 45%);
+
+/*
+*/
+@font-face {
+	font-family: 'MyWebFont';
+	src: url('../assets/fonts/RobotoCondensed-Regular.ttf') format('truetype');
+}
+
 /* Reset */
 * {
 	margin: 0;
@@ -8,16 +30,10 @@
 /* Main Styling */
 
 body {
-	// background-color: #cccccc;
-	background-color: #cfd8dc;
-	// font-family: 'Roboto', sans-serif;
-	font-family: 'Helvetica', 'Roboto Condensed', Arial, sans-serif;
+	background-color: $color_l5;
+	font-family: 'MyWebFont', 'Courier New', 'Roboto Condensed', 'Helvetica',
+		sans-serif, Arial;
 
-	.titlebar {
-		color: rgb(0, 255, 0);
-		font-size: 20;
-		background-color: #0a0; // Sem efeito
-	}
 	.window-title {
 		font-weight: bold;
 	}
@@ -145,13 +161,19 @@ body {
 	}
 }
 
+/* Barra lateral */
+.sidebar {
+	width: 200px;
+	padding: 10px;
+	height: 100%;
+}
+
 /* Corpo principal */
 main {
-	max-width: 900px;
 	margin: 0 auto;
+	height: 100%;
 	display: grid;
-	grid-template-columns: 150px 400px 395px;
-	grid-gap: 10px;
+	grid-auto-flow: column;
 
 	div {
 		padding: 0.5rem;

@@ -25,7 +25,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		width : 1600,
-		height: 900,
+		height: 950,
 		minWidth: 600,
 		minHeight: 400,
 		frame: false,

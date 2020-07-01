@@ -2577,7 +2577,9 @@ html {
           box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   -webkit-box-sizing: inherit;
           box-sizing: inherit;
 }
@@ -2659,10 +2661,10 @@ a {
 }
 
 .hoverable {
-  -webkit-transition: -webkit-box-shadow .25s;
-  transition: -webkit-box-shadow .25s;
-  transition: box-shadow .25s;
-  transition: box-shadow .25s, -webkit-box-shadow .25s;
+  -webkit-transition: -webkit-box-shadow 0.25s;
+  transition: -webkit-box-shadow 0.25s;
+  transition: box-shadow 0.25s;
+  transition: box-shadow 0.25s, -webkit-box-shadow 0.25s;
 }
 
 .hoverable:hover {
@@ -2777,7 +2779,8 @@ video.responsive-video {
 }
 
 .breadcrumb i,
-.breadcrumb [class^="mdi-"], .breadcrumb [class*="mdi-"],
+.breadcrumb [class^='mdi-'],
+.breadcrumb [class*='mdi-'],
 .breadcrumb i.material-icons {
   display: inline-block;
   float: left;
@@ -2833,7 +2836,8 @@ video.responsive-video {
           transform: translateX(-50%);
 }
 
-.pin-top, .pin-bottom {
+.pin-top,
+.pin-bottom {
   position: relative;
 }
 
@@ -2858,7 +2862,8 @@ ul.staggered-list li {
   Media Query Classes
 **********************/
 @media only screen and (max-width: 600px) {
-  .hide-on-small-only, .hide-on-small-and-down {
+  .hide-on-small-only,
+  .hide-on-small-and-down {
     display: none !important;
   }
 }
@@ -2936,14 +2941,17 @@ ul.staggered-list li {
 }
 
 .page-footer {
-  padding-top: 20px;
+  padding: auto 10px;
   color: #fff;
   background-color: #ee6e73;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
 }
 
 .page-footer .footer-copyright {
   overflow: hidden;
-  min-height: 50px;
+  min-height: 10px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -2953,12 +2961,14 @@ ul.staggered-list li {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  padding: 10px 0px;
+  padding: 1px 0px;
   color: rgba(255, 255, 255, 0.8);
   background-color: rgba(51, 51, 51, 0.08);
 }
 
-table, th, td {
+table,
+th,
+td {
   border: none;
 }
 
@@ -2982,15 +2992,16 @@ table.striped > tbody > tr > td {
 }
 
 table.highlight > tbody > tr {
-  -webkit-transition: background-color .25s ease;
-  transition: background-color .25s ease;
+  -webkit-transition: background-color 0.25s ease;
+  transition: background-color 0.25s ease;
 }
 
 table.highlight > tbody > tr:hover {
   background-color: rgba(242, 242, 242, 0.5);
 }
 
-table.centered thead tr th, table.centered tbody tr td {
+table.centered thead tr th,
+table.centered tbody tr td {
   text-align: center;
 }
 
@@ -2998,7 +3009,8 @@ tr {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
 }
 
-td, th {
+td,
+th {
   padding: 15px 5px;
   display: table-cell;
   text-align: left;
@@ -3035,7 +3047,7 @@ td, th {
     padding: 0 10px 0 0;
   }
   table.responsive-table thead tr th::before {
-    content: "\00a0";
+    content: '\00a0';
   }
   table.responsive-table tbody {
     display: block;
@@ -3137,8 +3149,8 @@ td, th {
 
 .collection a.collection-item {
   display: block;
-  -webkit-transition: .25s;
-  transition: .25s;
+  -webkit-transition: 0.25s;
+  transition: 0.25s;
   color: #26a69a;
 }
 
@@ -3177,7 +3189,9 @@ td, th {
   overflow: hidden;
 }
 
-.video-container iframe, .video-container object, .video-container embed {
+.video-container iframe,
+.video-container object,
+.video-container embed {
   position: absolute;
   top: 0;
   left: 0;
@@ -3202,8 +3216,8 @@ td, th {
   left: 0;
   bottom: 0;
   background-color: #26a69a;
-  -webkit-transition: width .3s linear;
-  transition: width .3s linear;
+  -webkit-transition: width 0.3s linear;
+  transition: width 0.3s linear;
 }
 
 .progress .indeterminate {
@@ -3311,7 +3325,8 @@ td, th {
   text-align: right;
 }
 
-.center, .center-align {
+.center,
+.center-align {
   text-align: center;
 }
 
@@ -3459,11 +3474,11 @@ table span.badge {
 .row {
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
 }
 
 .row:after {
-  content: "";
+  content: '';
   display: table;
   clear: both;
 }
@@ -3476,7 +3491,7 @@ table span.badge {
   min-height: 1px;
 }
 
-.row .col[class*="push-"], .row .col[class*="pull-"] {
+.row .col[class*='push-'], .row .col[class*='pull-'] {
   position: relative;
 }
 

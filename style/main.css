@@ -1,4 +1,11 @@
 @charset "UTF-8";
+/*
+*/
+@font-face {
+  font-family: 'MyWebFont';
+  src: url("../assets/fonts/RobotoCondensed-Regular.ttf") format("truetype");
+}
+
 /* Reset */
 * {
   margin: 0;
@@ -9,15 +16,9 @@
 
 /* Main Styling */
 body {
-  background-color: #cfd8dc;
-  font-family: 'Helvetica', 'Roboto Condensed', Arial, sans-serif;
+  background-color: #f0f3f4;
+  font-family: 'MyWebFont', 'Courier New', 'Roboto Condensed', 'Helvetica', sans-serif, Arial;
   /* Barra de Navegação / Título */
-}
-
-body .titlebar {
-  color: lime;
-  font-size: 20;
-  background-color: #0a0;
 }
 
 body .window-title {
@@ -176,15 +177,20 @@ body #navsum .sumcontainer #nGav-container .slider::-moz-range-thumb {
   cursor: pointer;
 }
 
+/* Barra lateral */
+.sidebar {
+  width: 200px;
+  padding: 10px;
+  height: 100%;
+}
+
 /* Corpo principal */
 main {
-  max-width: 900px;
   margin: 0 auto;
+  height: 100%;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 150px 400px 395px;
-      grid-template-columns: 150px 400px 395px;
-  grid-gap: 10px;
+  grid-auto-flow: column;
 }
 
 main div {
