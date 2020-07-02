@@ -19,8 +19,7 @@
 	"homepage": "https://github.com/zandargo/eGPF_R1#readme",
 	"devDependencies": {
 		"electron": "^9.0.5",
-		"electron-reloader": "^1.0.1",
-		"custom-electron-titlebar": "^3.2.2-hotfix62"
+		"electron-reloader": "^1.0.1"
 	},
 	"dependencies": {}
 }

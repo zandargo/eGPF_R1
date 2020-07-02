@@ -16,7 +16,7 @@ $color_l5: lighten($color, 45%);
 /*
 */
 @font-face {
-	font-family: 'MyWebFont';
+	font-family: 'MainFont';
 	src: url('../assets/fonts/RobotoCondensed-Regular.ttf') format('truetype');
 }
 
@@ -24,23 +24,23 @@ $color_l5: lighten($color, 45%);
 * {
 	margin: 0;
 	padding: 0;
+	border: 0;
+	vertical-align: baseline;
 	box-sizing: border-box;
+
+	&:before,
+	&:after {
+		box-sizing: inherit;
+	}
 }
 
 /* Main Styling */
 
 body {
 	background-color: $color_l5;
-	font-family: 'MyWebFont', 'Courier New', 'Roboto Condensed', 'Helvetica',
+	overflow-y: hidden;
+	font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica',
 		sans-serif, Arial;
-
-	.window-title {
-		font-weight: bold;
-	}
-
-	.window-appicon {
-		height: 160;
-	}
 
 	sub {
 		font-size: 0.5em;
@@ -80,83 +80,6 @@ body {
 		}
 		.nav-title {
 			padding: 0;
-		}
-	}
-
-	// Barra de opções / resumo
-	#navsum {
-		display: grid;
-		position: sticky;
-		top: 4rem;
-		width: 100%;
-		height: 160px;
-		/* text-align: center; */
-		align-items: center;
-		text-emphasis: none;
-		z-index: 1;
-		margin: auto;
-		max-width: calc(100vw - 2em);
-
-		.sumcontainer {
-			height: 100px;
-			width: 900px;
-			margin: auto;
-			border-radius: 20px;
-			background-color: #eee;
-			border: 4px solid #666;
-			z-index: 10;
-			font-family: 'Fira Code', 'Consolas';
-			font-weight: bold;
-			color: black;
-			cursor: default;
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			grid-template-rows: repeat(2, 1fr);
-
-			.div-hTotal {
-				grid-column: 3;
-				grid-row: 2;
-			}
-
-			#nGav-container {
-				grid-column: 1 / span 4;
-				grid-row: 1;
-				width: 100%;
-				padding: 0 1rem;
-				display: flex;
-				flex-direction: row;
-				align-items: center;
-				// border-bottom: 2px solid #ddd;
-
-				.slider {
-					-webkit-appearance: none;
-					width: 76%;
-					height: 6px;
-					border-radius: 3px;
-					background: #aaa;
-					outline: none;
-					-webkit-transition: 0.2s;
-					transition: all 0.2s;
-					margin: 0 20px;
-				}
-				.slider::-webkit-slider-thumb {
-					-webkit-appearance: none;
-					appearance: none;
-					width: 16px;
-					height: 32px;
-					border-radius: 6px;
-					background: darkred;
-					transition: all 0.2s;
-					/* cursor: pointer; */
-				}
-				.slider::-moz-range-thumb {
-					width: 20px;
-					height: 20px;
-					border-radius: 50%;
-					background: darkred;
-					cursor: pointer;
-				}
-			}
 		}
 	}
 }
@@ -286,3 +209,6 @@ main {
 		}
 	}
 }
+
+@import 'gpf';
+@import 'titlebar';

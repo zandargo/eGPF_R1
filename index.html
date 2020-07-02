@@ -24,7 +24,7 @@
 		<meta name="viewport" http-equiv="Content-Security-Policy" />
 
 		<!-- GENERAL STYLING -->
-		<!-- <link rel="stylesheet" type="text/css" href="./style/materialize.css" /> -->
+		<!-- <link rel="stylesheet" type="text/css" href="./style/style.css" /> -->
 		<link rel="stylesheet" type="text/css" href="./style/main.css" />
 	</head>
 
@@ -38,7 +38,44 @@
 	<!-- FULL PAGE BODY -->
 	<body>
 		<!-- HEADER -->
-		<header></header>
+		<header id="titlebar">
+			<div id="drag-region">
+				<div id="window-title">
+					<span>CADsichter v0.1</span>
+				</div>
+
+				<div id="window-controls">
+					<div class="button" id="min-button">
+						<img
+							class="icon"
+							src="./assets/icons/icon_minimize.svg"
+							draggable="false"
+						/>
+					</div>
+					<div class="button" id="max-button">
+						<img
+							class="icon"
+							src="./assets/icons/icon_maximize.svg"
+							draggable="false"
+						/>
+					</div>
+					<div class="button" id="restore-button">
+						<img
+							class="icon"
+							src="./assets/icons/icon_restore.svg"
+							draggable="false"
+						/>
+					</div>
+					<div class="button" id="close-button">
+						<img
+							class="icon"
+							src="./assets/icons/icon_close.svg"
+							draggable="false"
+						/>
+					</div>
+				</div>
+			</div>
+		</header>
 
 		<!-- MAIN BODY -->
 		<main>
@@ -64,31 +101,9 @@
 		</main>
 
 		<!-- FOOTER -->
-		<footer class="page-footer blue-grey darken-4">
+		<footer>
 			<p>Status bar</p>
 		</footer>
+		<script src="./js/renderer.js"></script>
 	</body>
-
-	<!-- TITLE BAR -->
-	<script>
-		const customTitlebar = require('custom-electron-titlebar')
-		let usrTitleBar = new customTitlebar.Titlebar({
-			backgroundColor: customTitlebar.Color.fromHex('#263238'),
-			icon: `./assets/icons/SB_Icon-GPF1.svg`,
-			shadow: true,
-			// menuPosition: 'bottom',
-		})
-		usrTitleBar.updateTitle('CADsichter v0.1')
-	</script>
-
-	<!-- ZOOM -->
-	<script>
-		const { webFrame } = require('electron')
-		webFrame.setZoomFactor(1.2)
-	</script>
-
-	<!-- TESTE -->
-	<script>
-		console.log('Testando um negócio aqui...')
-	</script>
 </html>
