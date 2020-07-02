@@ -35,6 +35,7 @@ function createMainWindow() {
 			// preload: path.join(__dirname, 'preload.js'),  //! ???
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			// webSecurity: isDev ? false : true,
 		},
 
 	})
