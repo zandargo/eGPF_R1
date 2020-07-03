@@ -1,0 +1,11 @@
+footer {
+	display: block;
+	position: fixed;
+	bottom: 0px;
+	height: $h_footer;
+	// width: calc(100% - 2px);
+	width: 100%;
+	// padding: 4px;
+	color: $color_l5;
+	background-color: $color_d2;
+}

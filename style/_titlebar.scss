@@ -1,10 +1,10 @@
 #titlebar {
 	display: block;
-	position: fixed;
-	height: 32px;
+	// position: fixed;
+	height: $h_title;
 	// width: calc(100% - 2px);
 	width: 100%;
-	padding: 4px;
+	// padding: 4px;
 	color: $color_l5;
 	background-color: $color_d4;
 
@@ -17,7 +17,7 @@
 		height: 100%;
 		-webkit-app-region: drag;
 		display: grid;
-		grid-template-columns: auto 138px;
+		grid-template-columns: 32px auto 138px;
 	}
 
 	#main {
@@ -26,9 +26,21 @@
 		padding: 20px;
 		overflow-y: auto;
 	}
+	#window-icon {
+		grid-column: 1;
+		display: flex;
+		align-items: center;
+		// margin-left: 8px;
+		margin: auto;
+		overflow: hidden;
+
+		img {
+			height: 24px;
+		}
+	}
 
 	#window-title {
-		grid-column: 1;
+		grid-column: 2;
 		display: flex;
 		align-items: center;
 		// margin-left: 8px;
@@ -50,7 +62,7 @@
 	#window-controls {
 		display: grid;
 		grid-template-columns: repeat(3, 46px);
-		position: absolute;
+		// position: absolute;
 		top: 0;
 		right: 0;
 		height: 100%;
@@ -73,6 +85,43 @@
 			}
 		}
 	}
+
+	#close-button {
+		&:hover {
+			background: #e81123 !important;
+		}
+
+		&:active {
+			background: #f1707a !important;
+
+			.icon {
+				filter: invert(1);
+			}
+		}
+	}
+
+	#min-button {
+		grid-column: 1;
+	}
+	#max-button,
+	#restore-button {
+		grid-column: 2;
+	}
+	#close-button {
+		grid-column: 3;
+	}
+}
+
+#restore-button {
+	display: none !important;
+}
+.maximized {
+	#restore-button {
+		display: flex !important;
+	}
+	#max-button {
+		display: none !important;
+	}
 }
 
 @media (-webkit-device-pixel-ratio: 1.5),
@@ -84,43 +133,5 @@
 	#window-controls .icon {
 		width: 10px;
 		height: 10px;
-	}
-}
-
-#close-button {
-	&:hover {
-		background: #e81123 !important;
-	}
-
-	&:active {
-		background: #f1707a !important;
-
-		.icon {
-			filter: invert(1);
-		}
-	}
-}
-
-#min-button {
-	grid-column: 1;
-}
-#max-button,
-#restore-button {
-	grid-column: 2;
-}
-#close-button {
-	grid-column: 3;
-}
-
-#restore-button {
-	display: none !important;
-}
-
-.maximized {
-	#restore-button {
-		display: flex !important;
-	}
-	#max-button {
-		display: none !important;
 	}
 }

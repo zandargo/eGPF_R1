@@ -1,27 +1,20 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!--Import Google Icon Font-->
-		<link
-			href="https://fonts.googleapis.com/icon?family=Material+Icons"
-			rel="stylesheet"
-		/>
-		<link
-			href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap"
-			rel="stylesheet"
-		/>
 		<link
 			href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap"
 			rel="stylesheet"
 		/>
+
+		<meta name="viewport" http-equiv="Content-Security-Policy" />
 		<meta charset="UTF-8" />
+
 		<title>CADsichter</title>
 		<script src="./js/snapdist/snap.svg-min.js"></script>
 		<script src="./js/animejs/anime.min.js"></script>
 		<script src="./js/prototype/prototype.js"></script>
 		<!-- https://electronjs.org/docs/tutorial 
                            /security#csp-meta-tag -->
-		<meta name="viewport" http-equiv="Content-Security-Policy" />
 
 		<!-- GENERAL STYLING -->
 		<!-- <link rel="stylesheet" type="text/css" href="./style/style.css" /> -->
@@ -38,62 +31,67 @@
 	<!-- FULL PAGE BODY -->
 	<body>
 		<!-- HEADER -->
-		<header id="titlebar">
-			<div id="drag-region">
-				<div id="window-title">
-					<span>CADsichter v0.1</span>
-				</div>
+		<header>
+			<div id="titlebar">
+				<div id="drag-region">
+					<div id="window-icon">
+						<img src="./assets/icons/SB_Icon-GPF1.svg" alt="App icon" />
+					</div>
+					<div id="window-title">
+						<span>CADsichter v0.1</span>
+					</div>
 
-				<div id="window-controls">
-					<div class="button" id="min-button">
-						<img
-							class="icon"
-							src="./assets/icons/icon_minimize.svg"
-							draggable="false"
-						/>
-					</div>
-					<div class="button" id="max-button">
-						<img
-							class="icon"
-							src="./assets/icons/icon_maximize.svg"
-							draggable="false"
-						/>
-					</div>
-					<div class="button" id="restore-button">
-						<img
-							class="icon"
-							src="./assets/icons/icon_restore.svg"
-							draggable="false"
-						/>
-					</div>
-					<div class="button" id="close-button">
-						<img
-							class="icon"
-							src="./assets/icons/icon_close.svg"
-							draggable="false"
-						/>
+					<div id="window-controls">
+						<div class="button" id="min-button">
+							<img
+								class="icon"
+								src="./assets/icons/icon_minimize.svg"
+								draggable="false"
+							/>
+						</div>
+						<div class="button" id="max-button">
+							<img
+								class="icon"
+								src="./assets/icons/icon_maximize.svg"
+								draggable="false"
+							/>
+						</div>
+						<div class="button" id="restore-button">
+							<img
+								class="icon"
+								src="./assets/icons/icon_restore.svg"
+								draggable="false"
+							/>
+						</div>
+						<div class="button" id="close-button">
+							<img
+								class="icon"
+								src="./assets/icons/icon_close.svg"
+								draggable="false"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
+			<!-- MENU TABS -->
+			<div id="menu-tabs"></div>
 		</header>
 
 		<!-- MAIN BODY -->
 		<main>
 			<!-- SIDEBAR -->
-			<div class="sidebar blue-grey darken-3 white-text">
-				<section id="sidebar">
-					<div class="inner">
-						<nav>
-							<ul>
-								<li>teste..</li>
-								<li><a href="#intro">Welcome</a></li>
-								<li><a href="#one">Who we are</a></li>
-								<li><a href="#two">What we do</a></li>
-								<li><a href="#three">Get in touch</a></li>
-							</ul>
-						</nav>
-					</div>
-				</section>
+			<div class="sidebar">
+				<div class="inner">
+					<nav>
+						<ul>
+							<li>teste..</li>
+							<li><a href="#intro">Welcome</a></li>
+							<li><a href="#one">Who we are</a></li>
+							<li><a href="#two">What we do</a></li>
+							<li><a href="#three">Get in touch</a></li>
+						</ul>
+					</nav>
+				</div>
 			</div>
 
 			<!-- EMPTY WRAPPER -->
@@ -104,6 +102,6 @@
 		<footer>
 			<p>Status bar</p>
 		</footer>
-		<script src="./js/renderer.js"></script>
+		<!-- <script src="./js/renderer.js"></script> -->
 	</body>
 </html>

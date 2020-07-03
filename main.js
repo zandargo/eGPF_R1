@@ -30,9 +30,10 @@ function createMainWindow() {
 		minHeight: 400,
 		frame: false,
 		show: false,
-		icon  : `${__dirname}/assets/icons/eGPF1-256x256.png`,
+		icon  : `${__dirname}/assets/icons/eGPF1.png`,
 		webPreferences: {
 			// preload: path.join(__dirname, 'preload.js'),  //! ???
+			preload: path.join(__dirname, 'js', 'preload.js'),  //! ???
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			// webSecurity: isDev ? false : true,

@@ -6,26 +6,20 @@
   src: url("../assets/fonts/RobotoCondensed-Regular.ttf") format("truetype");
 }
 
-/* Reset */
 * {
   margin: 0;
   padding: 0;
   border: 0;
-  vertical-align: baseline;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
 
-*:before, *:after {
-  -webkit-box-sizing: inherit;
-          box-sizing: inherit;
-}
-
-/* Main Styling */
 body {
-  background-color: #f0f3f4;
+  background-color: #c7ced1;
   overflow-y: hidden;
   font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica', sans-serif, Arial;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   /* Barra de Navegação / Título */
 }
 
@@ -78,20 +72,24 @@ body #navbar .nav-title {
   padding: 0;
 }
 
-/* Barra lateral */
 .sidebar {
+  display: inline-block;
   width: 200px;
+  background-color: #73848c;
   padding: 10px;
-  height: 100%;
+  height: 100vh;
 }
 
-/* Corpo principal */
 main {
   margin: 0 auto;
   height: 100%;
-  display: -ms-grid;
-  display: grid;
+  display: block;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
   grid-auto-flow: column;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
 }
 
 main div {
@@ -331,12 +329,10 @@ main #divCOD .codcontainer {
 
 #titlebar {
   display: block;
-  position: fixed;
-  height: 32px;
+  height: 36px;
   width: 100%;
-  padding: 4px;
-  color: #f0f3f4;
-  background-color: #161b1d;
+  color: #f1f3f4;
+  background-color: #171a1c;
 }
 
 #titlebar .maximized {
@@ -350,8 +346,8 @@ main #divCOD .codcontainer {
   -webkit-app-region: drag;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: auto 138px;
-      grid-template-columns: auto 138px;
+  -ms-grid-columns: 32px auto 138px;
+      grid-template-columns: 32px auto 138px;
 }
 
 #titlebar #main {
@@ -361,9 +357,26 @@ main #divCOD .codcontainer {
   overflow-y: auto;
 }
 
-#titlebar #window-title {
+#titlebar #window-icon {
   -ms-grid-column: 1;
   grid-column: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin: auto;
+  overflow: hidden;
+}
+
+#titlebar #window-icon img {
+  height: 24px;
+}
+
+#titlebar #window-title {
+  -ms-grid-column: 2;
+  grid-column: 2;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -391,7 +404,6 @@ main #divCOD .codcontainer {
   display: grid;
   -ms-grid-columns: (46px)[3];
       grid-template-columns: repeat(3, 46px);
-  position: absolute;
   top: 0;
   right: 0;
   height: 100%;
@@ -427,38 +439,31 @@ main #divCOD .codcontainer {
   background: rgba(255, 255, 255, 0.4);
 }
 
-@media (-webkit-device-pixel-ratio: 1.5), (device-pixel-ratio: 1.5), (-webkit-device-pixel-ratio: 2), (device-pixel-ratio: 2), (-webkit-device-pixel-ratio: 3), (device-pixel-ratio: 3) {
-  #window-controls .icon {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-#close-button:hover {
+#titlebar #close-button:hover {
   background: #e81123 !important;
 }
 
-#close-button:active {
+#titlebar #close-button:active {
   background: #f1707a !important;
 }
 
-#close-button:active .icon {
+#titlebar #close-button:active .icon {
   -webkit-filter: invert(1);
           filter: invert(1);
 }
 
-#min-button {
+#titlebar #min-button {
   -ms-grid-column: 1;
   grid-column: 1;
 }
 
-#max-button,
-#restore-button {
+#titlebar #max-button,
+#titlebar #restore-button {
   -ms-grid-column: 2;
   grid-column: 2;
 }
 
-#close-button {
+#titlebar #close-button {
   -ms-grid-column: 3;
   grid-column: 3;
 }
@@ -475,4 +480,32 @@ main #divCOD .codcontainer {
 
 .maximized #max-button {
   display: none !important;
+}
+
+@media (-webkit-device-pixel-ratio: 1.5), (device-pixel-ratio: 1.5), (-webkit-device-pixel-ratio: 2), (device-pixel-ratio: 2), (-webkit-device-pixel-ratio: 3), (device-pixel-ratio: 3) {
+  #window-controls .icon {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+#menu-tabs {
+  display: block;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  height: 28px;
+  width: 100%;
+  padding: 4px;
+  color: #f1f3f4;
+  background-color: #454f54;
+}
+
+footer {
+  display: block;
+  position: fixed;
+  bottom: 0px;
+  height: 24px;
+  width: 100%;
+  color: #f1f3f4;
+  background-color: #454f54;
 }

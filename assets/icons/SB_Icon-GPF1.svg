@@ -29,9 +29,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.4142136"
-     inkscape:cx="-232.61914"
-     inkscape:cy="-49.62672"
+     inkscape:zoom="16.000001"
+     inkscape:cx="11.595312"
+     inkscape:cy="15.771591"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -83,15 +83,15 @@
      id="defs2">
     <linearGradient
        inkscape:collect="always"
-       id="linearGradient4325">
+       id="linearGradient4176">
       <stop
-         style="stop-color:#e53935;stop-opacity:1"
+         style="stop-color:#e6464b;stop-opacity:1"
          offset="0"
-         id="stop4321" />
+         id="stop4172" />
       <stop
-         style="stop-color:#c62828;stop-opacity:1"
+         style="stop-color:#e61e23;stop-opacity:1"
          offset="1"
-         id="stop4323" />
+         id="stop4174" />
     </linearGradient>
     <linearGradient
        inkscape:collect="always"
@@ -129,7 +129,7 @@
        miter_limit="100" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4325"
+       xlink:href="#linearGradient4176"
        id="linearGradient4294"
        x1="9"
        y1="11"
@@ -139,7 +139,7 @@
        gradientTransform="matrix(0.92548865,0,0,0.92548865,1.7016452,0.9081331)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4325"
+       xlink:href="#linearGradient4176"
        id="linearGradient4302"
        x1="12"
        y1="11"
@@ -169,7 +169,7 @@
        gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4325"
+       xlink:href="#linearGradient4176"
        id="linearGradient4339"
        gradientUnits="userSpaceOnUse"
        x1="10.027118"
@@ -179,7 +179,7 @@
        gradientTransform="matrix(0.92548865,0,0,0.92548865,0.72001621,0.9081331)" />
     <linearGradient
        inkscape:collect="always"
-       xlink:href="#linearGradient4325"
+       xlink:href="#linearGradient4176"
        id="linearGradient4341"
        gradientUnits="userSpaceOnUse"
        x1="11.107628"
