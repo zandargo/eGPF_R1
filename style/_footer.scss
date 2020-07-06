@@ -3,9 +3,16 @@ footer {
 	position: fixed;
 	bottom: 0px;
 	height: $h_footer;
-	// width: calc(100% - 2px);
+	//- width: calc(100% - 2px);
 	width: 100%;
-	// padding: 4px;
+	padding: 0 4px;
 	color: $color_l5;
-	background-color: $color_d2;
+	background-color: $bg_footer;
+
+	p {
+		// height: 100%;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
 }

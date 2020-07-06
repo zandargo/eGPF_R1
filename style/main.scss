@@ -1,4 +1,6 @@
+// * COLORS
 $blue_grey: hsl(200, 10%, 50%);
+$blue_grey_shadow: transparentize($blue_grey, 0.75);
 
 $color: $blue_grey;
 $color_d1: darken($color, 10%);
@@ -14,10 +16,19 @@ $color_l4: lighten($color, 40%);
 $color_l5: lighten($color, 45%);
 $color1: rgb(230, 70, 75);
 
+$bg_wintitle: $color_d4;
+$bg_footer: $color_d3;
+$bg_tabs: $color_d2;
+$bg_ribbon: $color_l3;
+$bg_sidebar: $color_l4;
+$bg_main: $color_l5;
+
 $h_title: 36px;
 $h_tabs: 28px;
 $h_ribbon: 72px;
 $h_footer: 24px;
+
+$shadow1: 5px 5px 10px $blue_grey_shadow;
 
 /*
 */
@@ -43,7 +54,7 @@ $h_footer: 24px;
 //* Main Styling */
 
 body {
-	background-color: $color_l3;
+	background-color: $bg_main;
 	overflow-y: hidden;
 	font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica',
 		sans-serif, Arial;
@@ -92,17 +103,7 @@ body {
 	}
 }
 
-//* Barra lateral */
-.sidebar {
-	display: inline-block;
-	width: 200px;
-	background-color: $color;
-	padding: 10px;
-	height: 100vh;
-	// border: 1px solid black;
-}
-
-//* Corpo principal */
+//* MAIN BODY */
 main {
 	margin: 0 auto;
 	height: 100%;

@@ -15,7 +15,7 @@
 }
 
 body {
-  background-color: #c7ced1;
+  background-color: #f1f3f4;
   overflow-y: hidden;
   font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica', sans-serif, Arial;
   -webkit-box-sizing: border-box;
@@ -70,14 +70,6 @@ body #navbar .nav-logo {
 
 body #navbar .nav-title {
   padding: 0;
-}
-
-.sidebar {
-  display: inline-block;
-  width: 200px;
-  background-color: #73848c;
-  padding: 10px;
-  height: 100vh;
 }
 
 main {
@@ -495,9 +487,72 @@ main #divCOD .codcontainer {
           box-sizing: border-box;
   height: 28px;
   width: 100%;
-  padding: 4px;
+  padding: 0 50px;
   color: #f1f3f4;
   background-color: #454f54;
+}
+
+#menu-tabs ul {
+  height: 100%;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+}
+
+#menu-tabs ul li {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 20px;
+  text-align: center;
+  padding: 2px 32px;
+  border-radius: 8px 8px 0 0;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+}
+
+#menu-tabs .activated {
+  color: #171a1c;
+  font-weight: 600;
+  background-color: #c7ced1;
+}
+
+#menu-ribbon {
+  display: block;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  height: 72px;
+  width: 100%;
+  padding: 4px;
+  color: #f1f3f4;
+  background-color: #c7ced1;
+  border-bottom: 1px solid #abb5ba;
+  -webkit-box-shadow: 5px 5px 10px rgba(115, 132, 140, 0.25);
+          box-shadow: 5px 5px 10px rgba(115, 132, 140, 0.25);
+}
+
+#sidebar {
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  width: 200px;
+  background-color: #e3e6e8;
+  padding: 10px;
+  height: 100vh;
+  border-right: 1px solid #abb5ba;
+  -webkit-box-shadow: 5px 5px 10px rgba(115, 132, 140, 0.25);
+          box-shadow: 5px 5px 10px rgba(115, 132, 140, 0.25);
 }
 
 footer {
@@ -506,6 +561,20 @@ footer {
   bottom: 0px;
   height: 24px;
   width: 100%;
+  padding: 0 4px;
   color: #f1f3f4;
-  background-color: #454f54;
+  background-color: #2e3538;
+}
+
+footer p {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }

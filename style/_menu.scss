@@ -1,12 +1,62 @@
 #menu-tabs {
 	display: block;
 	box-sizing: border-box;
-	// position: fixed;
 	height: $h_tabs;
-	// top: $h_title;
-	// left: 0;
+	width: 100%;
+	padding: 0 50px;
+	color: $color_l5;
+	background-color: $bg_tabs;
+
+	ul {
+		height: 100%;
+		flex-direction: row;
+		display: flex;
+		align-items: flex-end;
+
+		li {
+			display: flex;
+			margin: 0 20px;
+			text-align: center;
+			padding: 2px 32px;
+			border-radius: 8px 8px 0 0;
+			cursor: default;
+
+			user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+			// -webkit-touch-callout: none; /* iOS Safari */
+			// -webkit-user-select: none; /* Safari */
+			// -khtml-user-select: none; /* Konqueror HTML */
+			// -moz-user-select: none; /* Old versions of Firefox */
+			// -ms-user-select: none; /* Internet Explorer/Edge */
+		}
+	}
+
+	.activated {
+		color: $color_d4;
+		font-weight: 600;
+		background-color: $bg_ribbon;
+	}
+}
+
+#menu-ribbon {
+	display: block;
+	box-sizing: border-box;
+	height: $h_ribbon;
 	width: 100%;
 	padding: 4px;
 	color: $color_l5;
-	background-color: $color_d2;
+	background-color: $bg_ribbon;
+	border-bottom: 1px solid $color_l2;
+	box-shadow: $shadow1;
+}
+
+#sidebar {
+	display: inline-block;
+	box-sizing: border-box;
+	width: 200px;
+	background-color: $bg_sidebar;
+	padding: 10px;
+	height: 100vh;
+	// border: 1px solid black;
+	border-right: 1px solid $color_l2;
+	box-shadow: $shadow1;
 }
