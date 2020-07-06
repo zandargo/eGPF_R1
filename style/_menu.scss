@@ -34,11 +34,13 @@
 		color: $color_d4;
 		font-weight: 600;
 		background-color: $bg_ribbon;
+		box-shadow: $shadow2;
 	}
 }
 
 #menu-ribbon {
 	display: block;
+	position: relative;
 	box-sizing: border-box;
 	height: $h_ribbon;
 	width: 100%;
@@ -47,6 +49,7 @@
 	background-color: $bg_ribbon;
 	border-bottom: 1px solid $color_l2;
 	box-shadow: $shadow1;
+	// z-index: 1;
 }
 
 #sidebar {
@@ -59,4 +62,5 @@
 	// border: 1px solid black;
 	border-right: 1px solid $color_l2;
 	box-shadow: $shadow1;
+	// z-index: 0;
 }

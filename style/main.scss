@@ -28,7 +28,8 @@ $h_tabs: 28px;
 $h_ribbon: 72px;
 $h_footer: 24px;
 
-$shadow1: 5px 5px 10px $blue_grey_shadow;
+$shadow1: 5px 5px 10px transparentize($color, 0.75);
+$shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 
 /*
 */

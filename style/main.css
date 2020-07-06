@@ -526,10 +526,13 @@ main #divCOD .codcontainer {
   color: #171a1c;
   font-weight: 600;
   background-color: #c7ced1;
+  -webkit-box-shadow: 5px 5px 10px rgba(23, 26, 28, 0.5);
+          box-shadow: 5px 5px 10px rgba(23, 26, 28, 0.5);
 }
 
 #menu-ribbon {
   display: block;
+  position: relative;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   height: 72px;
