@@ -9,10 +9,20 @@ footer {
 	color: $color_l5;
 	background-color: $bg_footer;
 
-	p {
-		// height: 100%;
-		display: flex;
+	div {
+		height: 100%;
 		flex-direction: row;
-		align-items: center;
+		display: flex;
+		align-items: flex-end;
+		p {
+			display: flex;
+			margin: 0 2px;
+			text-align: center;
+			padding: 2px 2px;
+			border-radius: 8px 8px 0 0;
+			cursor: default;
+
+			user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+		}
 	}
 }
