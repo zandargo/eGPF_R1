@@ -42,7 +42,7 @@ $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 * {
 	margin: 0;
 	padding: 0;
-	border: 0;
+	border: none;
 	// vertical-align: baseline;
 	box-sizing: border-box;
 
@@ -61,6 +61,7 @@ body {
 		sans-serif, Arial;
 	// display: grid;
 	box-sizing: border-box;
+	border: none;
 
 	sub {
 		font-size: 0.5em;
@@ -112,6 +113,7 @@ main {
 	box-sizing: border-box;
 	grid-auto-flow: column;
 	justify-content: left;
+	border-right: 1px solid $color_l2;
 
 	div {
 		padding: 0.5rem;

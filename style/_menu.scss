@@ -1,40 +1,48 @@
 #menu-tabs {
-	display: block;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-end;
 	box-sizing: border-box;
 	height: $h_tabs;
 	width: 100%;
 	padding: 0 50px;
-	color: $color_l5;
 	background-color: $bg_tabs;
 
-	ul {
-		height: 100%;
-		flex-direction: row;
-		display: flex;
-		align-items: flex-end;
+	button {
+		background-color: $bg_tabs;
+		color: $color_l3;
+		font-family: inherit;
+		font-size: inherit;
+		height: 80%;
+		text-align: center;
+		text-decoration: none;
+		font-variant-caps: petite-caps;
 
-		li {
-			display: flex;
-			margin: 0 20px;
-			text-align: center;
-			padding: 2px 32px;
-			border-radius: 8px 8px 0 0;
-			cursor: default;
-
-			user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
-			// -webkit-touch-callout: none; /* iOS Safari */
-			// -webkit-user-select: none; /* Safari */
-			// -khtml-user-select: none; /* Konqueror HTML */
-			// -moz-user-select: none; /* Old versions of Firefox */
-			// -ms-user-select: none; /* Internet Explorer/Edge */
+		border-radius: 8px 8px 0 0;
+		margin: 0 20px;
+		padding: 2px 32px;
+		cursor: default;
+		transition: 0.2s;
+		user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+		outline: none;
+		//- pointer-events: none;
+		&:hover {
+			background-color: lighten($bg_tabs, 10%);
+			color: $color_l5;
+			//- outline: none;
 		}
-	}
 
-	.activated {
-		color: $color_d4;
-		font-weight: 600;
-		background-color: $bg_ribbon;
-		box-shadow: $shadow2;
+		&.active {
+			color: $color_d4;
+			font-weight: 500;
+			background-color: $bg_ribbon;
+			box-shadow: $shadow2;
+			font-size: 1.05em;
+			//-text-transform: uppercase;
+			&:focus {
+				outline: none;
+			}
+		}
 	}
 }
 
@@ -49,18 +57,18 @@
 	background-color: $bg_ribbon;
 	border-bottom: 1px solid $color_l2;
 	box-shadow: $shadow1;
-	// z-index: 1;
+	border-right: 1px solid $color_l2;
+	border-left: 1px solid $color_l2;
 }
 
 #sidebar {
 	display: inline-block;
 	box-sizing: border-box;
-	width: 200px;
+	width: 300px;
 	background-color: $bg_sidebar;
 	padding: 10px;
 	height: 100vh;
-	// border: 1px solid black;
 	border-right: 1px solid $color_l2;
+	border-left: 1px solid $color_l2;
 	box-shadow: $shadow1;
-	// z-index: 0;
 }
