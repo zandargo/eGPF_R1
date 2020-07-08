@@ -10,18 +10,17 @@
 		<meta charset="UTF-8" />
 
 		<title>CADsichter</title>
-		<script src="./js/snapdist/snap.svg-min.js"></script>
-		<script src="./js/animejs/anime.min.js"></script>
-		<script src="./js/prototype/prototype.js"></script>
-		<!-- https://electronjs.org/docs/tutorial 
-                           /security#csp-meta-tag -->
+		<script src="./assets/js/snapdist/snap.svg-min.js"></script>
+		<script src="./assets/js/animejs/anime.min.js"></script>
+		<script src="./assets/js/jQuery/jquery-3.5.1.js"></script>
 
 		<!-- GENERAL STYLING -->
 		<!-- <link rel="stylesheet" type="text/css" href="./style/style.css" /> -->
+		<link rel="stylesheet" type="text/css" href="./style/flow.css" />
 		<link rel="stylesheet" type="text/css" href="./style/main.css" />
 
 		<!-- SECTION FILES -->
-		<link rel="import" href="./pages/flow.html" />
+		<link rel="import" href="./pages/wrapper_flow.html" />
 	</head>
 
 	<style>
@@ -78,15 +77,29 @@
 			</div>
 			<!-- MENU TABS -->
 			<div id="menu-tabs">
-				<button class="tablink active" onclick="openTab(event, 't')">
+				<button
+					id="bt-flow"
+					class="tablink active"
+					onclick="openTab(event, 'wrapper_flow')"
+					data-section="wrapper_flow"
+					href="#"
+				>
 					Esquema
 				</button>
 
-				<button class="tablink" onclick="openTab(event, 't')">
+				<button
+					id="bt-chart"
+					class="tablink"
+					onclick="openTab(event, 'wrapper_chart')"
+				>
 					Esquemino
 				</button>
 
-				<button class="tablink" onclick="openTab(event, 't')">
+				<button
+					id="bt-defs1"
+					class="tablink"
+					onclick="openTab(event, 'wrapper_defs1')"
+				>
 					Ficha Técnica
 				</button>
 			</div>
@@ -110,7 +123,19 @@
 			</div>
 		</footer>
 		<!-- <script src="./js/renderer.js"></script> -->
-		<script></script>
+		<script>
+			window.$ = window.jQuery = require('./assets/js/jQuery/jquery-3.5.1.js')
+		</script>
+		<script src="assets/js/jquery.scrollex.min.js"></script>
+		<script src="assets/js/jquery.scrolly.min.js"></script>
+		<script src="assets/js/skel.min.js"></script>
+		<script src="assets/js/util.js"></script>
+		<script src="assets/js/main.js"></script>
+		<script>
+			var $ = require('./js/jQuery/jquery-3.5.1')
+		</script>
 		<script src="./js/menu.js"></script>
+		<script type="text/javascript" src="./js/gpf_vars.js"></script>
+		<script type="text/javascript" src="./js/gpf_main.js"></script>
 	</body>
 </html>

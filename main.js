@@ -5,6 +5,8 @@ const path = require('path')
 const { app, BrowserWindow } = require('electron')
 const env = process.env.NODE_ENV || 'development'
 
+
+
 // If development environment
 if (env === 'development') {
 	try {
@@ -24,8 +26,8 @@ const isDev = process.env.NODE_ENV !== 'production'
 //* Main Window
 function createMainWindow() {
 	const mainWindow = new BrowserWindow({
-		width : 1600,
-		height: 950,
+		width : 1200,
+		height: 800,
 		minWidth: 600,
 		minHeight: 400,
 		frame: false,
@@ -65,7 +67,7 @@ function createMainWindow() {
 
 }
 
-//* App initialize
+//* App initialize_____________________________________
 app.whenReady().then(createMainWindow)
 
 //* Closing
@@ -84,3 +86,4 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+

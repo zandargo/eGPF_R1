@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link
+			href="https://fonts.googleapis.com/css?family=Roboto+Condensed&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css?family=Fira+Code&display=swap"
+			rel="stylesheet"
+		/>
+		<title>Teste Esquema</title>
+		<script src="./js/snapdist/snap.svg-min.js"></script>
+		<script src="./js/animejs/anime.min.js"></script>
+		<script src="./js/prototype/prototype.js"></script>
+
+		<!-- CSS GERAL -->
+		<link rel="stylesheet" type="text/css" href="./style/flow.css" />
+		<!-- CSS Slider -->
+		<!-- <link rel="stylesheet" type="text/css" href="./css/slider.css" /> -->
+	</head>
+
+	<style>
+		::selection {
+			color: black;
+			background: none;
+		}
+	</style>
+
+	<body>
+		<!-- Resumo do Esquema -->
+		<div id="navsum">
+			<div class="sumcontainer">
+				<!-- <div>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Itaque, laborum.</div> -->
+				<div class="div-hTotal">
+					<h1>H<sub>TOTAL</sub>&nbsp;=</h1>
+					<h1 id="hTotal"></h1>
+				</div>
+				<div id="nGav-container">
+					<h1>GPFs:</h1>
+					<input
+						type="range"
+						id="nGav-slider"
+						class="slider"
+						min="1"
+						max="32"
+						step="1"
+						value="28"
+					/>
+					<h1 id="nGavs">28</h1>
+				</div>
+			</div>
+		</div>
+
+		<!-- MAIN -->
+		<main>
+			<!-- Div dos códigos das gavetas -->
+			<div id="divCOD"></div>
+
+			<!-- SVG do Esquema -->
+			<div id="divESQ">
+				<svg id="svgESQ"></svg>
+			</div>
+
+			<!-- Altura das gavetas -->
+			<div id="divHCtrl"></div>
+		</main>
+
+		<script type="text/javascript" src="./js/gpf_vars.js"></script>
+		<script type="text/javascript" src="./js/gpf_main.js"></script>
+		<!-- <script type="text/javascript" src="/js/style.js"></script>  -->
+	</body>
+</html>
