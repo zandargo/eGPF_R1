@@ -10,17 +10,12 @@
 		<meta charset="UTF-8" />
 
 		<title>CADsichter</title>
-		<script src="./assets/js/snapdist/snap.svg-min.js"></script>
-		<script src="./assets/js/animejs/anime.min.js"></script>
-		<script src="./assets/js/jQuery/jquery-3.5.1.js"></script>
+		<script type="module" src="./assets/js/jQuery/jquery-3.5.1.js"></script>
 
 		<!-- GENERAL STYLING -->
 		<!-- <link rel="stylesheet" type="text/css" href="./style/style.css" /> -->
 		<link rel="stylesheet" type="text/css" href="./style/flow.css" />
 		<link rel="stylesheet" type="text/css" href="./style/main.css" />
-
-		<!-- SECTION FILES -->
-		<link rel="import" href="./pages/wrapper_flow.html" />
 	</head>
 
 	<style>
@@ -30,9 +25,13 @@
 		}
 	</style>
 
-	<!-- FULL PAGE BODY -->
+	<!-- ----------------------------------------------------------------------- -->
+	<!--                             FULL PAGE BODY                              -->
+	<!-- ----------------------------------------------------------------------- -->
+
 	<body>
-		<!-- HEADER -->
+		<!-- ------------------------------- HEADER -------------------------------- -->
+
 		<header>
 			<div id="titlebar">
 				<div id="drag-region">
@@ -122,20 +121,10 @@
 				<p>Status bar</p>
 			</div>
 		</footer>
-		<!-- <script src="./js/renderer.js"></script> -->
 		<script>
 			window.$ = window.jQuery = require('./assets/js/jQuery/jquery-3.5.1.js')
-		</script>
-		<script src="assets/js/jquery.scrollex.min.js"></script>
-		<script src="assets/js/jquery.scrolly.min.js"></script>
-		<script src="assets/js/skel.min.js"></script>
-		<script src="assets/js/util.js"></script>
-		<script src="assets/js/main.js"></script>
-		<script>
-			var $ = require('./js/jQuery/jquery-3.5.1')
+			var $ = require('./assets/js/jQuery/jquery-3.5.1')
 		</script>
 		<script src="./js/menu.js"></script>
-		<script type="text/javascript" src="./js/gpf_vars.js"></script>
-		<script type="text/javascript" src="./js/gpf_main.js"></script>
 	</body>
 </html>

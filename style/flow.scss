@@ -6,7 +6,7 @@
 // }
 
 /* Main Styling */
-body {
+#flow-body {
 	background-color: #cccccc;
 	font-family: 'Roboto Condensed', sans-serif;
 
@@ -130,7 +130,7 @@ body {
 }
 
 /* Corpo principal */
-main {
+#flow-main {
 	max-width: 900px;
 	margin: 0 auto;
 	display: grid;

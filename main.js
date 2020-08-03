@@ -1,4 +1,8 @@
 
+//* -------------------------------------------------------------------------- */
+//*                                 DEFINITIONS                                */
+//* -------------------------------------------------------------------------- */
+
 const electron = require('electron')
 const path = require('path')
 // const url = require('url')
@@ -7,7 +11,7 @@ const env = process.env.NODE_ENV || 'development'
 
 
 
-// If development environment
+//* If development environment
 if (env === 'development') {
 	try {
 		require('electron-reloader')(module, {
@@ -19,7 +23,10 @@ if (env === 'development') {
 	}
 }
 
-//* Set enviroment
+//* -------------------------------------------------------------------------- */
+//*                               SET ENVIROMENT                               */
+//* -------------------------------------------------------------------------- */
+
 process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV !== 'production'
 
@@ -34,8 +41,7 @@ function createMainWindow() {
 		show: false,
 		icon  : `${__dirname}/assets/icons/eGPF1.png`,
 		webPreferences: {
-			// preload: path.join(__dirname, 'preload.js'),  //! ???
-			preload: path.join(__dirname, 'js', 'preload.js'),  //! ???
+			preload: path.join(__dirname, 'js', 'preload.js'),  //! Window buttom control
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			// webSecurity: isDev ? false : true,
@@ -67,7 +73,10 @@ function createMainWindow() {
 
 }
 
-//* App initialize_____________________________________
+//* -------------------------------------------------------------------------- */
+//*                               App initialize                               */
+//* -------------------------------------------------------------------------- */
+
 app.whenReady().then(createMainWindow)
 
 //* Closing
@@ -76,7 +85,7 @@ app.on('window-all-closed', () => {
 		app.quit()
 	}
 })
-
+teste
 //* ? Don't instantiate?
 app.on('activate', () => {
 	if (BrowserWindow.getAllWindows().length === 0) {

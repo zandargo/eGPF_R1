@@ -1,5 +1,12 @@
 
-//* ------- EVENTOS DE CLIQUE NO MOUSE: MOSTRAR SUB PÁGINA ------- */
+
+
+
+
+//* -------------------------------------------------------------------------- */
+//*               EVENTOS DE CLIQUE NO MOUSE: MOSTRAR SUB PÁGINA               */
+//* -------------------------------------------------------------------------- */
+
 var i, tablinks //, tabcontent
 function openTab(evt, tabName) {
 	//* Ocultar todos class="wrapperContent"
@@ -17,24 +24,24 @@ function openTab(evt, tabName) {
 	//* Mostrar a div e adicionar class="active"
 	// document.getElementById(tabName).style.display = 'block'
 	evt.currentTarget.className += ' active'
-	//- $('#wrapper').load('./pages/'.concat(tabName, '.html'))
-	//- $('#wrapper').on('load','./pages/'.concat(tabName, '.html'))
-	//- document.getElementById("wrapper").innerHTML='<object type="text/html" data="./pages/'.concat(tabName,'.html," ></object>')
+	//_ $('#wrapper').load('./pages/'.concat(tabName, '.html'))
+	//_ $('#wrapper').on('load','./pages/'.concat(tabName, '.html'))
+	//_ document.getElementById("wrapper").innerHTML='<object type="text/html" data="./pages/'.concat(tabName,'.html," ></object>')
 	console.log('./pages/'.concat(tabName, '.html'))
 	console.log('<object type="text/html" data="./pages/'.concat(tabName,'.html," ></object>'))
 
 	//* Rolar para o tpo da página
-	//- $('html, body').animate({ scrollTop: 0 }, 'slow')
+	//_ $('html, body').animate({ scrollTop: 0 }, 'slow')
 	$('#wrapper').animate({ scrollTop: 0 }, 'slow')
 
 }
 
+//* -------------------------------------------------------------------------- */
+//*                           INÍCIO DO CARREGAMENTO                           */
+//* -------------------------------------------------------------------------- */
 
-//* ------- INÍCIO DO CARREGAMENTO ------- */
 // Ocultar todos class="tabcontent" no início do carregamento
-// $('.tabcontent').hide()
-
-
+$('.tabcontent').hide()
 
 
 

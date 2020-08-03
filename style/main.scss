@@ -1,5 +1,8 @@
-// * COLORS
-$blue_grey: hsl(200, 10%, 50%);
+//* -------------------------------------------------------------------------- */
+//*                                   COLORS                                   */
+//* -------------------------------------------------------------------------- */
+
+$blue_grey: hsl(200, 20%, 50%);
 $blue_grey_shadow: transparentize($blue_grey, 0.75);
 
 $color: $blue_grey;
@@ -14,7 +17,6 @@ $color_l2: lighten($color, 20%);
 $color_l3: lighten($color, 30%);
 $color_l4: lighten($color, 40%);
 $color_l5: lighten($color, 45%);
-$color1: rgb(230, 70, 75);
 
 $bg_wintitle: $color_d4;
 $bg_footer: $color_d3;
@@ -22,6 +24,10 @@ $bg_tabs: $color_d2;
 $bg_ribbon: $color_l3;
 $bg_sidebar: $color_l4;
 $bg_main: $color_l5;
+
+//* -------------------------------------------------------------------------- */
+//*                                    SIZES                                   */
+//* -------------------------------------------------------------------------- */
 
 $h_title: 36px;
 $h_tabs: 28px;
@@ -38,7 +44,10 @@ $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 	src: url('../assets/fonts/RobotoCondensed-Regular.ttf') format('truetype');
 }
 
-//* Reset */
+//* -------------------------------------------------------------------------- */
+//*                                    RESET                                   */
+//* -------------------------------------------------------------------------- */
+
 * {
 	margin: 0;
 	padding: 0;
@@ -52,7 +61,9 @@ $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 	// }
 }
 
-//* Main Styling */
+//* -------------------------------------------------------------------------- */
+//*                                Main Styling                                */
+//* -------------------------------------------------------------------------- */
 
 body {
 	background-color: $bg_main;
