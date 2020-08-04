@@ -1,65 +1,18 @@
-@charset "UTF-8";
-/* Reset */
 /* Main Styling */
 #flow-body {
-  background-color: #cccccc;
   font-family: 'Roboto Condensed', sans-serif;
-  /* Barra de Navegação / Título */
 }
 
 #flow-body sub {
-  font-size: 0.5em;
+  font-size: 0.75em;
 }
 
 #flow-body h1 {
+  font-size: 12pt;
   display: inline;
 }
 
-#flow-body #navbar {
-  display: -ms-grid;
-  display: grid;
-  -ms-grid-columns: 50px auto 50px;
-      grid-template-columns: 50px auto 50px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  width: auto;
-  height: 3.5rem;
-  text-align: center;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  -webkit-text-emphasis: none;
-          text-emphasis: none;
-  padding: 0;
-  font-size: 2rem;
-  font-weight: 700;
-  letter-spacing: 0.2rem;
-  word-spacing: 0.25rem;
-  background: #333;
-  color: #fff;
-  z-index: 1;
-  -webkit-box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.75);
-          box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.75);
-  border-bottom: 5px black;
-  text-transform: capitalize;
-  cursor: default;
-}
-
-#flow-body #navbar .nav-logo {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-#flow-body #navbar .nav-title {
-  padding: 0;
-}
-
-#flow-body #navsum {
+#navsum {
   display: -ms-grid;
   display: grid;
   position: -webkit-sticky;
@@ -78,7 +31,7 @@
   max-width: calc(100vw - 2em);
 }
 
-#flow-body #navsum .sumcontainer {
+#navsum .sumcontainer {
   height: 100px;
   width: 900px;
   margin: auto;
@@ -86,7 +39,6 @@
   background-color: #eee;
   border: 4px solid #666;
   z-index: 10;
-  font-family: 'Fira Code', 'Consolas';
   font-weight: bold;
   color: black;
   cursor: default;
@@ -98,14 +50,14 @@
       grid-template-rows: repeat(2, 1fr);
 }
 
-#flow-body #navsum .sumcontainer .div-hTotal {
+#navsum .sumcontainer .div-hTotal {
   -ms-grid-column: 3;
   grid-column: 3;
   -ms-grid-row: 2;
   grid-row: 2;
 }
 
-#flow-body #navsum .sumcontainer #nGav-container {
+#navsum .sumcontainer #nGav-container {
   -ms-grid-column: 1;
   -ms-grid-column-span: 4;
   grid-column: 1 / span 4;
@@ -123,39 +75,6 @@
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-}
-
-#flow-body #navsum .sumcontainer #nGav-container .slider {
-  -webkit-appearance: none;
-  width: 76%;
-  height: 6px;
-  border-radius: 3px;
-  background: #aaa;
-  outline: none;
-  -webkit-transition: 0.2s;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
-  margin: 0 20px;
-}
-
-#flow-body #navsum .sumcontainer #nGav-container .slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 16px;
-  height: 32px;
-  border-radius: 6px;
-  background: darkred;
-  -webkit-transition: all 0.2s;
-  transition: all 0.2s;
-  /* cursor: pointer; */
-}
-
-#flow-body #navsum .sumcontainer #nGav-container .slider::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background: darkred;
-  cursor: pointer;
 }
 
 /* Corpo principal */
@@ -207,7 +126,6 @@
 #flow-main #divHCtrl .slidecontainer {
   width: 100%;
   height: 64px;
-  font-family: 'Fira Code', 'Consolas';
   font-weight: bold;
   color: black;
   display: -webkit-box;
@@ -232,7 +150,7 @@
 }
 
 #flow-main #divHCtrl .slidecontainer span {
-  font-size: 1.25rem;
+  font-size: 0.25rem;
   margin-left: auto;
   text-align: right;
 }
@@ -284,7 +202,6 @@
 #flow-main #divCOD .codcontainer {
   width: 100%;
   height: 64px;
-  font-family: 'Fira Code', 'Consolas';
   font-weight: bold;
   color: black;
   display: -webkit-box;

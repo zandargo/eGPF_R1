@@ -1,9 +1,9 @@
 
-var draw = Snap('#svgESQ')
+const draw = Snap('#svgESQ')
 
 
 //Peneirado de fundo
-var patPn = draw
+const patPn = draw
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPN,

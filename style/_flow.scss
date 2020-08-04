@@ -1,0 +1,43 @@
+//* -------------------------------------------------------------------------- */
+//*                                   COMMON                                   */
+//* -------------------------------------------------------------------------- */
+
+.slider {
+	-webkit-appearance: none;
+	width: 76%;
+	height: 6px;
+	border-radius: 3px;
+	background: #aaa;
+	outline: none;
+	-webkit-transition: 0.2s;
+	transition: all 0.2s;
+	margin: 0 20px;
+	margin: 20px 5px;
+}
+.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 16px;
+	height: 32px;
+	border-radius: 6px;
+	background: $sldr_color;
+	transition: all 0.2s;
+	box-shadow: $sldr_shadow;
+	/* cursor: pointer; */
+}
+.slider::-moz-range-thumb {
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	background: $sldr_color;
+	cursor: pointer;
+	box-shadow: $sldr_shadow;
+}
+
+//* -------------------------------------------------------------------------- */
+//*                              OPTIONS / SUMMARY                             */
+//* -------------------------------------------------------------------------- */
+
+//* -------------------------------------------------------------------------- */
+//*                               BODY / WRAPPER                               */
+//* -------------------------------------------------------------------------- */

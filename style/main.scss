@@ -25,6 +25,8 @@ $bg_ribbon: $color_l3;
 $bg_sidebar: $color_l4;
 $bg_main: $color_l5;
 
+$sldr_color: $color_d1;
+
 //* -------------------------------------------------------------------------- */
 //*                                    SIZES                                   */
 //* -------------------------------------------------------------------------- */
@@ -36,6 +38,7 @@ $h_footer: 24px;
 
 $shadow1: 5px 5px 10px transparentize($color, 0.75);
 $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
+$sldr_shadow: 2px 2px 5px transparentize($sldr_color, 0.5);
 
 /*
 */
@@ -80,6 +83,7 @@ body {
 
 	h1 {
 		display: inline;
+		font-size: 12pt;
 	}
 
 	/* Barra de Navegação / Título */
@@ -133,18 +137,17 @@ main {
 @import 'menu';
 @import 'footer';
 
+@import 'flow';
+
 #wrapper {
 	display: block;
-	position: relative;
+	// position: relative;
 	box-sizing: border-box;
 	height: 100%;
 	width: 100%;
-	// margin: 3px;
-	// background-color: $color_d4;
-	// padding: 4px;
-	// color: $color_d3;
-	// border-bottom: 1px solid $color_l2;
-	// box-shadow: $shadow1;
-	// border-right: 1px solid $color_l2;
-	// border-left: 1px solid $color_l2;
+	overflow-y: auto;
+
+	.tabcontent {
+		padding: 10px;
+	}
 }

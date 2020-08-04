@@ -26,8 +26,7 @@ if (env === 'development') {
 //* -------------------------------------------------------------------------- */
 //*                               SET ENVIROMENT                               */
 //* -------------------------------------------------------------------------- */
-
-process.env.NODE_ENV = 'development'
+//_ process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV !== 'production'
 
 //* Main Window
@@ -85,7 +84,7 @@ app.on('window-all-closed', () => {
 		app.quit()
 	}
 })
-teste
+
 //* ? Don't instantiate?
 app.on('activate', () => {
 	if (BrowserWindow.getAllWindows().length === 0) {

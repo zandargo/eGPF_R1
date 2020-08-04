@@ -30,6 +30,7 @@ body sub {
 
 body h1 {
   display: inline;
+  font-size: 12pt;
 }
 
 body #navbar {
@@ -449,7 +450,7 @@ footer {
   bottom: 0px;
   height: 24px;
   width: 100%;
-  padding: 0 4px;
+  padding: 0 10px;
   color: #f0f3f5;
   background-color: #29363d;
 }
@@ -477,6 +478,7 @@ footer div p {
   padding: 2px 2px;
   border-radius: 8px 8px 0 0;
   cursor: default;
+  font-weight: 100;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -484,11 +486,52 @@ footer div p {
   /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+.slider {
+  -webkit-appearance: none;
+  width: 76%;
+  height: 6px;
+  border-radius: 3px;
+  background: #aaa;
+  outline: none;
+  -webkit-transition: 0.2s;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  margin: 0 20px;
+  margin: 20px 5px;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 32px;
+  border-radius: 6px;
+  background: #526d7a;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+  -webkit-box-shadow: 2px 2px 5px rgba(82, 109, 122, 0.5);
+          box-shadow: 2px 2px 5px rgba(82, 109, 122, 0.5);
+  /* cursor: pointer; */
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #526d7a;
+  cursor: pointer;
+  box-shadow: 2px 2px 5px rgba(82, 109, 122, 0.5);
+}
+
 #wrapper {
   display: block;
-  position: relative;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   height: 100%;
   width: 100%;
+  overflow-y: auto;
+}
+
+#wrapper .tabcontent {
+  padding: 10px;
 }

@@ -11,10 +11,12 @@
 
 		<title>CADsichter</title>
 		<script type="module" src="./assets/js/jQuery/jquery-3.5.1.js"></script>
+		<!-- <script src="./assets/js/jQuery/jquery-3.5.1.min.js"></script> -->
+		<script src="./assets/js/snapdist/snap.svg-min.js"></script>
 
 		<!-- GENERAL STYLING -->
 		<!-- <link rel="stylesheet" type="text/css" href="./style/style.css" /> -->
-		<link rel="stylesheet" type="text/css" href="./style/flow.css" />
+		<!-- <link rel="stylesheet" type="text/css" href="./style/flow.css" /> -->
 		<link rel="stylesheet" type="text/css" href="./style/main.css" />
 	</head>
 
@@ -79,9 +81,7 @@
 				<button
 					id="bt-flow"
 					class="tablink active"
-					onclick="openTab(event, 'wrapper_flow')"
-					data-section="wrapper_flow"
-					href="#"
+					onclick="openTab(event, 'flow')"
 				>
 					Esquema
 				</button>
@@ -89,7 +89,7 @@
 				<button
 					id="bt-chart"
 					class="tablink"
-					onclick="openTab(event, 'wrapper_chart')"
+					onclick="openTab(event, 'chart')"
 				>
 					Esquemino
 				</button>
@@ -97,7 +97,7 @@
 				<button
 					id="bt-defs1"
 					class="tablink"
-					onclick="openTab(event, 'wrapper_defs1')"
+					onclick="openTab(event, 'defs1')"
 				>
 					Ficha Técnica
 				</button>
@@ -117,14 +117,19 @@
 
 		<!-- FOOTER -->
 		<footer>
-			<div>
-				<p>Status bar</p>
+			<div id="StatusBar">
+				<p>Pronto</p>
 			</div>
 		</footer>
 		<script>
 			window.$ = window.jQuery = require('./assets/js/jQuery/jquery-3.5.1.js')
 			var $ = require('./assets/js/jQuery/jquery-3.5.1')
+			const { webFrame } = require('electron')
+			webFrame.setZoomFactor(1.05)
 		</script>
+		<script src="./js/arch.js"></script>
 		<script src="./js/menu.js"></script>
+		<script type="text/javascript" src="./js/gpf_vars.js"></script>
+		<script type="text/javascript" src="./js/gpf_main.js"></script>
 	</body>
 </html>
