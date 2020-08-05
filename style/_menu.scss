@@ -64,10 +64,11 @@
 #sidebar {
 	// display: inline-block;
 	box-sizing: border-box;
-	width: 300px;
+	width: 320px;
 	background-color: $bg_sidebar;
 	padding: 10px;
-	height: 100vh;
+	// height: 100%;
+	height: $h_main;
 	border-right: 1px solid $color_l2;
 	border-left: 1px solid $color_l2;
 	box-shadow: $shadow1;

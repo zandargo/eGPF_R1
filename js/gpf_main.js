@@ -27,23 +27,28 @@ function animation() {
 // 	patPn.animate({ y: patOffset }, 5000, mina.linear, animation)
 //   }
 
-// Formatar o estilo CSS: Criar Sliders
+
+
+//* -------------------------------------------------------------------------- */
+//*                               CREATE SLIDERS                               */
+//* -------------------------------------------------------------------------- */
+
 function drwSliders() {
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
 
-		// Div Container
+		//* DIV CONTAINER
 		var div = document.createElement('div')
 		div.id = 'sliderGPF' + nGPF
 		div.className = 'slidecontainer'
 		document.getElementById('divHCtrl').appendChild(div)
 
-		// Texto com nº da gaveta
-		var h1 = document.createElement('h1')
-		h1.innerHTML = nGPF
-		div.appendChild(h1)
+		//* DRAWER NUMBER
+		var h2 = document.createElement('h2')
+		h2.innerHTML = nGPF
+		div.appendChild(h2)
 
-		//Slider
+		//* CREATE SLIDER
 		var input = document.createElement('input')
 		input.type = 'range'
 		input.id = 'rngG' + nGPF
@@ -54,7 +59,7 @@ function drwSliders() {
 		input.value = 65 // Terá que mudar dependendo do valor da matriz
 		div.appendChild(input)
 
-		// Valor
+		//* HEIGHT VALUE: CREATE AND CHANGE
 		var span = document.createElement('span')
 		span.id = 'valH' + nGPF
 		span.innerHTML = input.value
@@ -116,9 +121,10 @@ function drwCOD() {
 		div.className = 'codcontainer'
 		document.getElementById('divCOD').appendChild(div)
 
-		// Texto com nº da gaveta
+		// Texto com CÓD da gaveta
 		let h2 = document.createElement('h2')
 		h2.id = 'codGPF' + nGPF
+		h2.className = 'codValue'
 		h2.innerHTML = 'GPF'
 		div.appendChild(h2)
 	}
@@ -1355,59 +1361,6 @@ function drwSeta(x, y, w, h, clr, grp) {
 //
 //
 //
-// INIT
-for (var i = nGavs; i >= 1; i--) {
-	iGav = i
-	var gID = 'G' + pad(iGav)
-
-	// Pontos
-	calcMat(x0, y0 + yOff * i, Larg, i)
-
-	// Gaveta em branco
-	var gGav = draw.group()
-	gGav.attr({ id: gID })
-	drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
-	draw.select('#' + gID).hover(gHoverIN, gHoverOUT)
-	draw.select('#' + gID).click(clkSelGav)
-
-	//Áreas de posição
-	drwAreas()
-}
-drwGuias()
-drwCtrlPts()
-
-drwSliders()
-drwCOD()
-
-nGavs = 28
-rebuildGPF()
-calcHtotal()
-calcHtotal
-
-//
-var slidernGavs = document.getElementById('nGav-slider')
-slidernGavs.addEventListener('input', function () {
-	nGavs = slidernGavs.value
-	let vnGav = document.getElementById('nGavs')
-	vnGav.innerHTML = pad(nGavs)
-	rebuildGPF()
-	calcHtotal()
-})
-
-/* 
-
-
-
-
-
-
-
-
-
-
-
- */
-
 function rebuildGPF() {
 	//Oculta tudo
 	hideGPF()
@@ -1424,9 +1377,56 @@ function rebuildGPF() {
 	}
 }
 
-//
-//
-//
-//
-//
-//
+
+//* -------------------------------------------------------------------------- */
+//*                                    INIT                                    */
+//* -------------------------------------------------------------------------- */
+// $(document).ready( function () {
+	
+	for (var i = nGavs; i >= 1; i--) {
+		iGav = i
+		var gID = 'G' + pad(iGav)
+		
+		//* --------- POINTS ---------- */
+		calcMat(x0, y0 + yOff * i, Larg, i)
+		
+		//* --------- BLANK ---------- */
+		var gGav = draw.group()
+		gGav.attr({ id: gID })
+		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
+		draw.select('#' + gID).hover(gHoverIN, gHoverOUT)
+		draw.select('#' + gID).click(clkSelGav)
+		
+		//* --------- POSITION ---------- */
+		drwAreas()
+	}
+	
+	drwGuias()
+	drwCtrlPts()
+	
+	
+	drwSliders()
+	drwCOD()
+	nGavs = 28
+	rebuildGPF()
+	calcHtotal()
+	// calcHtotal
+	
+	var slidernGavs = document.getElementById('nGav-slider')
+	slidernGavs.addEventListener('input', function () {
+		nGavs = slidernGavs.value
+		let vnGav = document.getElementById('nGavs')
+		vnGav.innerHTML = pad(nGavs)
+		rebuildGPF()
+		calcHtotal()
+	})
+	
+	
+	
+	
+// });
+	
+	
+	
+	
+	

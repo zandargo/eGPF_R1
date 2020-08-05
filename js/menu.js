@@ -26,9 +26,8 @@ function openTab(evt, tabName) {
 //*                           INÍCIO DO CARREGAMENTO                           */
 //* -------------------------------------------------------------------------- */
 
-// Ocultar todos class="tabcontent" no início do carregamento
 $('.tabcontent').hide()
-// $('wrp-flow').show()
-// $('.tabcontent').show()
+$('#wrp-flow').show()
+$('#nav-flow').show()
 
 

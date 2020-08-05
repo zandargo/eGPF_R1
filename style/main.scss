@@ -2,15 +2,15 @@
 //*                                   COLORS                                   */
 //* -------------------------------------------------------------------------- */
 
-$blue_grey: hsl(200, 20%, 50%);
+$blue_grey: hsl(200, 15%, 50%);
 $blue_grey_shadow: transparentize($blue_grey, 0.75);
 
 $color: $blue_grey;
-$color_d1: darken($color, 10%);
-$color_d2: darken($color, 20%);
-$color_d3: darken($color, 30%);
-$color_d4: darken($color, 40%);
 $color_d5: darken($color, 45%);
+$color_d4: darken($color, 40%);
+$color_d3: darken($color, 30%);
+$color_d2: darken($color, 20%);
+$color_d1: darken($color, 10%);
 
 $color_l1: lighten($color, 10%);
 $color_l2: lighten($color, 20%);
@@ -35,10 +35,15 @@ $h_title: 36px;
 $h_tabs: 28px;
 $h_ribbon: 72px;
 $h_footer: 24px;
+// $h_main: 300px;
+// $h_main: calc(100vh - $h_title - $h_tabs - $h_ribbon - $h_footer);
+// $h_main: calc(	100vh - var($h_title) - var($h_tabs) - var($h_ribbon) - var($h_footer));
+$h_main: calc(100vh - 36px - 28px - 72px - 24px);
 
 $shadow1: 5px 5px 10px transparentize($color, 0.75);
 $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 $sldr_shadow: 2px 2px 5px transparentize($sldr_color, 0.5);
+$shadowscroll: 0px 0px 5px transparentize($color, 0.75);
 
 /*
 */
@@ -70,84 +75,101 @@ $sldr_shadow: 2px 2px 5px transparentize($sldr_color, 0.5);
 
 body {
 	background-color: $bg_main;
-	overflow-y: hidden;
+	height: 100vh;
 	font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica',
 		sans-serif, Arial;
 	// display: grid;
 	box-sizing: border-box;
 	border: none;
+	overflow-y: hidden;
 
 	sub {
-		font-size: 0.5em;
+		font-size: 0.6em;
 	}
 
 	h1 {
 		display: inline;
-		font-size: 12pt;
+		font-size: 16pt;
+		align-self: center;
 	}
-
-	/* Barra de Navegação / Título */
-	#navbar {
-		display: grid;
-		grid-template-columns: 50px auto 50px;
-		position: sticky;
-		top: 0px;
-		width: auto;
-		height: 3.5rem;
-		text-align: center;
-		justify-content: space-between;
-		align-items: center;
-		text-emphasis: none;
-		padding: 0;
-		font-size: 1rem;
-		font-weight: 700;
-		letter-spacing: 0.2rem;
-		word-spacing: 0.25rem;
-		// background: #333;
-		color: #fff;
-		z-index: 1;
-		// box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.75);
-		border-bottom: 5px black;
-		text-transform: capitalize;
-		cursor: default;
-
-		.nav-logo {
-			display: flex;
-		}
-		.nav-title {
-			padding: 0;
-		}
+	h2 {
+		display: inline;
+		font-size: 14pt;
+		align-self: center;
+	}
+	h4 {
+		font-variant-caps: petite-caps;
+		font-weight: 300;
+		color: $color_d3;
 	}
 }
 
-//* MAIN BODY */
+//* ------------------------------- SCROLL BAR ------------------------------- */
+
+::-webkit-scrollbar {
+	width: 16px;
+}
+
+::-webkit-scrollbar-track {
+	background: $color_l5;
+	//_ box-shadow: inset 0 0 5px black;
+}
+
+::-webkit-scrollbar-thumb {
+	background: $color_l3;
+	//_box-shadow: $shadowscroll;
+	border-radius: 2px;
+	//_ box-shadow: inset 0 0 5px black;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: $color;
+	//_ box-shadow: inset 0 0 5px black;
+}
+//_ ::-webkit-scrollbar-track-piece {
+//_ 	background: $color_d5;
+//_ 	box-shadow: inset 0 0 5px black;
+//_ }
+
+//_ ::-webkit-scrollbar-button {
+//_ 	color: $color_l2;
+//_ 	background: $color_l3;
+//_ 	border-radius: 4px;
+//_ }
+::-webkit-scrollbar-corner {
+	background: $color_l5;
+}
+
+//* -------------------------------- MAIN BODY ------------------------------- */
+
 main {
 	margin: 0 auto;
-	height: 100%;
+	height: $h_main;
 	display: flex;
 	flex-direction: row;
 	box-sizing: border-box;
 	grid-auto-flow: column;
 	justify-content: left;
 	border-right: 1px solid $color_l2;
+	// overflow-y: hidden;
 }
-
-@import 'gpf';
-@import 'titlebar';
-@import 'menu';
-@import 'footer';
-
-@import 'flow';
 
 #wrapper {
 	display: block;
 	// position: relative;
 	box-sizing: border-box;
-	height: 100%;
 	width: 100%;
 	overflow-y: auto;
+	height: $h_main;
+	// height: 500px;
 
 	.tabcontent {
 		padding: 10px;
 	}
 }
+
+// @import 'gpf';
+@import 'titlebar';
+@import 'menu';
+@import 'footer';
+@import 'flow';
