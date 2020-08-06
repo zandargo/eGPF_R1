@@ -40,6 +40,8 @@ $h_footer: 24px;
 // $h_main: calc(	100vh - var($h_title) - var($h_tabs) - var($h_ribbon) - var($h_footer));
 $h_main: calc(100vh - 36px - 28px - 72px - 24px);
 
+$w_sidebar: 320;
+
 $shadow1: 5px 5px 10px transparentize($color, 0.75);
 $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 $sldr_shadow: 2px 2px 5px transparentize($sldr_color, 0.5);
@@ -61,6 +63,7 @@ $shadowscroll: 0px 0px 5px transparentize($color, 0.75);
 	padding: 0;
 	border: none;
 	// vertical-align: baseline;
+	font-variant-caps: petite-caps;
 	box-sizing: border-box;
 
 	// &:before,

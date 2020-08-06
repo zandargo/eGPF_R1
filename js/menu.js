@@ -15,6 +15,8 @@ function openTab(evt, tabName) {
 	evt.currentTarget.className += ' active'
 	$('#wrp-'+tabName).show()
 	$('#nav-'+tabName).show()
+	$('#rbn-'+tabName).show()
+	$('#z-'+tabName).show()
 
 	//* Rolar para o tpo da página
 	//_ $('html, body').animate({ scrollTop: 0 }, 'slow')
@@ -29,5 +31,6 @@ function openTab(evt, tabName) {
 $('.tabcontent').hide()
 $('#wrp-flow').show()
 $('#nav-flow').show()
-
+$('#rbn-flow').show()
+$('#z-flow').show()
 

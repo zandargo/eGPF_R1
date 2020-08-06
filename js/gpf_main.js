@@ -89,7 +89,10 @@ function drwSliders() {
 	}
 }
 
-// CALCULAR ALTURA TOTAL DAS GAVETAS
+//* -------------------------------------------------------------------------- */
+//*                      CALCULAR ALTURA TOTAL DAS GAVETAS                     */
+//* -------------------------------------------------------------------------- */
+
 function calcHtotal() {
 	for (let index = 1; index < nGavs; index++) {
 		let nGPF = pad(index)
@@ -108,9 +111,14 @@ function calcHtotal() {
 	// console.log(hTotal)
 	let target = document.getElementById('hTotal')
 	target.innerHTML = '&nbsp' + hTotal + 'mm'
+
+	$("#divESQ").css({'height': 150+64*nGavs+"px" })
 }
 
-//CÓDIGO DAS GAVETAS
+//* -------------------------------------------------------------------------- */
+//*                             CÓDIGO DAS GAVETAS                             */
+//* -------------------------------------------------------------------------- */
+
 function drwCOD() {
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
@@ -387,17 +395,23 @@ function calcMat(xC, yC, L) {
 
 //+ TODO Adicionar desenhos das saídas de fundo em perspectiva
 
-// Função Guias (Edit Mode)
+
+
+
+//* -------------------------------------------------------------------------- */
+//*                          Função Guias (Edit Mode)                          */
+//* -------------------------------------------------------------------------- */
+
 function drwGuias() {
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		let swid = 0.5 * lwid
-		// Pontos
+		//* 	Pontos
 		calcMat(x0, y0 + yOff * j, Larg)
 		var gGui = draw.group()
 		gGui.attr({ id: 'Guia_' + gIDtmp })
-		//Linhas
+		//*	Linhas
 		var polyline = draw
 			.polyline(mF[1])
 			.attr({ stroke: 'gray', strokeWidth: swid })
@@ -414,7 +428,7 @@ function drwGuias() {
 			.polyline(mF[4])
 			.attr({ stroke: 'gray', strokeWidth: swid })
 			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		//Círculos
+		//*	Círculos
 		var ellipse = draw
 			.ellipse(mF[1][1][0], mF[1][1][1], Alt / 2, Alt)
 			.attr({ fill: 'none', stroke: 'gray', strokeWidth: swid })
@@ -439,7 +453,7 @@ function showGuias() {
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		// draw.select('#' + "Guia_" + gIDtmp).remove()
+		//_ draw.select('#' + "Guia_" + gIDtmp).remove()
 		draw.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 })
 	}
 }
@@ -454,7 +468,12 @@ function hideGuias() {
 	}
 }
 
-// FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO PENEIRADO
+
+
+//* -------------------------------------------------------------------------- */
+//*         FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO PENEIRADO        */
+//* -------------------------------------------------------------------------- */
+
 var cpPnMove = function (dx, dy) {
 	this.attr({
 		transform:
@@ -490,7 +509,7 @@ var cpPnMoveStop = function () {
 				if (dist(xf, yf, mG[g][l][io][0], mG[g][l][io][1]) < d) {
 					xv = 1 * mG[g][l][io][0]
 					yv = 1 * mG[g][l][io][1]
-					d = dist(xv, yv, xf, yf)
+					d = dist(xv, yv, xf, yf)	//> DISTANCE BETWEEN POINTS
 					nGav = g
 					nLado = l
 					nIE = io
@@ -506,11 +525,17 @@ var cpPnMoveStop = function () {
 	} else {
 		this.attr({ fill: 'gray' })
 	}
-	drwPN() //Deve ficar depois do if, pois muda o valor de nGav
+	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
+
+	//TODO: Add to the Matrix
+
 }
 
-// FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO RECHAÇO
+//* -------------------------------------------------------------------------- */
+//*          FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO RECHAÇO         */
+//* -------------------------------------------------------------------------- */
+
 var cpRxMove = function (dx, dy) {
 	this.attr({
 		transform:
@@ -563,19 +588,21 @@ var cpRxMoveStop = function () {
 	} else {
 		this.attr({ fill: 'navy' })
 	}
-	drwRX() //Deve ficar depois do if, pois muda o valor de nGav
+	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
 }
 
-// Função Pontos de Controle (Edit Mode)
+//* -------------------------------------------------------------------------- */
+//*                   DESENHAR PONTOS DE CONTROLE (Edit Mode)                  */
+//* -------------------------------------------------------------------------- */
 function drwCtrlPts() {
 	for (let g = 1; g <= nGavs; g++) {
 		iGav = g
 		var gIDtmp = 'G' + pad(iGav)
-		// Grupo
+		//* Grupo
 		var gCP = draw.group()
 		gCP.attr({ id: 'CP_' + gIDtmp })
-		// Ponto de Rechaço
+		//* Ponto de Rechaço
 		var ellipse = draw
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1])
@@ -588,7 +615,7 @@ function drwCtrlPts() {
 			})
 			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
 			.drag(cpRxMove, cpRxMoveStart, cpRxMoveStop)
-		// Pontos de Peneirado
+		//* Pontos de Peneirado
 		var ellipse = draw
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1])
@@ -617,34 +644,34 @@ function drwCtrlPts() {
 }
 
 function showCtrlPts() {
-	//GERAL
+	//*	GERAL
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		//Linha de Peneirado
+		//*	Linha de Peneirado
 		for (let L = 1; L <= 2; L++) {
 			try {
 				draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
 			} catch (error) {}
 		}
-		//Gaveta
+		//*	Gaveta
 		try {
 			draw.select('#' + gIDtmp).appendTo(draw)
 		} catch (error) {}
-		//Chaminé
+		//*	Chaminé
 		try {
 			draw.select('#Cham_' + gIDtmp).appendTo(draw)
 		} catch (error) {}
-		//Linha de Rechaço
+		//*	Linha de Rechaço
 		try {
 			draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
 		} catch (error) {}
 	}
-	//PONTOS
+	//*	PONTOS
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		// Pontos de Peneirado
+		//* Pontos de Peneirado
 		draw
 			.select('#' + 'CP_Pn1_' + gIDtmp)
 			.attr({ visibility: 'visible' })
@@ -653,7 +680,7 @@ function showCtrlPts() {
 			.select('#' + 'CP_Pn2_' + gIDtmp)
 			.attr({ visibility: 'visible' })
 			.appendTo(draw)
-		//Ponto de Rechaço
+		//*	Ponto de Rechaço
 		draw
 			.select('#' + 'CP_Rx_' + gIDtmp)
 			.attr({ visibility: 'visible' })
@@ -664,11 +691,11 @@ function hideCtrlPts() {
 	for (let j = 32; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		//Ponto de Rechaço
+		//* Ponto de Rechaço
 		try {
 			draw.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
-		// Ponto de Peneirado
+		//*  Ponto de Peneirado
 		try {
 			for (let l = 1; l <= 2; l++) {
 				draw
@@ -677,14 +704,18 @@ function hideCtrlPts() {
 					.appendTo(draw)
 			}
 		} catch (error) {}
-		//Linha de Rechaço
+		//* Linha de Rechaço
 		try {
 			draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
 		} catch (error) {}
 	}
 }
 
-// Função desenhar gaveta em branco
+
+//* -------------------------------------------------------------------------- */
+//*                      Função desenhar gaveta em branco                      */
+//* -------------------------------------------------------------------------- */
+
 function drwGPF(xC, yC, L, H) {
 	//Borda
 	var brdGav = draw
@@ -697,9 +728,9 @@ function drwGPF(xC, yC, L, H) {
 		})
 	brdGav.attr({ id: 'brd' + gID })
 	brdGav.appendTo(draw.select('#' + gID))
-	// brdGav.hover(brdHoverIN, brdHoverOUT)
+	//_ brdGav.hover(brdHoverIN, brdHoverOUT)
 
-	// Contorno principal
+	//* Contorno principal
 	var x1 = mP[0][1][0]
 	var y1 = mP[0][1][1] //1
 	var x2 = mP[0][2][0]
@@ -723,7 +754,7 @@ function drwGPF(xC, yC, L, H) {
 		})
 	polygon.appendTo(draw.select('#' + gID))
 
-	// Linhas internas
+	//* Linhas internas
 	xi = mP[0][4][0]
 	yi = mP[0][4][1] //i
 	var polygon = draw.polygon(x6, y6, x1, y1, xi, yi, x5, y5).attr({

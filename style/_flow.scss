@@ -100,6 +100,7 @@
 			height: 64px;
 			display: flex;
 			align-items: center;
+
 			.codValue {
 				align-self: center;
 				margin: auto 10px;
@@ -114,10 +115,12 @@
 		// display: flex;
 		justify-content: center;
 		//_ background-color: #eee;
-		border-radius: 20px;
+		border-radius: 10px;
 		border: 1px solid $color_l2;
 		margin: 20px 0;
 		padding: 50px 0;
+		height: 2200px;
+		overflow-y: hidden;
 
 		#svgESQ {
 			width: 400px;

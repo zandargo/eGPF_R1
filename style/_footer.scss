@@ -1,19 +1,25 @@
+//* -------------------------------------------------------------------------- */
+//*                                   COMMON                                   */
+//* -------------------------------------------------------------------------- */
+
 footer {
 	display: block;
 	position: fixed;
 	bottom: 0px;
 	height: $h_footer;
-	//- width: calc(100% - 2px);
+	//_ width: calc(100% - 2px);
 	width: 100%;
 	padding: 0 10px;
 	color: $color_l5;
 	background-color: $bg_footer;
+	// font-size: 12pt;
 
 	div {
 		height: 100%;
 		flex-direction: row;
 		display: flex;
 		align-items: flex-end;
+
 		p {
 			display: flex;
 			margin: 0 2px;
@@ -25,5 +31,36 @@ footer {
 			//_ font-variant-caps: petite-caps;
 			user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 		}
+	}
+}
+
+//* -------------------------------------------------------------------------- */
+//*                                    FLOW                                    */
+//* -------------------------------------------------------------------------- */
+
+#z-flow {
+	width: 100vw;
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+
+	div {
+		display: flex;
+		align-items: center;
+		width: 20vw;
+		max-width: 200px;
+		margin: auto -0.5px;
+		// padding: auto 20px;
+		padding-left: 20px;
+		padding-right: 20px;
+		// border-left: 1px dotted $color_d1;
+		// border-right: 1px dotted $color_d1;
+		user-select: none;
+	}
+
+	#z-flow-status {
+		max-width: 50vw;
+		width: 320px; //$w_sidebar * 1px;
+		// border-right: 4px double $color_d1;
 	}
 }

@@ -9,6 +9,7 @@
   margin: 0;
   padding: 0;
   border: none;
+  font-variant-caps: petite-caps;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
@@ -396,6 +397,42 @@ footer div p {
   /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
+#z-flow {
+  width: 100vw;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-line-pack: center;
+      align-content: center;
+}
+
+#z-flow div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  width: 20vw;
+  max-width: 200px;
+  margin: auto -0.5px;
+  padding-left: 20px;
+  padding-right: 20px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+#z-flow #z-flow-status {
+  max-width: 50vw;
+  width: 320px;
+}
+
 .slider {
   -webkit-appearance: none;
   width: 76%;
@@ -528,10 +565,12 @@ footer div p {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  border-radius: 20px;
+  border-radius: 10px;
   border: 1px solid #a7b6be;
   margin: 20px 0;
   padding: 50px 0;
+  height: 2200px;
+  overflow-y: hidden;
 }
 
 #flow-main #divESQ #svgESQ {

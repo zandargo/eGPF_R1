@@ -28,13 +28,21 @@ $.get("./pages/nav_flow.html", function (data) {
 	$('<div>', {
 		id: 'rbn-flow',
 		class: 'tabcontent'
-	}).appendTo('#sidebar')
+	}).appendTo('#menu-ribbon')
 	
 	$.get("./pages/rbn_flow.html", function (data) {
 		$('#rbn-flow').html(data)
 	})
 
-
+//*	FOOTER
+	$('<div>', {
+		id: 'z-flow',
+		class: 'tabcontent'
+	}).appendTo('#StatusBar')
+	
+	$.get("./pages/z_flow.html", function (data) {
+		$('#z-flow').html(data)
+	})
 
 	
 
@@ -66,13 +74,21 @@ $.get("./pages/nav_chart.html", function(data){
 $('<div>', {
 	id: 'rbn-chart',
 	class: 'tabcontent'
-	}).appendTo('#sidebar')
+	}).appendTo('#menu-ribbon')
 
 $.get("./pages/rbn_chart.html", function(data){
     $('#rbn-chart').html(data)
 	})
 
-
+//*	FOOTER
+	$('<div>', {
+		id: 'z-chart',
+		class: 'tabcontent'
+	}).appendTo('#StatusBar')
+	
+	$.get("./pages/z_chart.html", function (data) {
+		$('#z-chart').html(data)
+	})
 
 
 
@@ -80,3 +96,42 @@ $.get("./pages/rbn_chart.html", function(data){
 //*                                    DEFS1                                   */
 //* -------------------------------------------------------------------------- */
 
+//*	WRAPPER
+$('<div>', {
+	id: 'wrp-defs1',
+	class: 'tabcontent'
+	}).appendTo('#wrapper')
+
+$.get("./pages/wrp_defs1.html", function(data){
+    $('#wrp-defs1').html(data)
+})
+	
+//*	SIDEBAR
+$('<div>', {
+	id: 'nav-defs1',
+	class: 'tabcontent'
+	}).appendTo('#sidebar')
+
+$.get("./pages/nav_defs1.html", function(data){
+    $('#nav-defs1').html(data)
+	})
+
+//*	RIBBON
+$('<div>', {
+	id: 'rbn-defs1',
+	class: 'tabcontent'
+	}).appendTo('#menu-ribbon')
+
+$.get("./pages/rbn_defs1.html", function(data){
+    $('#rbn-defs1').html(data)
+})
+	
+//*	FOOTER
+	$('<div>', {
+		id: 'z-defs1',
+		class: 'tabcontent'
+	}).appendTo('#StatusBar')
+	
+	$.get("./pages/z_defs1.html", function (data) {
+		$('#z-defs1').html(data)
+	})

@@ -10,23 +10,23 @@ var y1p = A4y + offP
 
 
 // Definição geral da gaveta
-var nGavs     = 32                          // Número de gavetas
-var Larg      = 150                         // Largura da Gaveta
-var Alt       = 8                           // Altura da gaveta
-var k         = 5                           // Proporção Gaveta/Coluna
-var x0        = 200                         // Posição inicial X
-var y0        = 50                          // Posição inicial Y
-var yOff      = 64                          // Offset entre gavetas
-var lwid      = 2                           // Largura de linha geral
-var cor0      = 'white'                     // Cor de fundo
-var cor1      = 'black'                     // Cor de linha
-var sk        = 5                           // Skew
-var kLin      = 3                           // Expansão de linha fora da gaveta
-var kFT       = 2.25                        // Fator de correção para as linhas Frente e Trás
-var kDE       = 1                           // Fator de correção para as linhas Direita e Esquerda
-var strDashPR = 30 * lwid + ' ' + 3 * lwid  // Padrão de tracejado do PRODUTO
-var strDashRX = 3 * lwid + ' ' + 3 * lwid   // Padrão de tracejado do RECHAÇO
-var strDashPN = 6 * lwid + ' ' + 6 * lwid   // Padrão de tracejado do PENEIRADO
+var nGavs     = 32                          //> Número de gavetas
+var Larg      = 150                         //> Largura da Gaveta
+var Alt       = 8                           //> Altura da gaveta
+var k         = 5                           //> Proporção Gaveta/Coluna
+var x0        = 200                         //> Posição inicial X
+var y0        = 50                          //> Posição inicial Y
+var yOff      = 64                          //> Offset entre gavetas
+var lwid      = 2                           //> Largura de linha geral
+var cor0      = 'white'                     //> Cor de fundo
+var cor1      = 'black'                     //> Cor de linha
+var sk        = 5                           //> Skew
+var kLin      = 3                           //> Expansão de linha fora da gaveta
+var kFT       = 2.25                        //> Fator de correção para as linhas Frente e Trás
+var kDE       = 1                           //> Fator de correção para as linhas Direita e Esquerda
+var strDashPR = 30 * lwid + ' ' + 3 * lwid  //> Padrão de tracejado do PRODUTO
+var strDashRX = 3 * lwid + ' ' + 3 * lwid   //> Padrão de tracejado do RECHAÇO
+var strDashPN = 6 * lwid + ' ' + 6 * lwid   //> Padrão de tracejado do PENEIRADO
 
 var cLinPR = 'navy' // Cor da linha do PRODUTO
 var cLinRX = 'navy' // Cor da linha do RECHAÇO
@@ -89,6 +89,8 @@ let wf = 2.25 // Algo relacionado ao texto que aparece ao fazer hover sobre a GP
 
 
 
+
+
 //Matriz de equivalência de altura da gaveta
 var mH = [
 	[65, 65, 0],
@@ -133,6 +135,7 @@ var mF = [
 ]
 
 //MATRIZ GERAL DE PRODUTO/RECHAÇO
+
 // prettier-ignore
 var mG = [
 	[
