@@ -2,6 +2,27 @@
 const draw = Snap('#svgESQ')
 
 
+
+$('#z-flow-clog').html(bgcolor)
+
+
+
+
+//TODO	Desenhar 'Ai' já caindo.
+
+//TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
+
+//TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
+//			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=TouD, Direita
+
+
+//TODO 	Indicar na StatusBar produto, tipo de fluxo, origem e destino
+
+//TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
+
+//TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
+
+
 //Peneirado de fundo
 const patPn = draw
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
@@ -112,7 +133,7 @@ function calcHtotal() {
 	let target = document.getElementById('hTotal')
 	target.innerHTML = '&nbsp' + hTotal + 'mm'
 
-	$("#divESQ").css({'height': 150+64*nGavs+"px" })
+	$("#divESQ").css({'height': 200+64*nGavs+"px" })
 }
 
 //* -------------------------------------------------------------------------- */
@@ -201,6 +222,8 @@ function ladoHoverOUT() {
 
 
 */
+
+
 
 //DEFINIÇÃO GERAL DA MATRIZ DE PRODUTO/RECHAÇO
 for (let g = 1; g <= nGavs; g++) {
@@ -403,7 +426,7 @@ function calcMat(xC, yC, L) {
 //* -------------------------------------------------------------------------- */
 
 function drwGuias() {
-	for (let j = nGavs; j >= 1; j--) {
+	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		let swid = 0.5 * lwid
@@ -645,7 +668,7 @@ function drwCtrlPts() {
 
 function showCtrlPts() {
 	//*	GERAL
-	for (let j = nGavs; j >= 1; j--) {
+	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//*	Linha de Peneirado
@@ -667,6 +690,9 @@ function showCtrlPts() {
 			draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
 		} catch (error) {}
 	}
+	
+
+
 	//*	PONTOS
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
@@ -688,7 +714,7 @@ function showCtrlPts() {
 	}
 }
 function hideCtrlPts() {
-	for (let j = 32; j >= 1; j--) {
+	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//* Ponto de Rechaço
@@ -817,7 +843,7 @@ function drwGPF(xC, yC, L, H) {
 }
 
 function hideGPF() {
-	for (let j = 32; j >= 1; j--) {
+	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		try {
@@ -836,7 +862,7 @@ function hideGPF() {
 	}
 }
 function showGPF() {
-	for (let j = 1; j <= nGavs; j++) {
+	for (let j = 0; j <= nGavs; j++) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		try {
@@ -877,8 +903,61 @@ function drwCham() {
 		})
 		.appendTo(draw.select('#' + 'Cham_' + gID))
 	if (nIE == 1 || nGav0 != nGav) {
-		polygon.attr({ fill: 'darkred' })
+		// polygon.attr({ fill: 'darkred' })
+		polygon.attr({ fill: cCham })
 	}
+}
+
+
+//* ------------------------ DESENHAR LINHA DE RECHAÇO ----------------------- */
+//	[[x0, 10],[x0,y0 + yOff]]
+
+function drwRX0() {
+	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
+	var gID = 'G' + pad(0) //ID da Gaveta
+	try {
+		draw.select('#Rx_' + gID).remove() //Apaga grupo existente
+		draw.select('#maskRx_' + gID).remove() //Apaga grupo existente
+	} catch (error) {}
+
+	var gRx = draw.group() //Cria Grupo
+	gRx.attr({ id: 'Rx_' + gID }) //Atribui nome
+
+	//*	'Ai' - SEMPRE PRESENTE
+	//Linha de fundo escuro
+	var polyline = draw
+		.polyline([[x0, 10],[x0,y0 + yOff]])
+		.attr({
+			fill: 'none',
+			stroke: cLinPR,
+			strokeWidth: 1 * lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Rx_' + gID))
+
+	//Linha principal (animada)
+	var polyline = draw
+		.polyline([[x0, 10],[x0,y0 + yOff]])
+		.attr({
+			fill: 'none',
+			stroke: cLinPR,
+			strokeWidth: 2 * lwid,
+			strokeDasharray: strDashRX,
+			strokeDashoffset: 0,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Rx_' + gID))
+	Snap.animate(
+		Anim0,
+		Anim1,
+		function (value) {
+			polyline.attr({ strokeDashoffset: value })
+		},
+		Anim2
+	)
+
 }
 
 function drwRX() {
@@ -1229,7 +1308,8 @@ function drwPN() {
 	)
 }
 
-// Função desenhar áreas de posição
+
+//* -------------------- Função desenhar áreas de posição -------------------- */
 function drwAreas() {
 	var r = 8
 	var circle = draw
@@ -1414,6 +1494,15 @@ function rebuildGPF() {
 //* -------------------------------------------------------------------------- */
 // $(document).ready( function () {
 	
+//	[[x0, 10],[x0,y0 + yOff]]
+
+//* 	QUEDA DO PRODUTO 'A'
+
+
+
+
+
+//*	ITERAÇÕES
 	for (var i = nGavs; i >= 1; i--) {
 		iGav = i
 		var gID = 'G' + pad(iGav)
@@ -1441,8 +1530,10 @@ function rebuildGPF() {
 	nGavs = 28
 	rebuildGPF()
 	calcHtotal()
-	// calcHtotal
-	
+
+
+drwRX0()
+
 	var slidernGavs = document.getElementById('nGav-slider')
 	slidernGavs.addEventListener('input', function () {
 		nGavs = slidernGavs.value

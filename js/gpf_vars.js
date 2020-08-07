@@ -10,34 +10,39 @@ var y1p = A4y + offP
 
 
 // Definição geral da gaveta
-var nGavs     = 32                          //> Número de gavetas
-var Larg      = 150                         //> Largura da Gaveta
-var Alt       = 8                           //> Altura da gaveta
-var k         = 5                           //> Proporção Gaveta/Coluna
-var x0        = 200                         //> Posição inicial X
-var y0        = 50                          //> Posição inicial Y
-var yOff      = 64                          //> Offset entre gavetas
-var lwid      = 2                           //> Largura de linha geral
-var cor0      = 'white'                     //> Cor de fundo
-var cor1      = 'black'                     //> Cor de linha
-var sk        = 5                           //> Skew
-var kLin      = 3                           //> Expansão de linha fora da gaveta
-var kFT       = 2.25                        //> Fator de correção para as linhas Frente e Trás
-var kDE       = 1                           //> Fator de correção para as linhas Direita e Esquerda
-var strDashPR = 30 * lwid + ' ' + 3 * lwid  //> Padrão de tracejado do PRODUTO
-var strDashRX = 3 * lwid + ' ' + 3 * lwid   //> Padrão de tracejado do RECHAÇO
-var strDashPN = 6 * lwid + ' ' + 6 * lwid   //> Padrão de tracejado do PENEIRADO
+var nGavs     = 32 												//> Número de gavetas
+var Larg      = 150 												//> Largura da Gaveta
+var Alt       = 8 												//> Altura da gaveta
+var k         = 5 												//> Proporção Gaveta/Coluna
+var x0        = 200 												//> Posição inicial X
+var y0        = 50 												//> Posição inicial Y
+var yOff      = 64 												//> Offset entre gavetas
+var lwid      = 2 												//> Largura de linha geral
+var cor0      = 'white' 										//> Cor de fundo
+var cor1      = 'black' 										//> Cor de linha
+var bgcolor   = $('body').css('background-color')		//> Cor do fundo
+var sk        = 5 												//> Skew
+var kLin      = 3 												//> Expansão de linha fora da gaveta
+var kFT       = 2.25 											//> Fator de correção para as linhas Frente e Trás
+var kDE       = 1 												//> Fator de correção para as linhas Direita e Esquerda
+var strDashPR = 30 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODUTO
+var strDashRX = 3 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
+var strDashPN = 6 * lwid + ' ' + 6 * lwid 				//> Padrão de tracejado do PENEIRADO
 
-var cLinPR = 'navy' // Cor da linha do PRODUTO
-var cLinRX = 'navy' // Cor da linha do RECHAÇO
-var cLinPN = 'gray' // Cor da linha do PENEIRADO
+// var cCham = Snap.hsl2rgb(0, 0.1, 0.25)
+var cCham = Snap.hsl(0, 0.1, 0.25)
+var cLinPR = 'navy' //* Cor da linha do PRODUTO
+var cLinRX = 'navy' //* Cor da linha do RECHAÇO
+var cLinPN = 'gray' //* Cor da linha do PENEIRADO
 
-// Definições Animação
+//* --------------------------- Definições Animação -------------------------- */
+
 var Anim0 = 0
 var Anim1 = 8000
 var Anim2 = -500000
 
-// Posição dos centros
+//* --------------------------- Posição dos centros -------------------------- */
+
 var xFi = null
 var yFi = null
 var xEi = null
@@ -59,7 +64,8 @@ var yTe = null
 var xT = 0
 var yT = 0
 
-//Gaveta atual
+//* ------------------------------ Gaveta atual ------------------------------ */
+
 var iGav = null
 var gID
 var gIDhover  = ''
@@ -74,6 +80,7 @@ var sLado     = ''
 var sIE       = ''
 var s         = ''
 var L         = ''
+
 //Move
 var xi = 0
     yi = 0
@@ -85,13 +92,14 @@ var bRXmask = false
 //Esquema
 var hTotal = 0
 
-let wf = 2.25 // Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
+let wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
 
 
 
 
 
-//Matriz de equivalência de altura da gaveta
+//* --------------- Matriz de equivalência de altura da gaveta --------------- */
+
 var mH = [
 	[65, 65, 0],
 	[75, 75, 0],
@@ -104,7 +112,9 @@ var mH = [
 	[145, 85, 60],
 ]
 
-// MATRIZ PRINCIPAL: PONTOS DA GAVETA(PARA DESENHO TEMPLATE)
+//* -------------------------------------------------------------------------- */
+//*          MATRIZ PRINCIPAL: PONTOS DA GAVETA(PARA DESENHO TEMPLATE)         */
+//* -------------------------------------------------------------------------- */
 // prettier-ignore
 var mP = [
 	[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]], //0 Pontos do polígono principal
@@ -114,7 +124,10 @@ var mP = [
 	[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]] //4 Pontos do CANTO 4
 ]
 
-// MATRIX CHAMINÉ: PONTOS PARA DESENHO DA CHAMINÉ
+
+//* -------------------------------------------------------------------------- */
+//*               MATRIX CHAMINÉ: PONTOS PARA DESENHO DA CHAMINÉ               */
+//* -------------------------------------------------------------------------- */
 // prettier-ignore
 var mC = [
 	[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]], //0
@@ -124,7 +137,10 @@ var mC = [
 	[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]] //4 Pontos 'T'
 ]
 
-// MATRIZ FLUXO: PONTOS DE CONEXÃO
+
+//* -------------------------------------------------------------------------- */
+//*                       MATRIZ FLUXO: PONTOS DE CONEXÃO                      */
+//* -------------------------------------------------------------------------- */
 // prettier-ignore
 var mF = [
 	[[0, 0],[0, 0]], //0 Centro da Gaveta
@@ -134,8 +150,10 @@ var mF = [
 	[[0, 0],[0, 0]] //4 Pontos 'Ti' e 'Te'
 ]
 
-//MATRIZ GERAL DE PRODUTO/RECHAÇO
 
+//* -------------------------------------------------------------------------- */
+//*                       MATRIZ GERAL DE PRODUTO/RECHAÇO                      */
+//* -------------------------------------------------------------------------- */
 // prettier-ignore
 var mG = [
 	[
@@ -340,7 +358,9 @@ var mG = [
 
 
 
-//MATRIZ DE CÓDIGOS DAS GAVETAS
+//* -------------------------------------------------------------------------- */
+//*                        MATRIZ DE CÓDIGOS DAS GAVETAS                       */
+//* -------------------------------------------------------------------------- */
 var mCOD0 = [
 	[120, 'D'],
 	[102, 'D'],
@@ -380,7 +400,9 @@ var mCOD0 = [
 	[410, 'R'],
 ]
 
-//MATRIZ DE CORTE
+//* -------------------------------------------------------------------------- */
+//*                               MATRIZ DE CORTE                              */
+//* -------------------------------------------------------------------------- */
 var mCorte = [
 	[10000, ''],
 	[20000, ''],

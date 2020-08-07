@@ -2,6 +2,14 @@
 //*                                   COMMON                                   */
 //* -------------------------------------------------------------------------- */
 
+$color_Pr_A: hsl(200, 100%, 25%);
+$color_Pn_A: hsl(200, 50%, 75%);
+
+$color_Pr_B: hsl(120, 100%, 25%);
+$color_Pn_B: hsl(120, 50%, 75%);
+
+$color_cham: hsl(0, 10%, 25%);
+
 .slider {
 	-webkit-appearance: none;
 	width: 76%;
