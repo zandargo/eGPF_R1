@@ -3,7 +3,7 @@ const draw = Snap('#svgESQ')
 
 
 
-$('#z-flow-clog').html(bgcolor)
+//_$('#z-flow-clog').html(bgcolor)
 
 
 
@@ -73,28 +73,41 @@ function chkProdColor() {
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
 function propagate() {
-	//* PRODUTO		
-	for (let index = 1; index <= nGavs; index++) { 
-		let prod = mESQ[index][0][1]
-		let dest = mESQ[index][1][1]
-
-		// if (nlado==0) { //&& mESQ[nGav0][0][1]!='') {
-		// 	if (nGav0==nGav ) {
-		// 		mESQ[nGav0+1][0][1]=mESQ[nGav0][0][1]
-		// 	} else {
-		// 		mESQ[nGav][0][1]=mESQ[nGav0][0][1]
-		// 	}
-		// }
-		if (nIE==0) { //&& mESQ[nGav0][0][1]!='') {
-			if (nGav0==nGav ) {
-				mESQ[nGav0+1][0][1]=mESQ[nGav0][0][1]
-			} else {
-				mESQ[nGav][0][1]=mESQ[nGav0][0][1]
-			}
+	
+	let dest = 0
+	//* DESCONECTAR PRODUTO
+	for (let i = 2; i <= nGavs; i++) {		//> Gaveta atual
+		let cont = 0
+		for (let j = 1; j < i; j++) {		//> Varre desde a primeira até a atual
+			dest = 1 * mESQ[j][1][1]
+			if (dest == i && mESQ[j][1][2] == 0) { cont++ }
 		}
+		if (cont == 0) { mESQ[i][0][1] = '' }
+	}
+	
+	
+	//* PRODUTO
+	for (let index = 1; index <= nGavs; index++) { 
+		let prod = mESQ[index][0][1].toString()
+	
+		for (let p = 1; p <= 3; p++) {				//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
+			
+			let dest = 1 * mESQ[index][p][1]				//> nPara
+			if (mESQ[index][p][2] == 0) {
+				if (index==dest ) {
+					mESQ[index+1][0][1]=prod
+				} else {
+					mESQ[dest][0][1]=prod
+				}
+			} else {}
+			
+		}														//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
+	
 	}
 	
 }
+	
+
 
 //* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
 function reColor() {
@@ -119,6 +132,8 @@ function reColor() {
 		var gIDtmp = 'G' + pad(index)
 		try { draw.select('#' + 'linRx0_' + gIDtmp).attr({stroke: cLinRX}) } catch (error) {}
 		try { draw.select('#' + 'linRx1_' + gIDtmp).attr({stroke: cLinRX}) } catch (error) {}
+		try { draw.select('#' + 'linPn1_' + gIDtmp).attr({stroke: cLinPN}) } catch (error) {}
+		try { draw.select('#' + 'linPn2_' + gIDtmp).attr({stroke: cLinPN}) } catch (error) {}
 	}
 }
 
@@ -550,7 +565,10 @@ var cpPnMove = function (dx, dy) {
 	var bb = this.getBBox()
 	xi = bb.cx
 	yi = bb.cy
+	let s = this.attr('id')
+	s = s.substr(s.length - 3)
 }
+
 
 var cpPnMoveStart = function () {
 	this.data('origTransform', this.transform().local)
@@ -558,8 +576,7 @@ var cpPnMoveStart = function () {
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
-	$('#z-flow-type span').html('Peneirado')
-	$('#z-flow-from span').html(L.substr(s.length - 3, 3))
+	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1+nPn][1])][0][1] = '' } 
 }
 
 var cpPnMoveStop = function () {
@@ -588,16 +605,26 @@ var cpPnMoveStop = function () {
 	var s = this.attr('id')
 	s = s.substr(s.length - 3)
 	this.transform('t' + xv + ',' + yv)
-	if (nGav0 == nGav) {
-		this.attr({ fill: 'lightgray' })
-	} else {
-		this.attr({ fill: 'gray' })
-	}
+	
+	mESQ[nGav0][1+nPn][1] = nGav	//> nPara
+	mESQ[nGav0][1+nPn][2] = nIE		//> nIE
+
+
+
+	$('#z-flow-prod span').html(mESQ[nGav][0][1])
+	$('#z-flow-type span').html('Peneirado ' + nPn)
+	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
+	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1+nPn][1])+'.'+nLado)
+	
+	propagate()
+	reColor()
+
+
+
+
 	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
 
-	$('#z-flow-to span').html('G' + pad(nGav))
-	//TODO: Add to the Matrix
 
 }
 
@@ -658,17 +685,20 @@ var cpRxMoveStop = function () {
 	drwCham()
 
 	mESQ[nGav0][1][1] = nGav	//> nPara
+	mESQ[nGav0][1][2] = nIE		//> nIE
 
-	
 
 
-	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
+	$('#z-flow-type span').html('Rechaço')
+	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
+	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
+	
+	propagate()
+	reColor()
 
 	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
-	propagate()
-	reColor()
 }
 
 //* -------------------------------------------------------------------------- */
@@ -1427,6 +1457,7 @@ function drwPN() {
 	var polyline1 = draw
 		.polyline(vLinPn)
 		.attr({
+			id: 'linPn'+nPn+'_' + gID,
 			fill: 'none',
 			stroke: cLinPN,
 			strokeWidth: 1.5 * lwid,
@@ -1469,14 +1500,7 @@ function drwPN() {
 
 	//* Desenhar seta caso necessite
 	if (nIE == 1 && nGav0 != nGav) {
-		drwSeta(
-			vLinPr[2],
-			vLinPr[3],
-			1.2 * Alt,
-			2.5 * Alt,
-			cLinPN,
-			'#Pn' + nPn + '_' + gID
-		)
+		drwSeta( vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID )
 	}
 }
 

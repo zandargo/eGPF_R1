@@ -501,17 +501,17 @@ var mCorte = [
 //* ------------------- MATRIZ GERAL DE CONTROLE DO ESQUEMA ------------------ */
 var mESQ = [
 	[
-		[0, 'B'], 	//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
-		[0, 0], 		//> Rx: nLado, 'nPara', 
-		[0, 0], 		//> Pn1: nLado, 'nPara' - NÃO SE APLICA
-		[0, 0], 		//> Pn2: nLado, 'nPara' - NÃO SE APLICA
+		[0, 'B'], 		//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
+		[0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE
+		[0, 0, 0], 		//> Pn1: nLado, 'nPara' - NÃO SE APLICA, nIE
+		[0, 0, 0], 		//> Pn2: nLado, 'nPara' - NÃO SE APLICA, nIE
 	
 	], 
 	[
-		[65, 'A'], 	//> Gaveta 01: Altura, Produto
-		[0, 0], 		//> Rx: nLado, 'nPara'
-		[0, 0], 		//> Pn1: nLado, 'nPara'
-		[0, 0], 		//> Pn2: nLado, 'nPara'
+		[65, 'A'], 		//> Gaveta 01: Altura, Produto
+		[0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE
+		[0, 0, 0], 		//> Pn1: nLado, 'nPara', nIE
+		[0, 0, 0], 		//> Pn2: nLado, 'nPara', nIE
 	] 
 ]
 
@@ -521,9 +521,9 @@ for (let g = 2; g < nGavs; g++) {
 	let mGav = [
 		
 			[65, ''],
-			[0, 0],
-			[0, 0],
-			[0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
 		
 	]
 	mESQ.push(mGav)
@@ -532,9 +532,9 @@ for (let g = 2; g < nGavs; g++) {
 let mGav = [
 	
 		[32, ''],
-		[0, 0],
-		[0, 0],
-		[0, 0],
+		[0, 0, 0],
+		[0, 0, 0],
+		[0, 0, 0],
 	
 ]
 mESQ.push(mGav)
