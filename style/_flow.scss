@@ -8,9 +8,12 @@ $color_Pn_A: hsl(200, 75%, 50%);
 $color_Pr_B: hsl(320, 100%, 25%);
 $color_Pn_B: hsl(280, 75%, 50%);
 
+$color_Pr_0: hsl(0, 0%, 50%);
+$color_Pn_0: hsl(0, 0%, 75%);
+
 $color_cham: hsl(0, 10%, 25%);
 
-$teste1: hsl(160, 100%, 25%);
+$teste1: hsl(24, 100%, 25%);
 $teste2: hsl(160, 50%, 50%);
 $teste3: hsl(184, 50%, 50%);
 
@@ -114,6 +117,11 @@ $teste3: hsl(184, 50%, 50%);
 		margin: 2px 0;
 	}
 
+	.space {
+		height: 10px;
+		width: 100%;
+	}
+
 	#flow-color-box01 {
 		background-color: $color_Pr_A;
 	}
@@ -125,6 +133,12 @@ $teste3: hsl(184, 50%, 50%);
 	}
 	#flow-color-box04 {
 		background-color: $color_Pn_B;
+	}
+	#flow-color-box05 {
+		background-color: $color_Pr_0;
+	}
+	#flow-color-box06 {
+		background-color: $color_Pn_0;
 	}
 }
 //* -------------------------------------------------------------------------- */

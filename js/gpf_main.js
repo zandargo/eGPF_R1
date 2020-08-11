@@ -15,9 +15,6 @@ const draw = Snap('#svgESQ')
 //TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
 //			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=TouD, Direita
 
-
-//TODO 	Indicar na StatusBar produto, tipo de fluxo, origem e destino
-
 //TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
 
 //TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
@@ -79,8 +76,12 @@ function propagate() {
 	for (let i = 2; i <= nGavs; i++) {		//> Gaveta atual
 		let cont = 0
 		for (let j = 1; j < i; j++) {		//> Varre desde a primeira até a atual
-			dest = 1 * mESQ[j][1][1]
-			if (dest == i && mESQ[j][1][2] == 0) { cont++ }
+		
+			for (let p = 1; p <= 3; p++) {				//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
+				dest = 1 * mESQ[j][p][1]
+				if (dest == i && mESQ[j][p][2] == 0) { cont++ }
+			}														//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
+		
 		}
 		if (cont == 0) { mESQ[i][0][1] = '' }
 	}
@@ -130,10 +131,22 @@ function reColor() {
 			break;
 		}
 		var gIDtmp = 'G' + pad(index)
-		try { draw.select('#' + 'linRx0_' + gIDtmp).attr({stroke: cLinRX}) } catch (error) {}
-		try { draw.select('#' + 'linRx1_' + gIDtmp).attr({stroke: cLinRX}) } catch (error) {}
-		try { draw.select('#' + 'linPn1_' + gIDtmp).attr({stroke: cLinPN}) } catch (error) {}
-		try { draw.select('#' + 'linPn2_' + gIDtmp).attr({stroke: cLinPN}) } catch (error) {}
+		try { draw.select('#' + 'linRx0_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
+		try { draw.select('#' + 'linRx1_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
+		try { draw.select('#' + 'arwRx_'  + gIDtmp).attr({ fill  : cLinRX }) } catch (error) {}
+		
+		try { draw.select('#' + 'linPn1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { draw.select('#' + 'linPn2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { draw.select('#' + 'linPr1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { draw.select('#' + 'linPr2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { draw.select('#' + 'arwPn1_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
+		try { draw.select('#' + 'arwPn2_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
+		
+		
+		try { draw.select('#' + 'CP_Rx_'  + gIDtmp).attr({ fill: cLinRX }) } catch (error) {}
+		try { draw.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
+		try { draw.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
+
 	}
 }
 
@@ -179,6 +192,8 @@ function drwSliders() {
 			function () {
 				let sID = 'valH' + nGPF
 				let target = document.getElementById(sID)
+				let j = 0
+				let n = this.id.substring(this.id.length - 2)
 				for (let index = 0; index < mH.length; index++) {
 					if (this.value == mH[index][0]) {
 						let value = mH[index][1]
@@ -186,11 +201,12 @@ function drwSliders() {
 							value = ' <h5>+' + mH[index][2] + '</h5> ' + mH[index][1]
 						}
 						target.innerHTML = value
+						$('#codGPF' + n).html('GPF' + mH[index][1])
 						break
 					}
 				}
-				let j = 1 * index
 				mESQ[j][0][0] = parseInt(this.value, 10)
+				j = 1 * index
 				calcHtotal()
 			},
 			true
@@ -227,26 +243,27 @@ function calcHtotal() {
 //*                             CÓDIGO DAS GAVETAS                             */
 //* -------------------------------------------------------------------------- */
 
+
 function drwCOD() {
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
 
-		// Div Container
+		//* Div Container
 		var div = document.createElement('div')
-		div.id = 'codGPF' + nGPF
+		div.id = 'div-codGPF' + nGPF
 		div.className = 'codcontainer'
 		document.getElementById('divCOD').appendChild(div)
 
-		// Texto com CÓD da gaveta
+		//* Texto com CÓD da gaveta
 		let h2 = document.createElement('h2')
 		h2.id = 'codGPF' + nGPF
 		h2.className = 'codValue'
-		h2.innerHTML = 'GPF'
+		h2.innerHTML = 'GPF65'
 		div.appendChild(h2)
 	}
 }
 
-// POSIÇÃO DO MOUSE
+//* 	POSIÇÃO DO MOUSE
 var xM = null
 var yM = null
 draw.mousemove(moveFunc)
@@ -257,13 +274,13 @@ function moveFunc(ev, x, y) {
 	sGavHover.attr({ y: newY })
 }
 
-// FORMATO DE NÚMERO "00"
+//* 	FORMATO DE NÚMERO "00"
 function pad(num) {
 	var s = '00' + num
 	return s.substr(s.length - 2)
 }
 
-//FUNÇÃO DISTÂNCIA ENTRE DOIS PONTOS
+//*	FUNÇÃO DISTÂNCIA ENTRE DOIS PONTOS
 function dist(u1, v1, u2, v2) {
 	return Math.sqrt((u2 - u1) ** 2 + (v2 - v1) ** 2)
 }
@@ -313,7 +330,7 @@ function ladoHoverOUT() {
 
 
 //* -------------- DEFINIÇÃO GERAL DA MATRIZ DE PRODUTO/RECHAÇO -------------- */
-for (let g = 1; g <= nGavs; g++) {
+for (let g = 0; g <= nGavs; g++) {
 	//Calcula os pontos da gaveta atual
 	calcMat(x0, y0 + yOff * g, Larg)
 	//Grava na matriz geral
@@ -483,10 +500,20 @@ function calcMat(xC, yC, L) {
 //* -------------------------------------------------------------------------- */
 
 function drwGuias() {
-	for (let j = nGavs; j >= 0; j--) {
+	let swid = 0.5 * lwid
+	calcMat(x0, y0, Larg)
+
+	var gGui = draw.group()
+	gGui.attr({ id: 'Guia_G00' })
+	var ellipse = draw
+			.ellipse(mF[0][1][0], mF[0][1][1] -2- Alt / 2, Alt , Alt / 2)
+			.attr({ fill: 'gray', stroke: 'gray', strokeWidth: swid })
+			.appendTo(draw.select('#' + 'Guia_G00'))
+
+
+	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		let swid = 0.5 * lwid
 		//* 	Pontos
 		calcMat(x0, y0 + yOff * j, Larg)
 		var gGui = draw.group()
@@ -530,7 +557,7 @@ function drwGuias() {
 }
 
 function showGuias() {
-	for (let j = nGavs; j >= 1; j--) {
+	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//_ draw.select('#' + "Guia_" + gIDtmp).remove()
@@ -540,7 +567,7 @@ function showGuias() {
 }
 
 function hideGuias() {
-	for (let j = 32; j >= 1; j--) {
+	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		try {
@@ -702,25 +729,124 @@ var cpRxMoveStop = function () {
 }
 
 //* -------------------------------------------------------------------------- */
+//*          FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO PRODUTO         */
+//* -------------------------------------------------------------------------- */
+var cpPrMove = function (dx, dy) {
+	this.attr({
+		transform:
+			this.data('origTransform') +
+			(this.data('origTransform') ? 'T' : 't') +
+			[dx, dy],
+	})
+	var bb = this.getBBox()
+	xi = bb.cx
+	yi = bb.cy
+	let s = this.attr('id')
+	s = s.substr(s.length - 1)
+}
+
+
+
+var cpPrMoveStart = function () {
+	this.data('origTransform', this.transform().local)
+	let s = this.attr('id')
+	s = s.substr(s.length - 1)
+	nGav0 = 0
+	switch (s) {
+		case 'A':
+			nAB = 1
+			break;
+		case 'B':
+			nAB = 2
+			break;
+		default:
+			break;
+		}
+	nGav = mESQ[nGav0][nAB][1]
+	if (nGav != nGav0) { mESQ[(mESQ[nGav0][nAB][1])][0][1] = '' } 
+	$('#z-flow-prod span').html(s = s.substr(s.length - 1))
+}
+
+
+var cpPrMoveStop = function () {
+	var bb = this.getBBox()
+	xf = bb.cx
+	yf = bb.cy
+
+	let d = 10 ** 6
+	let xv = xf
+	let yv = yf
+
+	for (let g = 0; g <= nGavs; g++) {
+		for (let l = 1; l <= 4; l++) {
+			for (let io = 0; io <= 1; io++) {
+				if (dist(xf, yf, mG[g][l][io][0], mG[g][l][io][1]) < d) {
+					xv = 1 * mG[g][l][io][0]
+					yv = 1 * mG[g][l][io][1]
+					d = dist(xv, yv, xf, yf)
+					nGav = g
+					nLado = l
+					nIE = io
+				}
+			}
+		}
+	}
+	var s = this.attr('id')
+	s = s.substr(s.length - 1)
+	this.transform('t' + xv + ',' + yv)
+
+	mESQ[nGav0][nAB][1] = nGav	//> nPara
+	mESQ[nGav0][nAB][2] = 1		//> nIE [Sempre externo]
+
+
+
+	$('#z-flow-prod span').html(mESQ[nGav][0][1])
+	$('#z-flow-type span').html('Produto')
+	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
+	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
+	
+	// propagate()
+	// reColor()
+
+	//drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
+	showCtrlPts()
+}
+
+//* -------------------------------------------------------------------------- */
 //*                   DESENHAR PONTOS DE CONTROLE (Edit Mode)                  */
 //* -------------------------------------------------------------------------- */
 function drwCtrlPts() {
-		//* Ponto do produto A
-		//var gIDtmp = 'GA'
-		var gCP = draw.group()
-		gCP.attr({ id: 'CP_0'})
+	//* Grupo 0
+	var gCP = draw.group()
+	gCP.attr({ id: 'CP_G00'})
+	//* Ponto do produto A
 		var ellipse = draw
 			.ellipse(0, 0, Alt, Alt)
-			.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]/2))
+			.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]*0.75))
 			.attr({
 				id: 'CP_A',
 				fill: cLinPRa,
 				stroke: 'none',
 				strokeWidth: 0,
 				visibility: 'hidden',
+				opacity: cpAlpha,
 			})
-			.appendTo(draw.select('#' + 'CP_0'))
-			.drag(cpRxMove, cpRxMoveStart, cpRxMoveStop)
+			.appendTo(draw.select('#' + 'CP_G00'))
+			.drag(cpPrMove, cpPrMoveStart, cpPrMoveStop)
+	//* Ponto do produto B
+		var ellipse = draw
+			.ellipse(0, 0, Alt, Alt)
+			.transform('t' + (mG[1][0][0][0]) + ',10') //  (mG[1][0][0][1]/3))
+			.attr({
+				id: 'CP_B',
+				fill: cLinPRb,
+				stroke: 'none',
+				strokeWidth: 0,
+				visibility: 'hidden',
+				opacity: cpAlpha,
+			})
+			.appendTo(draw.select('#' + 'CP_G00'))
+			.drag(cpPrMove, cpPrMoveStart, cpPrMoveStop)
 
 	
 	for (let g = 1; g <= nGavs; g++) {
@@ -739,6 +865,7 @@ function drwCtrlPts() {
 				stroke: 'none',
 				strokeWidth: 0,
 				visibility: 'hidden',
+				opacity: cpAlpha,
 			})
 			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
 			.drag(cpRxMove, cpRxMoveStart, cpRxMoveStop)
@@ -748,10 +875,11 @@ function drwCtrlPts() {
 			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1])
 			.attr({
 				id: 'CP_Pn1_' + gIDtmp,
-				fill: 'lightgray',
+				fill: cCtrlPntPni,
 				stroke: 'none',
 				strokeWidth: 0,
 				visibility: 'hidden',
+				opacity: cpAlpha,
 			})
 			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
 			.drag(cpPnMove, cpPnMoveStart, cpPnMoveStop)
@@ -760,10 +888,11 @@ function drwCtrlPts() {
 			.transform('t' + (mG[g][0][0][0] + Larg / 5) + ',' + mG[g][0][0][1])
 			.attr({
 				id: 'CP_Pn2_' + gIDtmp,
-				fill: 'lightgray',
+				fill: cCtrlPntPni,
 				stroke: 'none',
 				strokeWidth: 0,
 				visibility: 'hidden',
+				opacity: cpAlpha,
 			})
 			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
 			.drag(cpPnMove, cpPnMoveStart, cpPnMoveStop)
@@ -776,7 +905,7 @@ function showCtrlPts() {
 	//*	GERAL [GRUPOS]
 		try {
 			draw
-				.select('#CP_0')
+				.select('#CP_G00')
 				.appendTo(draw)
 		} catch (error) {	}
 
@@ -808,6 +937,7 @@ function showCtrlPts() {
 
 	//*	PONTOS
 	draw.select('#CP_A').attr({ visibility: 'visible' }).appendTo(draw)
+	draw.select('#CP_B').attr({ visibility: 'visible' }).appendTo(draw)
 
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
@@ -831,6 +961,12 @@ function showCtrlPts() {
 
 
 function hideCtrlPts() {
+	//* 	Pontos AB
+	try {draw.select('#CP_A').attr({ visibility: 'hidden' })
+		} catch (error) {}
+	try {draw.select('#CP_B').attr({ visibility: 'hidden' })
+		} catch (error) {}
+	
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -1047,7 +1183,7 @@ function drwRX0() {
 	//*	'Ai' - SEMPRE PRESENTE
 	//Linha de fundo escuro
 	var polyline = draw
-		.polyline([[x0, 10],[x0,y0 + yOff]])
+		.polyline([[x0, 50],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
 			stroke: cLinPRa,
@@ -1059,7 +1195,7 @@ function drwRX0() {
 
 	//Linha principal (animada)
 	var polyline = draw
-		.polyline([[x0, 10],[x0,y0 + yOff]])
+		.polyline([[x0, 50],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
 			stroke: cLinPRa,
@@ -1327,7 +1463,7 @@ function drwRX() {
 
 	//*Desenhar seta caso necessite
 	if (nIE == 1 && nGav0 != nGav) {
-		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID)
+		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID, 'arwRx_' + gID)		
 	}
 
 
@@ -1480,6 +1616,7 @@ function drwPN() {
 	var polyline2 = draw
 		.polyline(vLinPr)
 		.attr({
+			id: 'linPr'+nPn+'_' + gID,
 			fill: 'none',
 			stroke: cLinPN,
 			strokeWidth: 1.5 * lwid,
@@ -1500,7 +1637,7 @@ function drwPN() {
 
 	//* Desenhar seta caso necessite
 	if (nIE == 1 && nGav0 != nGav) {
-		drwSeta( vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID )
+		drwSeta(vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID, 'arwPn'+nPn+'_' + gID)
 	}
 }
 
@@ -1646,10 +1783,11 @@ function showSlider() {
 
 
 //* -------------------- FUNÇÃO DESENHAR SETA PARA DESTINO ------------------- */
-function drwSeta(x, y, w, h, clr, grp) {
+function drwSeta(x, y, w, h, clr, grp, id) {
 	var seta = draw
 		.polygon(x, y, x - w / 2, y, x, y + h, x + w / 2, y)
 		.attr({
+			id,
 			fill: clr,
 			stroke: 'white',
 			'stroke-width': 0,
@@ -1734,7 +1872,9 @@ function rebuildGPF() {
 	calcHtotal()
 
 
-drwRX0()
+	drwRX0()
+	propagate()
+	reColor()
 
 	var slidernGavs = document.getElementById('nGav-slider')
 	slidernGavs.addEventListener('input', function () {

@@ -566,6 +566,11 @@ footer div p {
   margin: 2px 0;
 }
 
+.flow-leg-container .space {
+  height: 10px;
+  width: 100%;
+}
+
 .flow-leg-container #flow-color-box01 {
   background-color: navy;
 }
@@ -580,6 +585,14 @@ footer div p {
 
 .flow-leg-container #flow-color-box04 {
   background-color: #9f20df;
+}
+
+.flow-leg-container #flow-color-box05 {
+  background-color: gray;
+}
+
+.flow-leg-container #flow-color-box06 {
+  background-color: #bfbfbf;
 }
 
 #flow-main {

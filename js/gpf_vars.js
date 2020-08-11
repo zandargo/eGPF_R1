@@ -30,15 +30,17 @@ var strDashPR = 30 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODU
 var strDashRX = 3 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
 var strDashPN = 6 * lwid + ' ' + 6 * lwid 				//> Padrão de tracejado do PENEIRADO
 
+var cpAlpha	= 0.75		//> Transparência dos CP
+
 var cCham = Snap.hsl(0, 0.1, 0.25)							//> Cor da chaminé
 
-var cLinPR0 = Snap.hsl(0, 0, 0.5)						//> Cor da linha do PRODUTO neutro
-var cLinRX0 = Snap.hsl(0, 0, 0.5) 						//> Cor da linha do RECHAÇO neutro
-var cLinPN0 = Snap.hsl(0, 0, 0.7)						//> Cor da linha do PENEIRADO neutro
+var cLinPR0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do PRODUTO neutro
+var cLinRX0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do RECHAÇO neutro
+var cLinPN0 = $('#flow-color-box06').css('background-color')		//> Cor da linha do PENEIRADO neutro
 
-var cLinPR = cLinPR0 //> Cor da linha do PRODUTO
-var cLinRX = cLinRX0 //> Cor da linha do RECHAÇO
-var cLinPN = cLinPN0 //> Cor da linha do PENEIRADO
+var cLinPR = cLinPR0 //> Def Init Cor da linha do PRODUTO
+var cLinRX = cLinRX0 //> Def Init Cor da linha do RECHAÇO
+var cLinPN = cLinPN0 //> Def Init Cor da linha do PENEIRADO
 
 var cLinPRa = $('#flow-color-box01').css('background-color') //> Cor da linha do PRODUTO A
 var cLinRXa = $('#flow-color-box01').css('background-color') //> Cor da linha do RECHAÇO A
@@ -50,8 +52,14 @@ var cLinPNb = $('#flow-color-box04').css('background-color') //> Cor da linha do
 
 var cLinBG = 'white'
 
-var cCtrlPntRxi = Snap.hsl(0.3,0.2,0.6)	//> Cor do Ponto de controle Rx interno 
-var cCtrlPntRxe = Snap.hsl(0.3,0.2,0.3)	//> Cor do Ponto de controle Rx externo
+// var cCtrlPntRxi = Snap.hsl(0.15,0.2,0.6)	//> Cor do Ponto de controle Rx interno 
+// var cCtrlPntRxe = Snap.hsl(0.15,0.2,0.3)	//> Cor do Ponto de controle Rx externo
+// var cCtrlPntPni = Snap.hsl(0.40,0.2,0.6)	//> Cor do Ponto de controle Pn interno 
+// var cCtrlPntPne = Snap.hsl(0.40,0.2,0.3)	//> Cor do Ponto de controle Pn externo
+var cCtrlPntRxi = cLinPR0	//> Cor do Ponto de controle Rx interno 
+var cCtrlPntRxe = cLinPR0	//> Cor do Ponto de controle Rx externo
+var cCtrlPntPni = cLinPN0	//> Cor do Ponto de controle Pn interno 
+var cCtrlPntPne = cLinPN0	//> Cor do Ponto de controle Pn externo
 
 //* --------------------------- Definições Animação -------------------------- */
 
@@ -84,7 +92,7 @@ var yT = 0
 
 //* ------------------------------ Gaveta atual ------------------------------ */
 
-var iGav = null
+var iGav      = null
 var gID
 var gIDhover  = ''
 var bEditMode = false
@@ -98,6 +106,7 @@ var sLado     = ''
 var sIE       = ''
 var s         = ''
 var L         = ''
+var nAB       = 0
 
 //Move
 var xi = 0
@@ -502,9 +511,9 @@ var mCorte = [
 var mESQ = [
 	[
 		[0, 'B'], 		//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
-		[0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE
-		[0, 0, 0], 		//> Pn1: nLado, 'nPara' - NÃO SE APLICA, nIE
-		[0, 0, 0], 		//> Pn2: nLado, 'nPara' - NÃO SE APLICA, nIE
+		[0, 0, 1], 		//> Ae: nLado, 'nPara', nIE
+		[0, 0, 1], 		//> Be: nLado, 'nPara', nIE
+		[0, 0, 0], 		//> ?
 	
 	], 
 	[
