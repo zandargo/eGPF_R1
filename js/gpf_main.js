@@ -506,7 +506,7 @@ function drwGuias() {
 	var gGui = draw.group()
 	gGui.attr({ id: 'Guia_G00' })
 	var ellipse = draw
-			.ellipse(mF[0][1][0], mF[0][1][1] -2- Alt / 2, Alt , Alt / 2)
+			.ellipse(mF[0][1][0], mF[0][1][1] -2 -Alt/2, Alt , Alt/2)
 			.attr({ fill: 'gray', stroke: 'gray', strokeWidth: swid })
 			.appendTo(draw.select('#' + 'Guia_G00'))
 
