@@ -49,6 +49,79 @@ function animation() {
 //   }
 
 
+//* ------------------------- CHECAR LETRA DO PRODUTO ------------------------ */
+function chkProdColor() {
+	switch (mESQ[nGav0][0][1]) {
+		case 'A':
+			cLinPR = cLinPRa 
+			cLinRX = cLinRXa
+			cLinPN = cLinPNa
+			break;
+		case 'B':
+			cLinPR = cLinPRb 
+			cLinRX = cLinRXb
+			cLinPN = cLinPNb
+			break;
+		default:
+			cLinPR = cLinPR0 
+			cLinRX = cLinRX0
+			cLinPN = cLinPN0
+			break;
+	}
+		
+}
+
+//* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
+function propagate() {
+	//* PRODUTO		
+	for (let index = 1; index <= nGavs; index++) { 
+		let prod = mESQ[index][0][1]
+		let dest = mESQ[index][1][1]
+
+		// if (nlado==0) { //&& mESQ[nGav0][0][1]!='') {
+		// 	if (nGav0==nGav ) {
+		// 		mESQ[nGav0+1][0][1]=mESQ[nGav0][0][1]
+		// 	} else {
+		// 		mESQ[nGav][0][1]=mESQ[nGav0][0][1]
+		// 	}
+		// }
+		if (nIE==0) { //&& mESQ[nGav0][0][1]!='') {
+			if (nGav0==nGav ) {
+				mESQ[nGav0+1][0][1]=mESQ[nGav0][0][1]
+			} else {
+				mESQ[nGav][0][1]=mESQ[nGav0][0][1]
+			}
+		}
+	}
+	
+}
+
+//* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
+function reColor() {
+	for (let index = 1; index <= nGavs; index++) { 
+		switch (mESQ[index][0][1]) {
+		case 'A':
+			cLinPR = cLinPRa 
+			cLinRX = cLinRXa
+			cLinPN = cLinPNa
+			break;
+		case 'B':
+			cLinPR = cLinPRb 
+			cLinRX = cLinRXb
+			cLinPN = cLinPNb
+			break;
+		default:
+			cLinPR = cLinPR0 
+			cLinRX = cLinRX0
+			cLinPN = cLinPN0
+			break;
+		}
+		var gIDtmp = 'G' + pad(index)
+		try { draw.select('#' + 'linRx0_' + gIDtmp).attr({stroke: cLinRX}) } catch (error) {}
+		try { draw.select('#' + 'linRx1_' + gIDtmp).attr({stroke: cLinRX}) } catch (error) {}
+	}
+}
+
 
 //* -------------------------------------------------------------------------- */
 //*                               CREATE SLIDERS                               */
@@ -102,7 +175,7 @@ function drwSliders() {
 					}
 				}
 				let j = 1 * index
-				mESQ[j][0][0][0] = parseInt(this.value, 10)
+				mESQ[j][0][0] = parseInt(this.value, 10)
 				calcHtotal()
 			},
 			true
@@ -119,21 +192,20 @@ function calcHtotal() {
 		let nGPF = pad(index)
 		let source = document.getElementById('rngG' + nGPF)
 		let j = 1 * index
-		mESQ[j][0][0][0] = parseInt(source.value, 10)
+		mESQ[j][0][0] = parseInt(source.value, 10)
 	}
-	mESQ[nGavs][0][0][0] = 32
+	mESQ[nGavs][0][0] = 32
 
 	hTotal = 0
-	// mESQ[nGavs][0][0][0] = 32
 	for (let index = 1; index <= nGavs; index++) {
-		// console.log(mESQ[index][0][0][0])
-		hTotal = hTotal + 1 * mESQ[index][0][0][0]
+		hTotal = hTotal + 1 * parseInt(mESQ[index][0][0])
+		if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
 	}
-	// console.log(hTotal)
 	let target = document.getElementById('hTotal')
 	target.innerHTML = '&nbsp' + hTotal + 'mm'
 
-	$("#divESQ").css({'height': 200+64*nGavs+"px" })
+	$('#divESQ').css({ 'height': 200 + 64 * nGavs + "px" })
+	// $('#z-flow-clog').html('calcHtotal()=' + hTotal)
 }
 
 //* -------------------------------------------------------------------------- */
@@ -225,7 +297,7 @@ function ladoHoverOUT() {
 
 
 
-//DEFINIÇÃO GERAL DA MATRIZ DE PRODUTO/RECHAÇO
+//* -------------- DEFINIÇÃO GERAL DA MATRIZ DE PRODUTO/RECHAÇO -------------- */
 for (let g = 1; g <= nGavs; g++) {
 	//Calcula os pontos da gaveta atual
 	calcMat(x0, y0 + yOff * g, Larg)
@@ -239,37 +311,7 @@ for (let g = 1; g <= nGavs; g++) {
 	}
 }
 
-//MATRIZ GERAL DE CONTROLE DO ESQUEMA
-var mESQ = [
-	[
-		[0, 'A'], //Gaveta 00: Altura, Produto
-		[0, 0], // Rx: nLado, 'nPara'
-		[0, 0], //Pn1: nLado, 'nPara'
-		[0, 0],
-	], //Pn2: nLado, 'nPara'
-]
 
-//DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA
-for (let g = 1; g < nGavs; g++) {
-	let mGav = [
-		[
-			[65, ''],
-			[0, 0],
-			[0, 0],
-			[0, 0],
-		],
-	]
-	mESQ.push(mGav)
-}
-let mGav = [
-	[
-		[32, ''],
-		[0, 0],
-		[0, 0],
-		[0, 0],
-	],
-]
-mESQ.push(mGav)
 
 
 
@@ -478,6 +520,7 @@ function showGuias() {
 		var gIDtmp = 'G' + pad(iGav)
 		//_ draw.select('#' + "Guia_" + gIDtmp).remove()
 		draw.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 })
+		// paper.append('#' + 'Guia_' + gIDtmp)
 	}
 }
 
@@ -515,6 +558,8 @@ var cpPnMoveStart = function () {
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
+	$('#z-flow-type span').html('Peneirado')
+	$('#z-flow-from span').html(L.substr(s.length - 3, 3))
 }
 
 var cpPnMoveStop = function () {
@@ -551,6 +596,7 @@ var cpPnMoveStop = function () {
 	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
 
+	$('#z-flow-to span').html('G' + pad(nGav))
 	//TODO: Add to the Matrix
 
 }
@@ -573,11 +619,15 @@ var cpRxMove = function (dx, dy) {
 	s = s.substr(s.length - 3)
 }
 
+
 var cpRxMoveStart = function () {
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
+	nGav = mESQ[nGav0][1][1]
+	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1][1])][0][1] = '' } 
 }
+
 
 var cpRxMoveStop = function () {
 	var bb = this.getBBox()
@@ -606,19 +656,43 @@ var cpRxMoveStop = function () {
 	s = s.substr(s.length - 3)
 	this.transform('t' + xv + ',' + yv)
 	drwCham()
-	if (nGav0 == nGav) {
-		this.attr({ fill: 'steelblue' })
-	} else {
-		this.attr({ fill: 'navy' })
-	}
+
+	mESQ[nGav0][1][1] = nGav	//> nPara
+
+	
+
+
+	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
+	$('#z-flow-prod span').html(mESQ[nGav][0][1])
+
 	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
+	propagate()
+	reColor()
 }
 
 //* -------------------------------------------------------------------------- */
 //*                   DESENHAR PONTOS DE CONTROLE (Edit Mode)                  */
 //* -------------------------------------------------------------------------- */
 function drwCtrlPts() {
+		//* Ponto do produto A
+		//var gIDtmp = 'GA'
+		var gCP = draw.group()
+		gCP.attr({ id: 'CP_0'})
+		var ellipse = draw
+			.ellipse(0, 0, Alt, Alt)
+			.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]/2))
+			.attr({
+				id: 'CP_A',
+				fill: cLinPRa,
+				stroke: 'none',
+				strokeWidth: 0,
+				visibility: 'hidden',
+			})
+			.appendTo(draw.select('#' + 'CP_0'))
+			.drag(cpRxMove, cpRxMoveStart, cpRxMoveStop)
+
+	
 	for (let g = 1; g <= nGavs; g++) {
 		iGav = g
 		var gIDtmp = 'G' + pad(iGav)
@@ -631,7 +705,7 @@ function drwCtrlPts() {
 			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1])
 			.attr({
 				id: 'CP_Rx_' + gIDtmp,
-				fill: 'steelblue',
+				fill: cCtrlPntRxi,
 				stroke: 'none',
 				strokeWidth: 0,
 				visibility: 'hidden',
@@ -667,7 +741,16 @@ function drwCtrlPts() {
 }
 
 function showCtrlPts() {
-	//*	GERAL
+
+	
+	//*	GERAL [GRUPOS]
+		try {
+			draw
+				.select('#CP_0')
+				.appendTo(draw)
+		} catch (error) {	}
+
+
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -694,6 +777,8 @@ function showCtrlPts() {
 
 
 	//*	PONTOS
+	draw.select('#CP_A').attr({ visibility: 'visible' }).appendTo(draw)
+
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -713,6 +798,8 @@ function showCtrlPts() {
 			.appendTo(draw)
 	}
 }
+
+
 function hideCtrlPts() {
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
@@ -862,23 +949,27 @@ function hideGPF() {
 	}
 }
 function showGPF() {
-	for (let j = 0; j <= nGavs; j++) {
+	// for (let j = 0; j <= nGavs; j++) {
+	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		try {
 			// draw.select("#" + gIDtmp).attr({ opacity: 0 })
-			draw.select('#' + gIDtmp).attr({ visibility: 'visible' })
-			draw.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' })
+			draw.select('#' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
+			draw.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) {}
 		try {
-			draw.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' })
+			draw.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) {}
 		try {
-			draw.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' })
+			draw.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) {}
 		try {
-			draw.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' })
-		} catch (error) {}
+			draw.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
+		} catch (error) { }
+		// try {
+		// 	draw.select('#Guia_' + gIDtmp).appendTo(draw)
+		// } catch (error) { }
 	}
 }
 
@@ -929,7 +1020,7 @@ function drwRX0() {
 		.polyline([[x0, 10],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
-			stroke: cLinPR,
+			stroke: cLinPRa,
 			strokeWidth: 1 * lwid,
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
@@ -941,7 +1032,7 @@ function drwRX0() {
 		.polyline([[x0, 10],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
-			stroke: cLinPR,
+			stroke: cLinPRa,
 			strokeWidth: 2 * lwid,
 			strokeDasharray: strDashRX,
 			strokeDashoffset: 0,
@@ -973,19 +1064,23 @@ function drwRX() {
 	let tmpIE = null
 	let vLin = []
 	let vLinB = []
+	//* Caso o ctrl point seja interno (mesmo se o Rx for externo)
 	if (nIE == 0 && nLado != 0) {
 		bRXmask = true
-		if (nGav0 == nGav) {
+		if (nGav0 == nGav) {		//* Rechaço pela chaminé
 			tmpIE = 0
 			nGav = nGav0 + 1
-			switch (nLado) {
+
+			switch (nLado) {		//* Pela frente ou pela direita
 				case 1:
+					cLinBG = 'white'
 					vLinB.push(mG[nGav0][nLado][tmpIE][0])
 					vLinB.push(mG[nGav0][nLado][tmpIE][1] + yOff - 2 * Alt)
 					vLinB.push(mG[nGav][nLado][tmpIE][0])
 					vLinB.push(mG[nGav][nLado][tmpIE][1] - Alt)
 					break
 				case 2:
+					cLinBG = bgcolor
 					vLinB.push(mG[nGav0][nLado][tmpIE][0])
 					vLinB.push(mG[nGav0][nLado][tmpIE][1] + 2 * Alt)
 					vLinB.push(mG[nGav][nLado][tmpIE][0])
@@ -995,6 +1090,24 @@ function drwRX() {
 		} else {
 			tmpIE = 1
 			bRXmask = false
+			cLinBG = bgcolor
+			
+			//* Linha branca de cima
+			vLinB.push(mG[nGav0][nLado][0][0] + (mG[nGav0][nLado][1][0] - mG[nGav0][nLado][0][0]) * 0.32)
+			vLinB.push(mG[nGav0][nLado][0][1] + (mG[nGav0][nLado][1][1] - mG[nGav0][nLado][0][1]) * 0.32)
+			vLinB.push(mG[nGav0][nLado][tmpIE][0])
+			vLinB.push(mG[nGav0][nLado][tmpIE][1])
+			//* Linha branca vertical
+			vLinB.push(mG[nGav0][nLado][tmpIE][0])
+			vLinB.push(mG[nGav0][nLado][tmpIE][1])
+			vLinB.push(mG[nGav][nLado][tmpIE][0])
+			vLinB.push(mG[nGav][nLado][tmpIE][1])
+			//* Linha branca de baixo
+			vLinB.push(mG[nGav][nLado][0][0] + (mG[nGav][nLado][1][0] - mG[nGav][nLado][0][0]) * 0.32)
+			vLinB.push(mG[nGav][nLado][0][1] + (mG[nGav][nLado][1][1] - mG[nGav][nLado][0][1]) * 0.32)
+			vLinB.push(mG[nGav][nLado][tmpIE][0])
+			vLinB.push(mG[nGav][nLado][tmpIE][1])
+
 		}
 		vLin.push(mG[nGav0][0][0][0])
 		vLin.push(mG[nGav0][0][0][1])
@@ -1008,26 +1121,42 @@ function drwRX() {
 	if (nIE == 1) {
 		bRXmask = false
 		tmpIE = nIE
+		
 		vLin.push(mG[nGav0][0][0][0])
 		vLin.push(mG[nGav0][0][0][1])
 		vLin.push(mG[nGav0][nLado][tmpIE][0])
 		vLin.push(mG[nGav0][nLado][tmpIE][1])
 		vLin.push(mG[nGav][nLado][tmpIE][0])
 		vLin.push(mG[nGav][nLado][tmpIE][1])
+		//_ $('#z-flow-clog').html(vLin.join(", "))
 	}
-
+	
 	if (nIE == 1 && nGav0 != nGav) {
-		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID)
+		cLinBG = bgcolor
+		//* Linha branca de cima
+		vLinB.push(mG[nGav0][nLado][0][0] + (mG[nGav0][nLado][1][0] - mG[nGav0][nLado][0][0]) * 0.32)
+		vLinB.push(mG[nGav0][nLado][0][1] + (mG[nGav0][nLado][1][1] - mG[nGav0][nLado][0][1]) * 0.32)
+		vLinB.push(mG[nGav0][nLado][tmpIE][0])
+		vLinB.push(mG[nGav0][nLado][tmpIE][1])
+		//* Linha branca vertical
+		vLinB.push(mG[nGav0][nLado][tmpIE][0])
+		vLinB.push(mG[nGav0][nLado][tmpIE][1])
+		vLinB.push(mG[nGav][nLado][tmpIE][0])
+		vLinB.push(mG[nGav][nLado][tmpIE][1])
 	}
+	
 
+//* ----------------------------- DESENHAR LINHAS ---------------------------- */
+	chkProdColor()
 	//Linha Branca
 	try {
 		var polyline = draw
 			.polyline(vLinB)
 			.attr({
 				fill: 'none',
-				stroke: 'white',
-				strokeWidth: 4 * lwid,
+				stroke: cLinBG,
+				// stroke: 'red',
+				strokeWidth: wLinBG * lwid,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1038,6 +1167,7 @@ function drwRX() {
 	var polyline = draw
 		.polyline(vLin)
 		.attr({
+			id: 'linRx0_' + gID,
 			fill: 'none',
 			stroke: cLinPR,
 			strokeWidth: 1 * lwid,
@@ -1050,6 +1180,7 @@ function drwRX() {
 	var polyline = draw
 		.polyline(vLin)
 		.attr({
+			id: 'linRx1_' + gID,
 			fill: 'none',
 			stroke: cLinPR,
 			strokeWidth: 2 * lwid,
@@ -1163,9 +1294,20 @@ function drwRX() {
 		gRx.attr({ mask: draw.select('#maskRx_' + gID) })
 		// draw.select("#maskRx_" + gID).attr({ opacity: 0.5 })
 	}
+
+	//*Desenhar seta caso necessite
+	if (nIE == 1 && nGav0 != nGav) {
+		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID)
+	}
+
+
 }
 
+
+//* ----------------------- Desenhar linha de Peneirado ---------------------- */
+
 function drwPN() {
+	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
 		draw.select('#Pn' + nPn + '_' + gID).remove()
@@ -1190,6 +1332,17 @@ function drwPN() {
 		vLinPr.push(mG[nGav0][nLado][tmpIE][1] + Alt)
 		vLinPr.push(mG[nGav][nLado][tmpIE][0])
 		vLinPr.push(mG[nGav][nLado][tmpIE][1] + Alt)
+
+		vLinB.push(vLinPn[0])
+		vLinB.push(vLinPn[1])
+		vLinB.push(vLinPn[2])
+		vLinB.push(vLinPn[3])
+		vLinB.push(vLinPr[0])
+		vLinB.push(vLinPr[1])
+		vLinB.push(vLinPr[2])
+		vLinB.push(vLinPr[3])
+
+
 	}
 
 	if (nIE == 0 && nLado != 0) {
@@ -1210,6 +1363,17 @@ function drwPN() {
 			vLinPr.push(mG[nGav][nLado][tmpIE][1])
 			vLinPr.push(mG[nGav][0][tmpIE][0])
 			vLinPr.push(mG[nGav][0][tmpIE][1])
+
+			vLinB.push(vLinPn[0])
+			vLinB.push(vLinPn[1])
+			vLinB.push(vLinPn[2])
+			vLinB.push(vLinPn[3])
+			vLinB.push(vLinPr[0])
+			vLinB.push(vLinPr[1])
+			vLinB.push(vLinPr[2])
+			vLinB.push(vLinPr[3])
+			vLinB.push(mG[nGav][nLado][tmpIE][0] + (mG[nGav][0][tmpIE][0]-mG[nGav][nLado][tmpIE][0])*0.45)
+			vLinB.push(mG[nGav][nLado][tmpIE][1] + (mG[nGav][0][tmpIE][1]-mG[nGav][nLado][tmpIE][1])*0.45)
 		}
 	}
 
@@ -1239,24 +1403,20 @@ function drwPN() {
 	}
 
 	if (nIE == 1 && nGav0 != nGav) {
-		drwSeta(
-			vLinPr[2],
-			vLinPr[3],
-			1.2 * Alt,
-			2.5 * Alt,
-			cLinPN,
-			'#Pn' + nPn + '_' + gID
-		)
+		
+		
 	}
 
+//* ----------------------------- DESENHAR LINHAS ---------------------------- */
+	chkProdColor()
 	//Linha Branca
 	try {
 		var polyline = draw
 			.polyline(vLinB)
 			.attr({
 				fill: 'none',
-				stroke: 'white',
-				strokeWidth: 4 * lwid,
+				stroke: cLinBG,
+				strokeWidth: wLinBG * lwid,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1306,6 +1466,18 @@ function drwPN() {
 		},
 		Anim2
 	)
+
+	//* Desenhar seta caso necessite
+	if (nIE == 1 && nGav0 != nGav) {
+		drwSeta(
+			vLinPr[2],
+			vLinPr[3],
+			1.2 * Alt,
+			2.5 * Alt,
+			cLinPN,
+			'#Pn' + nPn + '_' + gID
+		)
+	}
 }
 
 
@@ -1447,7 +1619,9 @@ function showSlider() {
 	}
 }
 
-// FUNÇÃO DESENHAR SETA PARA DESTINO
+
+
+//* -------------------- FUNÇÃO DESENHAR SETA PARA DESTINO ------------------- */
 function drwSeta(x, y, w, h, clr, grp) {
 	var seta = draw
 		.polygon(x, y, x - w / 2, y, x, y + h, x + w / 2, y)
@@ -1472,6 +1646,10 @@ function drwSeta(x, y, w, h, clr, grp) {
 //
 //
 //
+
+//* -------------------------------------------------------------------------- */
+//*                                 RECONSTRUIR                                */
+//* -------------------------------------------------------------------------- */
 function rebuildGPF() {
 	//Oculta tudo
 	hideGPF()
@@ -1480,8 +1658,8 @@ function rebuildGPF() {
 	hideSlider()
 
 	//Exibe o que precisa
-	showGPF()
 	showSlider()
+	showGPF()
 	if (bEditMode == true) {
 		showGuias()
 		showCtrlPts()

@@ -18,7 +18,8 @@ var x0        = 200 												//> Posição inicial X
 var y0        = 50 												//> Posição inicial Y
 var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
-var cor0      = 'white' 										//> Cor de fundo
+var wLinBG	  = 1													//> Fator espessura da linha branca
+var cor0 = 'white' 										//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
 var bgcolor   = $('body').css('background-color')		//> Cor do fundo
 var sk        = 5 												//> Skew
@@ -29,11 +30,28 @@ var strDashPR = 30 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODU
 var strDashRX = 3 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
 var strDashPN = 6 * lwid + ' ' + 6 * lwid 				//> Padrão de tracejado do PENEIRADO
 
-// var cCham = Snap.hsl2rgb(0, 0.1, 0.25)
-var cCham = Snap.hsl(0, 0.1, 0.25)
-var cLinPR = 'navy' //* Cor da linha do PRODUTO
-var cLinRX = 'navy' //* Cor da linha do RECHAÇO
-var cLinPN = 'gray' //* Cor da linha do PENEIRADO
+var cCham = Snap.hsl(0, 0.1, 0.25)							//> Cor da chaminé
+
+var cLinPR0 = Snap.hsl(0, 0, 0.5)						//> Cor da linha do PRODUTO neutro
+var cLinRX0 = Snap.hsl(0, 0, 0.5) 						//> Cor da linha do RECHAÇO neutro
+var cLinPN0 = Snap.hsl(0, 0, 0.7)						//> Cor da linha do PENEIRADO neutro
+
+var cLinPR = cLinPR0 //> Cor da linha do PRODUTO
+var cLinRX = cLinRX0 //> Cor da linha do RECHAÇO
+var cLinPN = cLinPN0 //> Cor da linha do PENEIRADO
+
+var cLinPRa = $('#flow-color-box01').css('background-color') //> Cor da linha do PRODUTO A
+var cLinRXa = $('#flow-color-box01').css('background-color') //> Cor da linha do RECHAÇO A
+var cLinPNa = $('#flow-color-box02').css('background-color') //> Cor da linha do PENEIRADO A
+
+var cLinPRb = $('#flow-color-box03').css('background-color') //> Cor da linha do PRODUTO B
+var cLinRXb = $('#flow-color-box03').css('background-color') //> Cor da linha do RECHAÇO B
+var cLinPNb = $('#flow-color-box04').css('background-color') //> Cor da linha do PENEIRADO B
+
+var cLinBG = 'white'
+
+var cCtrlPntRxi = Snap.hsl(0.3,0.2,0.6)	//> Cor do Ponto de controle Rx interno 
+var cCtrlPntRxe = Snap.hsl(0.3,0.2,0.3)	//> Cor do Ponto de controle Rx externo
 
 //* --------------------------- Definições Animação -------------------------- */
 
@@ -112,6 +130,8 @@ var mH = [
 	[145, 85, 60],
 ]
 
+
+
 //* -------------------------------------------------------------------------- */
 //*          MATRIZ PRINCIPAL: PONTOS DA GAVETA(PARA DESENHO TEMPLATE)         */
 //* -------------------------------------------------------------------------- */
@@ -123,6 +143,7 @@ var mP = [
 	[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]], //3 Pontos do CANTO 3
 	[[0, 0],[0, 0],[0, 0],[0, 0],[0, 0]] //4 Pontos do CANTO 4
 ]
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -138,6 +159,7 @@ var mC = [
 ]
 
 
+
 //* -------------------------------------------------------------------------- */
 //*                       MATRIZ FLUXO: PONTOS DE CONEXÃO                      */
 //* -------------------------------------------------------------------------- */
@@ -149,6 +171,7 @@ var mF = [
 	[[0, 0],[0, 0]], //3 Pontos 'Ei' e 'Ee'
 	[[0, 0],[0, 0]] //4 Pontos 'Ti' e 'Te'
 ]
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -400,6 +423,8 @@ var mCOD0 = [
 	[410, 'R'],
 ]
 
+
+
 //* -------------------------------------------------------------------------- */
 //*                               MATRIZ DE CORTE                              */
 //* -------------------------------------------------------------------------- */
@@ -467,3 +492,49 @@ var mCorte = [
 	[41003, '-RAPPD'],
 ]
 
+
+
+//* -------------------------------------------------------------------------- */
+//*                              MATRIZ DE ESQUEMA                             */
+//* -------------------------------------------------------------------------- */
+
+//* ------------------- MATRIZ GERAL DE CONTROLE DO ESQUEMA ------------------ */
+var mESQ = [
+	[
+		[0, 'B'], 	//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
+		[0, 0], 		//> Rx: nLado, 'nPara', 
+		[0, 0], 		//> Pn1: nLado, 'nPara' - NÃO SE APLICA
+		[0, 0], 		//> Pn2: nLado, 'nPara' - NÃO SE APLICA
+	
+	], 
+	[
+		[65, 'A'], 	//> Gaveta 01: Altura, Produto
+		[0, 0], 		//> Rx: nLado, 'nPara'
+		[0, 0], 		//> Pn1: nLado, 'nPara'
+		[0, 0], 		//> Pn2: nLado, 'nPara'
+	] 
+]
+
+
+//* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
+for (let g = 2; g < nGavs; g++) {
+	let mGav = [
+		
+			[65, ''],
+			[0, 0],
+			[0, 0],
+			[0, 0],
+		
+	]
+	mESQ.push(mGav)
+}
+
+let mGav = [
+	
+		[32, ''],
+		[0, 0],
+		[0, 0],
+		[0, 0],
+	
+]
+mESQ.push(mGav)

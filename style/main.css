@@ -17,7 +17,7 @@
 body {
   background-color: #f0f3f4;
   height: 100vh;
-  font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica', sans-serif, Arial;
+  font-family: 'MainFont', 'Courier New', 'Roboto Condensed', 'Helvetica', sans-serif, Arial;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   border: none;
@@ -417,19 +417,30 @@ footer div p {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   width: 20vw;
   max-width: 200px;
   margin: auto -0.5px;
-  padding-left: 20px;
-  padding-right: 20px;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
 }
 
+#z-flow div h4 {
+  color: #f0f3f4;
+  margin-right: 20px;
+}
+
 #z-flow #z-flow-status {
   max-width: 50vw;
+  width: 320px;
+}
+
+#z-flow #z-flow-clog {
+  max-width: 500px;
   width: 320px;
 }
 
@@ -520,6 +531,55 @@ footer div p {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+}
+
+.flow-leg-container {
+  margin-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.flow-leg-container #leg-title {
+  width: 100%;
+  padding: 0 150px;
+}
+
+.flow-leg-container .flow-color-title {
+  width: 80%;
+  text-align: right;
+  padding: 0 20px;
+}
+
+.flow-leg-container .flow-color-box {
+  width: 10%;
+  margin: 2px 0;
+}
+
+.flow-leg-container #flow-color-box01 {
+  background-color: navy;
+}
+
+.flow-leg-container #flow-color-box02 {
+  background-color: #209fdf;
+}
+
+.flow-leg-container #flow-color-box03 {
+  background-color: #800055;
+}
+
+.flow-leg-container #flow-color-box04 {
+  background-color: #9f20df;
 }
 
 #flow-main {
