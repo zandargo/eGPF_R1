@@ -30,7 +30,7 @@ var strDashPR = 30 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODU
 var strDashRX = 3 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
 var strDashPN = 6 * lwid + ' ' + 6 * lwid 				//> Padrão de tracejado do PENEIRADO
 
-var cpAlpha	= 0.75		//> Transparência dos CP
+var cpAlpha	= 0.65		//> Transparência dos CP
 
 var cCham = Snap.hsl(0, 0.1, 0.25)							//> Cor da chaminé
 

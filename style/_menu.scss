@@ -1,3 +1,7 @@
+//* -------------------------------------------------------------------------- */
+//*                                    TABS                                    */
+//* -------------------------------------------------------------------------- */
+
 #menu-tabs {
 	display: flex;
 	flex-direction: row;
@@ -46,9 +50,15 @@
 	}
 }
 
+//* -------------------------------------------------------------------------- */
+//*                                   RIBBON                                   */
+//* -------------------------------------------------------------------------- */
+
 #menu-ribbon {
-	display: block;
 	position: relative;
+	display: block;
+	flex-direction: row;
+	flex-wrap: nowrap;
 	box-sizing: border-box;
 	height: $h_ribbon;
 	width: 100%;
@@ -59,7 +69,60 @@
 	box-shadow: $shadow1;
 	border-right: 1px solid $color_l2;
 	border-left: 1px solid $color_l2;
+
+	#rbn-flow {
+		display: flex;
+		flex-direction: row;
+		padding: 0 20px;
+
+		.btn-container {
+			height: 100%;
+			margin: 0px 10px;
+			margin-top: 5px;
+			// padding: 5px;
+			user-select: none;
+
+			// &:hover {
+			// 	border-radius: 10px;
+			// 	border: 1px solid $color;
+			// }
+		}
+
+		h5 {
+			font-weight: 300;
+		}
+
+		img {
+			height: 40px;
+			filter: none;
+			-webkit-filter: grayscale(100%);
+			-moz-filter: grayscale(100%);
+			-ms-filter: grayscale(100%);
+			-o-filter: grayscale(100%);
+			cursor: pointer;
+			transition: all 100ms ease;
+			cursor: default;
+			border-radius: 5px;
+			border: 1px solid $bg_ribbon;
+			padding: 4px;
+		}
+		img:hover {
+			filter: none;
+			// height: 46px;
+			-webkit-filter: grayscale(0%);
+			-moz-filter: grayscale(0%);
+			-ms-filter: grayscale(0%);
+			-o-filter: grayscale(0%);
+			box-shadow: $shadow1;
+			border-radius: 5px;
+			border: 1px solid $color_l1;
+		}
+	}
 }
+
+//* -------------------------------------------------------------------------- */
+//*                                   SIDEBAR                                  */
+//* -------------------------------------------------------------------------- */
 
 #sidebar {
 	// display: inline-block;

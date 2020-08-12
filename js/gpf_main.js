@@ -8,7 +8,6 @@ const draw = Snap('#svgESQ')
 
 
 
-//TODO	Desenhar 'Ai' já caindo.
 
 //TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
 
@@ -18,6 +17,9 @@ const draw = Snap('#svgESQ')
 //TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
 
 //TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
+
+//_ TODO Impedir os CP Pn de se alinharem nos pontos internos da gaveta
+//_ TODO CP Pn se alinhando nos pontos internos: "Excluir" da conexão
 
 
 //Peneirado de fundo
@@ -75,37 +77,40 @@ function propagate() {
 	//* DESCONECTAR PRODUTO
 	for (let i = 2; i <= nGavs; i++) {		//> Gaveta atual
 		let cont = 0
-		for (let j = 1; j < i; j++) {		//> Varre desde a primeira até a atual
-		
+		for (let j = 1; j < i; j++) {			//> Varre desde a primeira até a atual
 			for (let p = 1; p <= 3; p++) {				//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
 				dest = 1 * mESQ[j][p][1]
 				if (dest == i && mESQ[j][p][2] == 0) { cont++ }
 			}														//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
-		
 		}
 		if (cont == 0) { mESQ[i][0][1] = '' }
 	}
 	
-	
-	//* PRODUTO
+	//*		CONECTAR PRODUTOS AOS DESTINOS
 	for (let index = 1; index <= nGavs; index++) { 
 		let prod = mESQ[index][0][1].toString()
-	
-		for (let p = 1; p <= 3; p++) {				//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
-			
+		
+		//* RODUTO/RECHAÇO
+		let dest = 1 * mESQ[index][1][1]				//> nPara
+		if (mESQ[index][1][2] == 0) {
+			if (index==dest ) {
+				mESQ[index+1][0][1]=prod
+			} else {
+				mESQ[dest][0][1]=prod
+			}
+		} 
+		//* PENEIRADO	[DEVE PERMANECER APÓS O PRODUTO/RECHAÇO]
+		for (let p = 2; p <= 3; p++) {				
 			let dest = 1 * mESQ[index][p][1]				//> nPara
-			if (mESQ[index][p][2] == 0) {
-				if (index==dest ) {
-					mESQ[index+1][0][1]=prod
-				} else {
-					mESQ[dest][0][1]=prod
-				}
-			} else {}
+			if (mESQ[index][p][2] == 0 && index!=dest) {mESQ[dest][0][1]=prod}
+			//TODO 		INCLUIR PENEIRADO POR BAIXO NA PROPAGAÇÃO
+			if (index == dest && mESQ[index][p][0] == 0) {
+				mESQ[dest][0][1] = prod
+				$('#z-flow-clog').html('Saída por baixo')
+			}
 			
-		}														//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
-	
+		}														
 	}
-	
 }
 	
 
@@ -208,6 +213,7 @@ function drwSliders() {
 				mESQ[j][0][0] = parseInt(this.value, 10)
 				j = 1 * index
 				calcHtotal()
+				rebuildGPF()
 			},
 			true
 		)
@@ -603,7 +609,7 @@ var cpPnMoveStart = function () {
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
-	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1+nPn][1])][0][1] = '' } 
+	if (nGav != nGav0) { mESQ[(1*mESQ[nGav0][1+nPn][1])][0][1] = '' } 
 }
 
 var cpPnMoveStop = function () {
@@ -632,11 +638,11 @@ var cpPnMoveStop = function () {
 	var s = this.attr('id')
 	s = s.substr(s.length - 3)
 	this.transform('t' + xv + ',' + yv)
-	
-	mESQ[nGav0][1+nPn][1] = nGav	//> nPara
+	//_ drwCham()
+
+	mESQ[nGav0][1+nPn][0] = nLado		//> nLado
+	mESQ[nGav0][1+nPn][1] = nGav		//> nPara
 	mESQ[nGav0][1+nPn][2] = nIE		//> nIE
-
-
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -645,9 +651,6 @@ var cpPnMoveStop = function () {
 	
 	propagate()
 	reColor()
-
-
-
 
 	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
@@ -711,10 +714,9 @@ var cpRxMoveStop = function () {
 	this.transform('t' + xv + ',' + yv)
 	drwCham()
 
+	mESQ[nGav0][1][0] = nLado	//> nLado
 	mESQ[nGav0][1][1] = nGav	//> nPara
 	mESQ[nGav0][1][2] = nIE		//> nIE
-
-
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -795,8 +797,9 @@ var cpPrMoveStop = function () {
 	s = s.substr(s.length - 1)
 	this.transform('t' + xv + ',' + yv)
 
-	mESQ[nGav0][nAB][1] = nGav	//> nPara
-	mESQ[nGav0][nAB][2] = 1		//> nIE [Sempre externo]
+	mESQ[nGav0][nAB][0] = nLado	//> nLado
+	mESQ[nGav0][nAB][1] = nGav		//> nPara
+	mESQ[nGav0][nAB][2] = 1			//> nIE [Sempre externo]
 
 
 
