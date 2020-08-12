@@ -3,30 +3,28 @@ const draw = Snap('#svgESQ')
 
 
 
-//_$('#z-flow-clog').html(bgcolor)
 
 
 
 
 
-//TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
-
+//_ TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
 //TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
 //			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=TouD, Direita
-
+//TODO PENEIRADO POR BAIXO DA MESMA COR DO PRODUTO A/B
 //TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
-
 //TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
-
 //_ TODO Impedir os CP Pn de se alinharem nos pontos internos da gaveta
 //_ TODO CP Pn se alinhando nos pontos internos: "Excluir" da conexão
 
 
-//Peneirado de fundo
-const patPn = draw
+
+
+//Peneirado de fundo  //! 3 Pn fundo??? (cor A, cor B, cor desconectado)
+const patPn0 = draw
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
-		stroke           : cLinPN,
+		stroke           : cLinPN0,
 		strokeDasharray  : 1 * lwid + ',' + 3 * lwid,
 		strokeDashoffset : 0,
 		strokeWidth      : 1.5 * lwid,
@@ -34,18 +32,15 @@ const patPn = draw
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-// patPn.animate({ y: 90000 }, 5000000)
+
+
 
 var patOffset = 0
 animation()
 function animation() {
 	patOffset += 9000
-	patPn.animate({ y: patOffset }, 500000, mina.linear, animation)
+	patPn0.animate({ y: patOffset }, 500000, mina.linear, animation)
 }
-// var animation = function() {
-// 	patOffset -= 90
-// 	patPn.animate({ y: patOffset }, 5000, mina.linear, animation)
-//   }
 
 
 //* ------------------------- CHECAR LETRA DO PRODUTO ------------------------ */
@@ -90,7 +85,7 @@ function propagate() {
 	for (let index = 1; index <= nGavs; index++) { 
 		let prod = mESQ[index][0][1].toString()
 		
-		//* RODUTO/RECHAÇO
+		//> RODUTO/RECHAÇO
 		let dest = 1 * mESQ[index][1][1]				//> nPara
 		if (mESQ[index][1][2] == 0) {
 			if (index==dest ) {
@@ -99,16 +94,12 @@ function propagate() {
 				mESQ[dest][0][1]=prod
 			}
 		} 
-		//* PENEIRADO	[DEVE PERMANECER APÓS O PRODUTO/RECHAÇO]
+		//> PENEIRADO	[DEVE PERMANECER APÓS O PRODUTO/RECHAÇO]
 		for (let p = 2; p <= 3; p++) {				
 			let dest = 1 * mESQ[index][p][1]				//> nPara
 			if (mESQ[index][p][2] == 0 && index!=dest) {mESQ[dest][0][1]=prod}
-			//TODO 		INCLUIR PENEIRADO POR BAIXO NA PROPAGAÇÃO
-			if (index == dest && mESQ[index][p][0] == 0) {
-				mESQ[dest][0][1] = prod
-				$('#z-flow-clog').html('Saída por baixo')
-			}
-			
+			//> 		INCLUIR PENEIRADO POR BAIXO NA PROPAGAÇÃO
+			if (index == dest && mESQ[index][p][0] == 0) {mESQ[index + 1][0][1] = prod}
 		}														
 	}
 }
@@ -1567,7 +1558,7 @@ function drwPN() {
 
 		var r = draw
 			.polygon(vBaixo)
-			.attr({ fill: patPn })
+			.attr({ fill: patPn0 })
 			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
 	}
 
