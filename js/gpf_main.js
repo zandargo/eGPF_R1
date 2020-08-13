@@ -1,17 +1,8 @@
 
-const draw = Snap('#svgESQ')
-
-
-
-
-
-
-
-
 //_ TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
 //TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
 //			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=TouD, Direita
-//TODO PENEIRADO POR BAIXO DA MESMA COR DO PRODUTO A/B
+//_ TODO PENEIRADO POR BAIXO DA MESMA COR DO PRODUTO A/B
 //TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
 //TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
 //_ TODO Impedir os CP Pn de se alinharem nos pontos internos da gaveta
@@ -20,27 +11,7 @@ const draw = Snap('#svgESQ')
 
 
 
-//Peneirado de fundo  //! 3 Pn fundo??? (cor A, cor B, cor desconectado)
-const patPn0 = draw
-	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
-	.attr({
-		stroke           : cLinPN0,
-		strokeDasharray  : 1 * lwid + ',' + 3 * lwid,
-		strokeDashoffset : 0,
-		strokeWidth      : 1.5 * lwid,
-		'stroke-linecap' : 'round',
-		'stroke-linejoin': 'round',
-	})
-	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
 
-
-
-var patOffset = 0
-animation()
-function animation() {
-	patOffset += 9000
-	patPn0.animate({ y: patOffset }, 500000, mina.linear, animation)
-}
 
 
 //* ------------------------- CHECAR LETRA DO PRODUTO ------------------------ */
@@ -50,16 +21,19 @@ function chkProdColor() {
 			cLinPR = cLinPRa 
 			cLinRX = cLinRXa
 			cLinPN = cLinPNa
+			patPn	 =	patPna
 			break;
 		case 'B':
 			cLinPR = cLinPRb 
 			cLinRX = cLinRXb
 			cLinPN = cLinPNb
+			patPn	 =	patPnb
 			break;
 		default:
 			cLinPR = cLinPR0 
 			cLinRX = cLinRX0
 			cLinPN = cLinPN0
+			patPn	 =	patPn0
 			break;
 	}
 		
@@ -78,6 +52,7 @@ function propagate() {
 				if (dest == i && mESQ[j][p][2] == 0) { cont++ }
 			}														//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
 		}
+		
 		if (cont == 0) { mESQ[i][0][1] = '' }
 	}
 	
@@ -114,16 +89,19 @@ function reColor() {
 			cLinPR = cLinPRa 
 			cLinRX = cLinRXa
 			cLinPN = cLinPNa
+			patPn	 =	patPna
 			break;
 		case 'B':
 			cLinPR = cLinPRb 
 			cLinRX = cLinRXb
 			cLinPN = cLinPNb
+			patPn	 =	patPnb
 			break;
 		default:
 			cLinPR = cLinPR0 
 			cLinRX = cLinRX0
 			cLinPN = cLinPN0
+			patPn	 =	patPn0
 			break;
 		}
 		var gIDtmp = 'G' + pad(index)
@@ -137,13 +115,16 @@ function reColor() {
 		try { draw.select('#' + 'linPr2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'arwPn1_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'arwPn2_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
-		
+		try { draw.select('#' + 'PnD1_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
+		try { draw.select('#' + 'PnD2_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
+
 		
 		try { draw.select('#' + 'CP_Rx_'  + gIDtmp).attr({ fill: cLinRX }) } catch (error) {}
 		try { draw.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 
 	}
+	//animatePnD()		//! Acelera a animação. Descobrir motivo
 }
 
 
@@ -600,7 +581,7 @@ var cpPnMoveStart = function () {
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
-	if (nGav != nGav0) { mESQ[(1*mESQ[nGav0][1+nPn][1])][0][1] = '' } 
+	if (nGav!=0 && nGav!=nGav0) { mESQ[(1*mESQ[nGav0][1+nPn][1])][0][1] = '' } 
 }
 
 var cpPnMoveStop = function () {
@@ -640,12 +621,12 @@ var cpPnMoveStop = function () {
 	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
 	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1+nPn][1])+'.'+nLado)
 	
-	propagate()
-	reColor()
-
+	
 	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
-
+	
+	propagate()
+	reColor()
 
 }
 
@@ -1275,8 +1256,10 @@ function drwRX() {
 		vLin.push(mG[nGav0][nLado][tmpIE][1])
 		vLin.push(mG[nGav][nLado][tmpIE][0])
 		vLin.push(mG[nGav][nLado][tmpIE][1])
-		vLin.push(mG[nGav][0][0][0])
-		vLin.push(mG[nGav][0][0][1])
+		if (nGav0!=nGavs) {		//>	Caso não seja a última gaveta:
+			vLin.push(mG[nGav][0][0][0])
+			vLin.push(mG[nGav][0][0][1])
+		}
 	}
 	if (nIE == 1) {
 		bRXmask = false
@@ -1456,7 +1439,7 @@ function drwRX() {
 	}
 
 	//*Desenhar seta caso necessite
-	if (nIE == 1 && nGav0 != nGav) {
+	if ((nIE == 1 && nGav0 != nGav)  || nGav0==nGavs) {
 		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID, 'arwRx_' + gID)		
 	}
 
@@ -1558,7 +1541,7 @@ function drwPN() {
 
 		var r = draw
 			.polygon(vBaixo)
-			.attr({ fill: patPn0 })
+			.attr({ id: 'PnD' + nPn + '_' + gID, fill: patPn })
 			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
 	}
 

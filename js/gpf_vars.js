@@ -1,3 +1,5 @@
+const draw = Snap('#svgESQ')
+
 // Definições iniciais
 var A4x = 500
 var A4y = 2250
@@ -26,9 +28,9 @@ var sk        = 5 												//> Skew
 var kLin      = 3 												//> Expansão de linha fora da gaveta
 var kFT       = 2.25 											//> Fator de correção para as linhas Frente e Trás
 var kDE       = 1 												//> Fator de correção para as linhas Direita e Esquerda
-var strDashPR = 30 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODUTO
-var strDashRX = 3 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
-var strDashPN = 6 * lwid + ' ' + 6 * lwid 				//> Padrão de tracejado do PENEIRADO
+var strDashPR = 6 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODUTO
+var strDashRX = 5 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
+var strDashPN = 2 * lwid + ' ' + 4 * lwid 				//> Padrão de tracejado do PENEIRADO
 
 var cpAlpha	= 0.65		//> Transparência dos CP
 
@@ -120,6 +122,63 @@ var bRXmask = false
 var hTotal = 0
 
 let wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
+
+
+
+//* -------------------------------------------------------------------------- */
+//*                       PENEIRADOS DE SAÍDA PELO FUNDO                       */
+//* -------------------------------------------------------------------------- */
+
+var strkDashArr = 1   * lwid + ',' + 3 * lwid	//> 	strokeDasharray
+var strkDashOff = 0  									//>	strokeDashoffset
+var strokeWidth = 1.5 * lwid							//>	strokeWidth
+
+//! 3 Pn fundo??? (cor A, cor B, cor desconectado)
+const patPn0 = draw
+	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
+	.attr({
+		stroke           : cLinPN0,
+		strokeDasharray  : strkDashArr,
+		strokeDashoffset : strkDashOff,
+		strokeWidth      : strokeWidth,
+		'stroke-linecap' : 'round',
+		'stroke-linejoin': 'round',
+	})
+	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
+const patPna = draw
+	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
+	.attr({
+		stroke           : cLinPNa,
+		strokeDasharray  : strkDashArr,
+		strokeDashoffset : strkDashOff,
+		strokeWidth      : strokeWidth,
+		'stroke-linecap' : 'round',
+		'stroke-linejoin': 'round',
+	})
+	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
+const patPnb = draw
+	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
+	.attr({
+		stroke           : cLinPNb,
+		strokeDasharray  : strkDashArr,
+		strokeDashoffset : strkDashOff,
+		strokeWidth      : strokeWidth,
+		'stroke-linecap' : 'round',
+		'stroke-linejoin': 'round',
+	})
+	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
+
+var patPn = patPn0
+
+var patOffset = 0
+animatePnD()
+
+function animatePnD() {
+	patOffset += 900000
+	patPn0.animate({ y: patOffset }, 50000000, mina.linear, animatePnD)
+	patPna.animate({ y: patOffset }, 50000000, mina.linear, animatePnD)
+	patPnb.animate({ y: patOffset }, 50000000, mina.linear, animatePnD)
+}
 
 
 
