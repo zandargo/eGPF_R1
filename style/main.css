@@ -22,6 +22,10 @@ body {
           box-sizing: border-box;
   border: none;
   overflow-y: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 body sub {
@@ -666,6 +670,10 @@ footer div p {
       flex-wrap: nowrap;
   -ms-flex-line-pack: justify;
       align-content: space-between;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 #flow-main #divCOD {

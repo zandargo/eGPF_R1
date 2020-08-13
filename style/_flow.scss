@@ -150,6 +150,7 @@ $teste3: hsl(184, 50%, 50%);
 	flex-direction: row;
 	flex-wrap: nowrap;
 	align-content: space-between;
+	user-select: none;
 	// overflow-y: auto;
 	// height: $h_main;
 

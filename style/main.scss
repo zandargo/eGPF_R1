@@ -85,6 +85,7 @@ body {
 	box-sizing: border-box;
 	border: none;
 	overflow-y: hidden;
+	user-select: none;
 
 	sub {
 		font-size: 0.6em;

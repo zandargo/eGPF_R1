@@ -4,11 +4,12 @@
 //			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=TouD, Direita
 //_ TODO PENEIRADO POR BAIXO DA MESMA COR DO PRODUTO A/B
 //TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
-//TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
+//_ TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
 //_ TODO Impedir os CP Pn de se alinharem nos pontos internos da gaveta
 //_ TODO CP Pn se alinhando nos pontos internos: "Excluir" da conexão
+//TODO 	As funções de desenhar
 
-
+//TODO	O cód da última gaveta precisa ser GPF32...   (Está GPF65)
 
 
 
@@ -44,17 +45,20 @@ function propagate() {
 	
 	let dest = 0
 	//* DESCONECTAR PRODUTO
-	for (let i = 2; i <= nGavs; i++) {		//> Gaveta atual
+	
+	for (let i = 2; i <= nGavs; i++) {		
 		let cont = 0
-		for (let j = 1; j < i; j++) {			//> Varre desde a primeira até a atual
-			for (let p = 1; p <= 3; p++) {				//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
+		for (let j = 1; j < i; j++) {			//> Varre desde a primeira até a última
+			for (let p = 1; p <= 3; p++) {				
 				dest = 1 * mESQ[j][p][1]
 				if (dest == i && mESQ[j][p][2] == 0) { cont++ }
-			}														//> TESTE LOOP (REMOVER CASO PN DÊ PROBLEMA)
+			}														
 		}
 		
 		if (cont == 0) { mESQ[i][0][1] = '' }
 	}
+
+	mESQ[1][0][1] = 'A'	//> Garantir que o produto da primeira seja sempre 'A'
 	
 	//*		CONECTAR PRODUTOS AOS DESTINOS
 	for (let index = 1; index <= nGavs; index++) { 
