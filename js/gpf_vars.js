@@ -187,6 +187,7 @@ function animatePnD() {
 //* --------------- Matriz de equivalência de altura da gaveta --------------- */
 
 var mH = [
+	[32, 32, 0],
 	[65, 65, 0],
 	[75, 75, 0],
 	[85, 85, 0],
@@ -573,7 +574,6 @@ var mESQ = [
 		[0, 0, 1], 		//> Ae: nLado, 'nPara', nIE
 		[0, 0, 1], 		//> Be: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> ?
-	
 	], 
 	[
 		[65, 'A'], 		//> Gaveta 01: Altura, Produto

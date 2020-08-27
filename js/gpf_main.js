@@ -182,14 +182,21 @@ function drwSliders() {
 							value = ' <h5>+' + mH[index][2] + '</h5> ' + mH[index][1]
 						}
 						target.innerHTML = value
-						$('#codGPF' + n).html('GPF' + mH[index][1])
+						j = parseInt(n, 10)
+						if (j<nGavs) {
+							mESQ[j][0][0] = parseInt(this.value, 10)
+							//$('#codGPF' + n).html('GPF' + mH[index][1])
+						} else {
+							mESQ[j][0][0] = 32
+							//$('#codGPF' + n).html('GPF' + 32)
+						}
 						break
 					}
 				}
-				mESQ[j][0][0] = parseInt(this.value, 10)
-				j = 1 * index
+				// j = 1 * index
 				calcHtotal()
 				rebuildGPF()
+				// $('#codGPF' + n).html('GPF' + parseH(mESQ[j][0][0]))
 			},
 			true
 		)
@@ -206,8 +213,13 @@ function calcHtotal() {
 		let source = document.getElementById('rngG' + nGPF)
 		let j = 1 * index
 		mESQ[j][0][0] = parseInt(source.value, 10)
+		$('#codGPF' + pad(index)).html(calcCOD(index))
+		$('#matGPF' + pad(index))
+			.html(mESQ[index][0] + '<br>' + mESQ[index][1] + '<br>' + mESQ[index][2] + '<br>' + mESQ[index][3])
+			// .css({ 'font-size': '9pt' })
 	}
 	mESQ[nGavs][0][0] = 32
+	$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
 
 	hTotal = 0
 	for (let index = 1; index <= nGavs; index++) {
@@ -217,8 +229,42 @@ function calcHtotal() {
 	let target = document.getElementById('hTotal')
 	target.innerHTML = '&nbsp' + hTotal + 'mm'
 
-	$('#divESQ').css({ 'height': 200 + 64 * nGavs + "px" })
+	$('#divESQ').css({ 'height': 220 + 64 * nGavs + "px" })
 	// $('#z-flow-clog').html('calcHtotal()=' + hTotal)
+	// console.log(mESQ)
+}
+
+function parseH(H) {
+	for (let index = 0; index < mH.length; index++) {
+		if (H == mH[index][0]) {
+			return mH[index][1]
+			//break
+		}
+	}
+}
+
+
+function calcCOD(nGav) {
+	//* Código principal da Gaveta
+
+	let n = 0
+	if (mESQ[nGav][1][2] == 1) { n += mESQ[nGav][1][0] * 100 }
+	if (mESQ[nGav][2][2] == 1) { n += mESQ[nGav][2][0] * 10 	} 
+	if (mESQ[nGav][3][2] == 1) { n += mESQ[nGav][3][0]			} 
+
+	console.log(n)
+	// $('#z-flow-clog').html(n)
+	let sCod = 'GPF' + parseH(mESQ[nGav][0][0])
+	for (let index = 0; index < mCOD0.length; index++) {
+		if (n == mCOD0[index][0]) {
+			sCod += mCOD0[index][1]
+			break
+		}
+	}
+	//* Código de usinagem
+
+	//* FIM
+	return sCod
 }
 
 //* -------------------------------------------------------------------------- */
@@ -242,6 +288,18 @@ function drwCOD() {
 		h2.className = 'codValue'
 		h2.innerHTML = 'GPF65'
 		div.appendChild(h2)
+
+		//* Div Matriz Esquema
+		div = document.createElement('div')
+		div.id = 'div-matGPF' + nGPF
+		div.className = 'matcontainer'
+		document.getElementById('divMAT').appendChild(div)
+		h2 = document.createElement('h2')
+		h2.id = 'matGPF' + nGPF
+		h2.className = 'matValue'
+		// h2.innerHTML = 'GPF65'
+		div.appendChild(h2)
+
 	}
 }
 
@@ -631,7 +689,7 @@ var cpPnMoveStop = function () {
 	
 	propagate()
 	reColor()
-
+	calcHtotal()
 }
 
 //* -------------------------------------------------------------------------- */
@@ -704,6 +762,7 @@ var cpRxMoveStop = function () {
 
 	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
+	calcHtotal()
 }
 
 //* -------------------------------------------------------------------------- */
@@ -789,6 +848,7 @@ var cpPrMoveStop = function () {
 
 	//drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	showCtrlPts()
+	calcHtotal()
 }
 
 //* -------------------------------------------------------------------------- */
@@ -1704,10 +1764,7 @@ var clkSelGav = function () {
 	}
 }
 
-function calcCOD(nGav) {
-	//Código principal da Gaveta
-	//Código de usinagem
-}
+
 
 //Ocultar slidersDiv
 function hideSlider() {
