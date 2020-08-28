@@ -34,7 +34,7 @@ var strDashPN = 2 * lwid + ' ' + 4 * lwid 				//> Padrão de tracejado do PENEIR
 
 var cpAlpha	= 0.65		//> Transparência dos CP
 
-var cCham = Snap.hsl(0, 0.1, 0.25)							//> Cor da chaminé
+var cCham = Snap.hsl(0, 1, 0.5)							//> Cor da chaminé
 
 var cLinPR0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do PRODUTO neutro
 var cLinRX0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do RECHAÇO neutro

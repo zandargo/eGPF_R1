@@ -215,11 +215,13 @@ function calcHtotal() {
 		mESQ[j][0][0] = parseInt(source.value, 10)
 		$('#codGPF' + pad(index)).html(calcCOD(index))
 		$('#matGPF' + pad(index))
-			.html(mESQ[index][0] + '<br>' + mESQ[index][1] + '<br>' + mESQ[index][2] + '<br>' + mESQ[index][3])
+			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
 			// .css({ 'font-size': '9pt' })
-	}
-	mESQ[nGavs][0][0] = 32
-	$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
+		}
+		mESQ[nGavs][0][0] = 32
+		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
+		$('#matGPF' + pad(nGavs))
+			.html(mESQ[nGavs][0]+'<br>'+mESQ[nGavs][1]+'<br>'+mESQ[nGavs][2]+'<br>'+mESQ[nGavs][3])
 
 	hTotal = 0
 	for (let index = 1; index <= nGavs; index++) {
@@ -248,7 +250,7 @@ function calcCOD(nGav) {
 	//* Código principal da Gaveta
 
 	let n = 0
-	if (mESQ[nGav][1][2] == 1) { n += mESQ[nGav][1][0] * 100 }
+	n += mESQ[nGav][1][0] * 100
 	if (mESQ[nGav][2][2] == 1) { n += mESQ[nGav][2][0] * 10 	} 
 	if (mESQ[nGav][3][2] == 1) { n += mESQ[nGav][3][0]			} 
 
