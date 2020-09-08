@@ -710,6 +710,7 @@ footer div p {
 
 #flow-main #divMAT .matcontainer {
   height: 64px;
+  width: 64px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;

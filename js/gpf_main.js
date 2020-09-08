@@ -254,8 +254,6 @@ function calcCOD(nGav) {
 	if (mESQ[nGav][2][2] == 1) { n += mESQ[nGav][2][0] * 10 	} 
 	if (mESQ[nGav][3][2] == 1) { n += mESQ[nGav][3][0]			} 
 
-	console.log(n)
-	// $('#z-flow-clog').html(n)
 	let sCod = 'GPF' + parseH(mESQ[nGav][0][0])
 	for (let index = 0; index < mCOD0.length; index++) {
 		if (n == mCOD0[index][0]) {
