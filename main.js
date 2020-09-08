@@ -51,9 +51,6 @@ function createMainWindow() {
 	
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show()
-		// if (isDev) {
-		// 	mainWindow.webContents.send('init', 'isDev')
-		// }
 		isDev ? mainWindow.webContents.send('init', 'isDev') : mainWindow.webContents.send('init', 'notDev')
 	})
 
@@ -85,7 +82,9 @@ function createMainWindow() {
 //* -------------------------------------------------------------------------- */
 
 app.whenReady().then(createMainWindow)
-
+ipcMain.on('qDev', (event, arg) => {
+	isDev ? mainWindow.webContents.send('init', 'isDev') : mainWindow.webContents.send('init', 'notDev')
+})
 
 //* Closing
 app.on('window-all-closed', () => {

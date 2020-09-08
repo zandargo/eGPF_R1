@@ -1876,6 +1876,7 @@ ipcRenderer.on('init', (event, arg) => {
 })
 
 
+
 // $(document).ready( function () {
 	
 //	[[x0, 10],[x0,y0 + yOff]]
