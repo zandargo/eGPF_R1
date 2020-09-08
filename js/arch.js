@@ -1,3 +1,11 @@
+// const ipc = require('electron').ipcRenderer
+// ipc.on('envDef', (isDev) => {
+//  $('#divMAT').hide()
+// })
+
+const electron = require('electron')
+const { ipcRenderer } = require('electron')
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -135,3 +143,12 @@ $.get("./pages/rbn_defs1.html", function(data){
 	$.get("./pages/z_defs1.html", function (data) {
 		$('#z-defs1').html(data)
 	})
+
+
+
+
+
+
+
+
+	

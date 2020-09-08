@@ -4,9 +4,10 @@
 //* -------------------------------------------------------------------------- */
 
 const electron = require('electron')
+const fs = require('fs')
 const path = require('path')
 // const url = require('url')
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const env = process.env.NODE_ENV || 'development'
 
 
@@ -50,6 +51,10 @@ function createMainWindow() {
 	
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show()
+		// if (isDev) {
+		// 	mainWindow.webContents.send('init', 'isDev')
+		// }
+		isDev ? mainWindow.webContents.send('init', 'isDev') : mainWindow.webContents.send('init', 'notDev')
 	})
 
 	if (isDev) {
@@ -62,14 +67,17 @@ function createMainWindow() {
 				enableRemoteModule: true,
 			},
 		})
-
+		
 		mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
 		mainWindow.webContents.openDevTools({ mode: 'detach' })
+		
 	}
 	mainWindow.loadFile('index.html')
 
-	mainWindow.webContents.send("log", [__dirname])
+	mainWindow.webContents.send('log', [__dirname])
+	
 
+	
 }
 
 //* -------------------------------------------------------------------------- */
@@ -77,6 +85,7 @@ function createMainWindow() {
 //* -------------------------------------------------------------------------- */
 
 app.whenReady().then(createMainWindow)
+
 
 //* Closing
 app.on('window-all-closed', () => {

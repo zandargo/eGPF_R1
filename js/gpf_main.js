@@ -1870,9 +1870,17 @@ function rebuildGPF() {
 //* -------------------------------------------------------------------------- */
 //*                                    INIT                                    */
 //* -------------------------------------------------------------------------- */
+ipcRenderer.on('init', (event, arg) => {
+	// arg == 'notDev' ? $('#divMAT').hide() : $('#divMAT').show()
+	arg == 'isDev' ? $('#divMAT').show() : $('#divMAT').hide()
+})
+
+
 // $(document).ready( function () {
 	
 //	[[x0, 10],[x0,y0 + yOff]]
+
+
 
 //* 	QUEDA DO PRODUTO 'A'
 
@@ -1927,6 +1935,8 @@ function rebuildGPF() {
 	
 	
 // });
+	
+	
 	
 	
 	
