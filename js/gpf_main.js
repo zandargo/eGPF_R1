@@ -1,17 +1,19 @@
 
 //_ TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
-//TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
-//			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=TouD, Direita
 //_ TODO PENEIRADO POR BAIXO DA MESMA COR DO PRODUTO A/B
-//TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
 //_ TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
 //_ TODO Impedir os CP Pn de se alinharem nos pontos internos da gaveta
 //_ TODO CP Pn se alinhando nos pontos internos: "Excluir" da conexão
-//TODO 	As funções de desenhar
+//_ TODO	O cód da última gaveta precisa ser GPF32...   (Está GPF65)
 
-//TODO	O cód da última gaveta precisa ser GPF32...   (Está GPF65)
+//TODO	Mudar slide nGav está deixando a linha de peneirado acima das gavetas
 
+//TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
 
+//TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
+//			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=T||D, Direita
+
+//TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
 
 
 
@@ -58,6 +60,7 @@ function propagate() {
 		if (cont == 0) { mESQ[i][0][1] = '' }
 	}
 
+	mESQ[0][0][1] = 'B'	//> Garantir que o produto da zero seja sempre 'B'
 	mESQ[1][0][1] = 'A'	//> Garantir que o produto da primeira seja sempre 'A'
 	
 	//*		CONECTAR PRODUTOS AOS DESTINOS
@@ -109,10 +112,11 @@ function reColor() {
 			break;
 		}
 		var gIDtmp = 'G' + pad(index)
+		//*	COLORIR RECHAÇO
 		try { draw.select('#' + 'linRx0_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
 		try { draw.select('#' + 'linRx1_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
 		try { draw.select('#' + 'arwRx_'  + gIDtmp).attr({ fill  : cLinRX }) } catch (error) {}
-		
+		//*	COLORIR PENEIRADO
 		try { draw.select('#' + 'linPn1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'linPn2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'linPr1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
@@ -121,14 +125,11 @@ function reColor() {
 		try { draw.select('#' + 'arwPn2_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'PnD1_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
 		try { draw.select('#' + 'PnD2_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
-
-		
+		//*	COLORIR CPoints
 		try { draw.select('#' + 'CP_Rx_'  + gIDtmp).attr({ fill: cLinRX }) } catch (error) {}
 		try { draw.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 		try { draw.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
-
 	}
-	//animatePnD()		//! Acelera a animação. Descobrir motivo
 }
 
 
@@ -208,6 +209,11 @@ function drwSliders() {
 //* -------------------------------------------------------------------------- */
 
 function calcHtotal() {
+	//* G00 (PRODUTO B)
+	$('#matGPF' + pad(0))
+			.html(mESQ[0][0]+'<br>'+mESQ[0][1])
+
+	//* PRIMEIRA À PENÚLTIMA
 	for (let index = 1; index < nGavs; index++) {
 		let nGPF = pad(index)
 		let source = document.getElementById('rngG' + nGPF)
@@ -217,7 +223,8 @@ function calcHtotal() {
 		$('#matGPF' + pad(index))
 			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
 			// .css({ 'font-size': '9pt' })
-		}
+	}
+	//* ÚLTIMA GAVETA
 		mESQ[nGavs][0][0] = 32
 		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
 		$('#matGPF' + pad(nGavs))
@@ -231,7 +238,7 @@ function calcHtotal() {
 	let target = document.getElementById('hTotal')
 	target.innerHTML = '&nbsp' + hTotal + 'mm'
 
-	$('#divESQ').css({ 'height': 220 + 64 * nGavs + "px" })
+	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
 	// $('#z-flow-clog').html('calcHtotal()=' + hTotal)
 	// console.log(mESQ)
 }
@@ -273,6 +280,18 @@ function calcCOD(nGav) {
 
 
 function drwCOD() {
+	//* Div Matriz Esquema
+		let nGPF = pad(0)
+		var div = document.createElement('div')
+		div.id = 'div-matGPF' + nGPF
+		div.className = 'matcontainer'
+		document.getElementById('divMAT').appendChild(div)
+		h2 = document.createElement('h2')
+		h2.id = 'matGPF' + nGPF
+		h2.className = 'matValue'
+		// h2.innerHTML = 'GPF65'
+		div.appendChild(h2)
+
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
 
@@ -303,28 +322,10 @@ function drwCOD() {
 	}
 }
 
-//* 	POSIÇÃO DO MOUSE
-var xM = null
-var yM = null
-draw.mousemove(moveFunc)
-function moveFunc(ev, x, y) {
-	xM = x
-	yM = y
-	var newY = (Math.round(yM / yOff + 0.4) - 1.25) * yOff
-	sGavHover.attr({ y: newY })
-}
 
-//* 	FORMATO DE NÚMERO "00"
-function pad(num) {
-	var s = '00' + num
-	return s.substr(s.length - 2)
-}
 
-//*	FUNÇÃO DISTÂNCIA ENTRE DOIS PONTOS
-function dist(u1, v1, u2, v2) {
-	return Math.sqrt((u2 - u1) ** 2 + (v2 - v1) ** 2)
-}
 
+//*	HOVER ZONES
 function FiHoverIN() {
 	sLado = 'Fi'
 }
@@ -530,7 +531,7 @@ function calcMat(xC, yC, L) {
 	mF[4][1][1] = yC + 3 * f * (mF[4][0][1] - yC) //yTe
 }
 
-//+ TODO Adicionar desenhos das saídas de fundo em perspectiva
+//TODO Adicionar desenhos das saídas de fundo em perspectiva
 
 
 
@@ -1870,12 +1871,12 @@ function rebuildGPF() {
 //* -------------------------------------------------------------------------- */
 //*                                    INIT                                    */
 //* -------------------------------------------------------------------------- */
-ipcRenderer.on('init', (event, arg) => {
-	// arg == 'notDev' ? $('#divMAT').hide() : $('#divMAT').show()
-	arg == 'isDev' ? $('#divMAT').show() : $('#divMAT').hide()
-})
+// ipcRenderer.on('init', (event, arg) => {
+// 	// arg == 'notDev' ? $('#divMAT').hide() : $('#divMAT').show()
+// 	arg == 'isDev' ? $('#divMAT').show() : $('#divMAT').hide()
+// })
 
-
+isDev ? $('#divMAT').show() : $('#divMAT').hide()
 
 // $(document).ready( function () {
 	

@@ -5,6 +5,7 @@
 
 const electron = require('electron')
 const { ipcRenderer } = require('electron')
+const isDev = process.env.NODE_ENV !== 'production'
 
 
 
