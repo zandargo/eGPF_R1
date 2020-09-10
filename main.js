@@ -56,7 +56,7 @@ function createMainWindow() {
 
 	if (isDev) {
 		const devtools = new BrowserWindow({
-			width : 500,
+			width : 600,
 			height: 1000,
 			icon  : `${__dirname}/assets/icons/eGPF1.png`,
 			webPreferences: {
