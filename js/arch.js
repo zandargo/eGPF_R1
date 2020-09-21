@@ -9,6 +9,21 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 
 
+const sqlite3 = require('sqlite3').verbose()
+var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.error(err.message)
+  }
+  console.log('Connected to the Plansichter database.')
+})
+
+
+
+
+
+
+
+
 //* -------------------------------------------------------------------------- */
 //*                                    FLOW                                    */
 //* -------------------------------------------------------------------------- */
@@ -147,6 +162,23 @@ $.get("./pages/rbn_defs1.html", function(data){
 
 
 
+
+
+
+
+
+//* -------------------------------------------------------------------------- */
+//*                                 TESTES SQL                                 */
+//* -------------------------------------------------------------------------- */
+
+$('#wrp-chart').append(`<p>.<br></p>`)
+let sql = `SELECT NoSQMN, Rev FROM Reg_SQMN`
+db.each(sql, [], (err, row) => {
+  if (err) {
+    throw err
+  }
+  	$('#wrp-chart').append(`<p>Esquemino Nº ${row.NoSQMN}-${row.Rev} </p>`)
+})
 
 
 

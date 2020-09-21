@@ -1547,13 +1547,7 @@ function drwAreas() {
 		.appendTo(draw.select('#' + gID))
 }
 
-var sGavHover = draw.text(x0 + (Larg * wf) / 2 - 40, 250, gIDhover)
-sGavHover.attr({
-	'font-size': 12,
-	fill: 'lightgray',
-	'font-family': 'Roboto, Consolas, Calibri, Arial Narrow',
-	// 'font-weight': 'bold',
-})
+
 
 function gHoverIN() {
 	gIDhover = this.attr('id')

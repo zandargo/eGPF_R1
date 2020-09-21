@@ -125,6 +125,16 @@ let wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre 
 
 
 
+//* ----------------------------- TEXTO GPF HOVER ---------------------------- */
+var sGavHover = draw.text(x0 + (Larg * wf) / 2 - 40, 250, gIDhover)
+sGavHover.attr({
+	'font-size': 12,
+	fill: 'lightgray',
+	'font-family': 'Roboto, Consolas, Calibri, Arial Narrow',
+	// 'font-weight': 'bold',
+})
+
+
 //* -------------------------------------------------------------------------- */
 //*                       PENEIRADOS DE SAÍDA PELO FUNDO                       */
 //* -------------------------------------------------------------------------- */
