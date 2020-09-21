@@ -634,7 +634,8 @@ var cpPrMoveStop = function () {
 
 	for (let g = 0; g <= nGavs; g++) {
 		for (let l = 1; l <= 4; l++) {
-			for (let io = 0; io <= 1; io++) {
+			// for (let io = 0; io <= 1; io++) {
+			let io = 0
 				if (dist(xf, yf, mG[g][l][io][0], mG[g][l][io][1]) < d) {
 					xv = 1 * mG[g][l][io][0]
 					yv = 1 * mG[g][l][io][1]
@@ -643,7 +644,7 @@ var cpPrMoveStop = function () {
 					nLado = l
 					nIE = io
 				}
-			}
+			// }
 		}
 	}
 	var s = this.attr('id')
