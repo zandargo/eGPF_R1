@@ -16,8 +16,8 @@ const env = process.env.NODE_ENV || 'development'
 if (env === 'development') {
 	try {
 		require('electron-reloader')(module, {
-			debug: true,
-			watchRenderer: true,
+			debug: false,
+			watchRenderer: false,
 		})
 	} catch (_) {
 		console.log('Error')
@@ -30,7 +30,7 @@ if (env === 'development') {
 //_ process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV !== 'production'
 
-//* Main Window
+//* Main Window 
 function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		width : 1200,
@@ -44,6 +44,7 @@ function createMainWindow() {
 			preload: path.join(__dirname, 'js', 'preload.js'),  //! Window buttom control
 			nodeIntegration: true,
 			enableRemoteModule: true,
+			worldSafeExecuteJavaScript: true,
 			// webSecurity: isDev ? false : true,
 		},
 
@@ -54,27 +55,24 @@ function createMainWindow() {
 		isDev ? mainWindow.webContents.send('init', 'isDev') : mainWindow.webContents.send('init', 'notDev')
 	})
 
-	if (isDev) {
-		const devtools = new BrowserWindow({
-			width : 600,
-			height: 1000,
-			icon  : `${__dirname}/assets/icons/eGPF1.png`,
-			webPreferences: {
-				nodeIntegration: true,
-				enableRemoteModule: true,
-			},
-		})
-		
-		mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
-		mainWindow.webContents.openDevTools({ mode: 'detach' })
-		
-	}
+	
+	//* 	DEV TOOLS DETTACHED
+	//_ if (isDev) {
+	//_ 	const devtools = new BrowserWindow({
+	//_ 		width : 600,
+	//_ 		height: 1000,
+	//_ 		icon  : `${__dirname}/assets/icons/eGPF1.png`,
+	//_ 		webPreferences: {
+	//_ 			nodeIntegration: true,
+	//_ 			// enableRemoteModule: true,
+	//_ 		},
+	//_ 	})
+	//_ 	mainWindow.webContents.setDevToolsWebContents(devtools.webContents)
+	//_ 	mainWindow.webContents.openDevTools({ mode: 'detach' })
+	//_ }
+
 	mainWindow.loadFile('index.html')
-
 	mainWindow.webContents.send('log', [__dirname])
-	
-
-	
 }
 
 //* -------------------------------------------------------------------------- */
