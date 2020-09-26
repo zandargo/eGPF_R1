@@ -1,12 +1,13 @@
-
-
-//* -------------------------------------------------------------------------- */
-//*                                  MAIN DEFS                                 */
-//* -------------------------------------------------------------------------- */
+// const ipc = require('electron').ipcRenderer
+// ipc.on('envDef', (isDev) => {
+//  $('#divMAT').hide()
+// })
 
 const electron = require('electron')
 const { ipcRenderer } = require('electron')
 const isDev = process.env.NODE_ENV !== 'production'
+
+
 
 const sqlite3 = require('sqlite3').verbose()
 var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
