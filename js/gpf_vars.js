@@ -1,6 +1,6 @@
 const draw = Snap('#svgESQ')
 
-// Definições iniciais
+//*	 Definições iniciais
 var A4x = 500
 var A4y = 2250
 var offP = 0
@@ -11,7 +11,7 @@ var x1p = A4x + offP
 var y1p = A4y + offP
 
 
-// Definição geral da gaveta
+//*	 Definição geral da gaveta
 var nGavs     = 32 												//> Número de gavetas
 var Larg      = 150 												//> Largura da Gaveta
 var Alt       = 8 												//> Altura da gaveta
