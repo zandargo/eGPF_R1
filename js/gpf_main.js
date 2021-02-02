@@ -7,6 +7,8 @@
 //_ TODO	O cód da última gaveta precisa ser GPF32...   (Está GPF65)
 //_ TODO	Slide nGav deixando a linha de peneirado acima das gavetas: APENAS em edit mode OFF
 
+//TODO	Corrigir CodGav qnd Pn retorna em outra gaveta
+
 //TODO 	Código da gaveta com saída por baixo está incorreto
 
 //TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
