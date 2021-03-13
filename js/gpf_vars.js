@@ -257,207 +257,16 @@ var mF = [
 //*                       MATRIZ GERAL DE PRODUTO/RECHAÇO                      */
 //* -------------------------------------------------------------------------- */
 // prettier-ignore
-var mG = [
-	[
-		[[0, 0], [0, 0]] , //0 Centro da Gaveta	00
-		[[0, 0], [0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0], [0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0], [0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0], [0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	01
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	02
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	03
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	04
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	05
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	06
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	07
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	08
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	09
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	10
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	11
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	12
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	13
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	14
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	15
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	16
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	17
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	18
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	19
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	20
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	21
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	22
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	23
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	24
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	25
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	26
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	27
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	28
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	29
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	30
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]] , //0 Centro da Gaveta	31
-		[[0, 0],[0, 0]] , //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]] , //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]] , //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]], //4 Pontos 'Ti' e 'Te'
-	[
-		[[0, 0],[0, 0]], //0 Centro da Gaveta	32
+var mG = []
+for (let g = 0; g <= 32; g++) {
+	let mGtmp = [
+		[[0, 0],[0, 0]], //0 Centro da Gaveta
 		[[0, 0],[0, 0]], //1 Pontos 'Fi' e 'Fe'
 		[[0, 0],[0, 0]], //2 Pontos 'Di' e 'De'
 		[[0, 0],[0, 0]], //3 Pontos 'Ei' e 'Ee'
 		[[0, 0],[0, 0]]] //4 Pontos 'Ti' e 'Te'
-]
-
+	mG.push(mGtmp)	
+}
 
 
 //* -------------------------------------------------------------------------- */
@@ -470,18 +279,21 @@ var mCOD0 = [
 	[103, 'E'],
 	[123, 'A'],
 	[132, 'A'],
+
 	[210, 'E'],
 	[201, 'E'],
 	[240, 'D'],
 	[204, 'D'],
 	[214, 'A'],
 	[241, 'A'],
+
 	[310, 'D'],
 	[301, 'D'],
 	[340, 'E'],
 	[304, 'E'],
 	[314, 'A'],
 	[341, 'A'],
+
 	[420, 'E'],
 	[402, 'E'],
 	[430, 'D'],
@@ -625,26 +437,24 @@ var mESQ = [
 	] 
 ]
 
-
 //* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
 for (let g = 2; g < nGavs; g++) {
 	let mGav = [
-		
 			[65, ''],
 			[0, 0, 0],
 			[0, 0, 0],
 			[0, 0, 0],
-		
 	]
 	mESQ.push(mGav)
 }
 
-let mGav = [
-	
+let mGav = [	
 		[32, ''],
 		[0, 0, 0],
 		[0, 0, 0],
 		[0, 0, 0],
-	
-]
+	]
 mESQ.push(mGav)
+
+
+

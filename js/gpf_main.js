@@ -6,19 +6,18 @@
 //_ TODO CP Pn se alinhando nos pontos internos: "Excluir" da conexão
 //_ TODO	O cód da última gaveta precisa ser GPF32...   (Está GPF65)
 //_ TODO	Slide nGav deixando a linha de peneirado acima das gavetas: APENAS em edit mode OFF
+//_ TODO	Corrigir CodGav qnd Pn retorna em outra gaveta
+//_ TODO 	Código da gaveta com saída por baixo está incorreto
+//_ TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
 
-//TODO	Corrigir CodGav qnd Pn retorna em outra gaveta
+//TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
-//TODO 	Código da gaveta com saída por baixo está incorreto
 
-//TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
-
-//TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
+//TODO	Linha'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
 //			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
 
 //TODO	Criar contorno no último ponto selecionado
 
-//TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
@@ -237,8 +236,8 @@ function calcCOD(nGav) {
 
 	let n = 0
 	n += mESQ[nGav][1][0] * 100
-	if (mESQ[nGav][2][2] == 1) { n += mESQ[nGav][2][0] * 10 	} 
-	if (mESQ[nGav][3][2] == 1) { n += mESQ[nGav][3][0]			} 
+	if (mESQ[nGav][2][2] == 1 || mESQ[nGav][2][1] != nGav) { n += mESQ[nGav][2][0] * 10 	} 
+	if (mESQ[nGav][3][2] == 1 || mESQ[nGav][3][1] != nGav) { n += mESQ[nGav][3][0]			} 
 
 	let sCod = 'GPF' + parseH(mESQ[nGav][0][0])
 	for (let index = 0; index < mCOD0.length; index++) {
@@ -334,24 +333,6 @@ function ladoHoverOUT() {
 	sLado = ''
 }
 
-
-/* 
-
-
-
-
-
-
-
-
-
-*/
-
-
-
-
-
-//TODO Adicionar desenhos das saídas de fundo em perspectiva
 
 
 
@@ -1030,55 +1011,6 @@ function drwCham() {
 
 //* ------------------------ DESENHAR LINHA DE RECHAÇO ----------------------- */
 //	[[x0, 10],[x0,y0 + yOff]]
-
-function drwRX0() {
-	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
-	var gID = 'G' + pad(0) //ID da Gaveta
-	try {
-		draw.select('#Rx_' + gID).remove() //Apaga grupo existente
-		draw.select('#maskRx_' + gID).remove() //Apaga grupo existente
-	} catch (error) {}
-
-	var gRx = draw.group() //Cria Grupo
-	gRx.attr({ id: 'Rx_' + gID }) //Atribui nome
-
-	//*	'Ai' - SEMPRE PRESENTE
-	//Linha de fundo escuro
-	var polyline = draw
-		.polyline([[x0, 50],[x0,y0 + yOff]])
-		.attr({
-			fill: 'none',
-			stroke: cLinPRa,
-			strokeWidth: 1 * lwid,
-			'stroke-linecap': 'round',
-			'stroke-linejoin': 'round',
-		})
-		.appendTo(draw.select('#Rx_' + gID))
-
-	//Linha principal (animada)
-	var polyline = draw
-		.polyline([[x0, 50],[x0,y0 + yOff]])
-		.attr({
-			fill: 'none',
-			stroke: cLinPRa,
-			strokeWidth: 2 * lwid,
-			strokeDasharray: strDashRX,
-			strokeDashoffset: 0,
-			'stroke-linecap': 'round',
-			'stroke-linejoin': 'round',
-		})
-		.appendTo(draw.select('#Rx_' + gID))
-	Snap.animate(
-		Anim0,
-		Anim1,
-		function (value) {
-			polyline.attr({ strokeDashoffset: value })
-		},
-		Anim2
-	)
-
-}
-
 function drwRX() {
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
@@ -1334,8 +1266,7 @@ function drwRX() {
 }
 
 
-//* ----------------------- Desenhar linha de Peneirado ---------------------- */
-
+//* ----------------------- DESENHAR LINHA DE PENEIRADO ---------------------- */
 function drwPN() {
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
@@ -1503,6 +1434,52 @@ function drwPN() {
 		drwSeta(vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID, 'arwPn'+nPn+'_' + gID)
 	}
 }
+
+//* ----------------------- DESENHAR LINHAS DE PRODUTO ----------------------- */
+function drwAi() {
+	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
+
+	var gAi = draw.group() //Cria Grupo
+	gAi.attr({ id: 'Ai'}) //Atribui nome
+
+	//*	'Ai' - SEMPRE PRESENTE
+	//Linha de fundo escuro
+	var polyline = draw
+		.polyline([[x0, 50],[x0,y0 + yOff]])
+		.attr({
+			fill: 'none',
+			stroke: cLinPRa,
+			strokeWidth: 1 * lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Ai'))
+
+	//Linha principal (animada)
+	var polyline = draw
+		.polyline([[x0, 50],[x0,y0 + yOff]])
+		.attr({
+			fill: 'none',
+			stroke: cLinPRa,
+			strokeWidth: 2 * lwid,
+			strokeDasharray: strDashRX,
+			strokeDashoffset: 0,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Ai'))
+	Snap.animate(
+		Anim0,
+		Anim1,
+		function (value) {
+			polyline.attr({ strokeDashoffset: value })
+		},
+		Anim2
+	)
+
+}
+
+
 
 
 //* -------------------- Função desenhar áreas de posição -------------------- */
@@ -1731,7 +1708,7 @@ isDev ? $('#divMAT').show() : $('#divMAT').hide()
 	calcHtotal()
 
 
-	drwRX0()
+	drwAi()
 	propagate()
 	reColor()
 
