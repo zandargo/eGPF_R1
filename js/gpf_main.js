@@ -14,12 +14,11 @@
 //TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
 
 //TODO	'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
-//			LINHA Be: Se Be=FouE, Esquerda	;	Se Be=T||D, Direita
+//			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
 
-//TODO 	Criar desenhos de guias que simulem o fundo do canal. (Elipses em perspectiva)
+//TODO	Criar contorno no último ponto selecionado
 
-
-
+//TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */

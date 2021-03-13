@@ -21,7 +21,7 @@ var y0        = 50 												//> Posição inicial Y
 var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
 var wLinBG	  = 1													//> Fator espessura da linha branca
-var cor0 = 'white' 										//> Cor de fundo
+var cor0 = 'white' 												//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
 var bgcolor   = $('body').css('background-color')		//> Cor do fundo
 var sk        = 5 												//> Skew
@@ -34,7 +34,7 @@ var strDashPN = 2 * lwid + ' ' + 4 * lwid 				//> Padrão de tracejado do PENEIR
 
 var cpAlpha	= 0.65		//> Transparência dos CP
 
-var cCham = Snap.hsl(0, 1, 0.5)							//> Cor da chaminé
+var cCham = Snap.hsl(0, 1, 0.5)								//> Cor da chaminé
 
 var cLinPR0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do PRODUTO neutro
 var cLinRX0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do RECHAÇO neutro
