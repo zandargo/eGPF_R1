@@ -9,15 +9,12 @@
 //_ TODO	Corrigir CodGav qnd Pn retorna em outra gaveta
 //_ TODO 	Código da gaveta com saída por baixo está incorreto
 //_ TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
-
-//TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
-
-
-//TODO	Linha'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
-//			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
+//_ TODO	Linha'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
+//_			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
 
 //TODO	Criar contorno no último ponto selecionado
 
+//TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
@@ -28,7 +25,9 @@ function propagate() {
 	
 	for (let i = 2; i <= nGavs; i++) {		
 		let cont = 0
-		for (let j = 1; j < i; j++) {			//> Varre desde a primeira até a última
+
+		//_ for (let j = 1; j < i; j++) {			//> Varre desde a primeira até a última
+		for (let j = 0; j < i; j++) {			//> Varre desde a primeira até a última
 			for (let p = 1; p <= 3; p++) {				
 				dest = 1 * mESQ[j][p][1]
 				if (dest == i && mESQ[j][p][2] == 0) { cont++ }
@@ -42,7 +41,12 @@ function propagate() {
 	mESQ[1][0][1] = 'A'	//> Garantir que o produto da primeira seja sempre 'A'
 	
 	//*		CONECTAR PRODUTOS AOS DESTINOS
-	for (let index = 1; index <= nGavs; index++) { 
+	let destAe = 1 * mESQ[0][1][1]					//> nPara Ae
+	if (destAe>0) {mESQ[destAe][0][1]='A'} 
+	let destBe = 1 * mESQ[0][2][1]					//> nPara Be
+	if (destBe>0 && mESQ[destBe][0][1]!='A') {mESQ[destBe][0][1]='B'} 
+	
+	for (let index = 1; index <= nGavs; index++) {
 		let prod = mESQ[index][0][1].toString()
 		
 		//> RODUTO/RECHAÇO
@@ -63,7 +67,6 @@ function propagate() {
 		}														
 	}
 }
-	
 
 
 //* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
@@ -114,7 +117,6 @@ function reColor() {
 //* -------------------------------------------------------------------------- */
 //*                               CREATE SLIDERS                               */
 //* -------------------------------------------------------------------------- */
-
 function drwSliders() {
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
@@ -182,14 +184,14 @@ function drwSliders() {
 	}
 }
 
+
 //* -------------------------------------------------------------------------- */
 //*                      CALCULAR ALTURA TOTAL DAS GAVETAS                     */
 //* -------------------------------------------------------------------------- */
-
 function calcHtotal() {
 	//* G00 (PRODUTO B)
 	$('#matGPF' + pad(0))
-			.html(mESQ[0][0]+'<br>'+mESQ[0][1])
+			.html(mESQ[0][0]+'<br>'+mESQ[0][1]+'<br>'+mESQ[0][2]+'<br>'+mESQ[0][3])
 
 	//* PRIMEIRA À PENÚLTIMA
 	for (let index = 1; index < nGavs; index++) {
@@ -255,7 +257,6 @@ function calcCOD(nGav) {
 //* -------------------------------------------------------------------------- */
 //*                             CÓDIGO DAS GAVETAS                             */
 //* -------------------------------------------------------------------------- */
-
 
 function drwCOD() {
 	//* Div Matriz Esquema
@@ -347,11 +348,10 @@ function drwGuias() {
 
 	var gGui = draw.group()
 	gGui.attr({ id: 'Guia_G00' })
-	var ellipse = draw
-			.ellipse(mF[0][1][0], mF[0][1][1] -2 -Alt/2, Alt , Alt/2)
-			.attr({ fill: 'gray', stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_G00'))
-
+	//_ var ellipse = draw
+	//_ 		.ellipse(mF[0][1][0], mF[0][1][1] -2 -Alt/2, Alt , Alt/2)
+	//_ 		.attr({ fill: 'gray', stroke: 'gray', strokeWidth: swid })
+	//_ 		.appendTo(draw.select('#' + 'Guia_G00'))
 
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
@@ -448,6 +448,7 @@ var cpPnMoveStart = function () {
 	if (nGav!=0 && nGav!=nGav0) { mESQ[(1*mESQ[nGav0][1+nPn][1])][0][1] = '' } 
 }
 
+
 var cpPnMoveStop = function () {
 	var bb = this.getBBox()
 	xf = bb.cx
@@ -493,6 +494,7 @@ var cpPnMoveStop = function () {
 	reColor()
 	calcHtotal()
 }
+
 
 //* -------------------------------------------------------------------------- */
 //*          FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO RECHAÇO         */
@@ -567,6 +569,7 @@ var cpRxMoveStop = function () {
 	calcHtotal()
 }
 
+
 //* -------------------------------------------------------------------------- */
 //*          FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO PRODUTO         */
 //* -------------------------------------------------------------------------- */
@@ -590,6 +593,7 @@ var cpPrMoveStart = function () {
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	s = s.substr(s.length - 1)
+	//_ console.log('s = ' + s)
 	nGav0 = 0
 	switch (s) {
 		case 'A':
@@ -602,6 +606,8 @@ var cpPrMoveStart = function () {
 			break;
 		}
 	nGav = mESQ[nGav0][nAB][1]
+	//_ console.log('nGav='+nGav)
+	//_ console.log('nGav0='+nGav0)
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][nAB][1])][0][1] = '' } 
 	$('#z-flow-prod span').html(s = s.substr(s.length - 1))
 }
@@ -646,10 +652,22 @@ var cpPrMoveStop = function () {
 	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
 	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
 	
-	// propagate()
-	// reColor()
+	propagate()
+	reColor()
 
 	//drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
+	switch (s) {
+		case 'A':
+			drwAe()
+			break;
+		case 'B':
+			drwBe()
+			break;
+		default:
+			break;
+		}
+
+
 	showCtrlPts()
 	calcHtotal()
 }
@@ -772,7 +790,19 @@ function showCtrlPts() {
 		//*	Linha de Rechaço
 		try {
 			draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
-		} catch (error) {}
+		} catch (error) { }
+		//*	Linha Ai
+		try {
+			draw.select('#Ai').appendTo(draw)
+		} catch (error) { }
+		//*	Linha Ae
+		try {
+			draw.select('#Ae').appendTo(draw)
+		} catch (error) { }
+		//*	Linha Be
+		try {
+			draw.select('#Be').appendTo(draw)
+		} catch (error) { }
 	}
 	
 
@@ -941,45 +971,77 @@ function hideGPF() {
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
+		//* Ocultar Chaminés
 		try {
 			draw.select('#' + gIDtmp).attr({ visibility: 'hidden' })
 			draw.select('#Cham_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
+		//* Ocultar Rx
 		try {
 			draw.select('#Rx_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
+		//* Ocultar Pn1
 		try {
 			draw.select('#Pn1_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
+		//* Ocultar Pn2
 		try {
 			draw.select('#Pn2_' + gIDtmp).attr({ visibility: 'hidden' })
-		} catch (error) {}
+		} catch (error) { }
 	}
+
+	//* Ocultar Ai
+	try {
+		draw.select('#Ai').attr({ visibility: 'hidden' })
+	} catch (error) { }
+	//* Ocultar Ae
+	try {
+		draw.select('#Ae').attr({ visibility: 'hidden' })
+	} catch (error) { }
+	//* Ocultar Be
+	try {
+		draw.select('#Be').attr({ visibility: 'hidden' })
+	} catch (error) { }
 }
 
 function showGPF() {
 	// for (let j = 0; j <= nGavs; j++) {
+	
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
+		//* Exibir Chaminés
 		try {
 			// draw.select("#" + gIDtmp).attr({ opacity: 0 })
 			draw.select('#' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 			draw.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) {}
+		//* Exibir Rx
 		try {
 			draw.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) {}
+		//* Exibir Pn1
 		try {
 			draw.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) {}
+		//* Exibir Pn2
 		try {
 			draw.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
 		} catch (error) { }
-		// try {
-		// 	draw.select('#Guia_' + gIDtmp).appendTo(draw)
-		// } catch (error) { }
 	}
+
+	//* Exibir Ai
+	try {
+		draw.select('#Ai').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) { }
+	//* Exibir Ae
+	try {
+		draw.select('#Ae').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) { }
+	//* Exibir Be
+	try {
+		draw.select('#Be').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) { }
 }
 
 // Função desenhar chaminé
@@ -1008,8 +1070,9 @@ function drwCham() {
 	}
 }
 
-
-//* ------------------------ DESENHAR LINHA DE RECHAÇO ----------------------- */
+//* -------------------------------------------------------------------------- */
+//*                          DESENHAR LINHA DE RECHAÇO                         */
+//* -------------------------------------------------------------------------- */
 //	[[x0, 10],[x0,y0 + yOff]]
 function drwRX() {
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
@@ -1024,7 +1087,7 @@ function drwRX() {
 	let tmpIE = null
 	let vLin = []
 	let vLinB = []
-	//* Caso o ctrl point seja interno (mesmo se o Rx for externo)
+	//* CASO CP INTERNO (mesmo se o Rx for externo)
 	if (nIE == 0 && nLado != 0) {
 		bRXmask = true
 		if (nGav0 == nGav) {		//* Rechaço pela chaminé
@@ -1108,7 +1171,7 @@ function drwRX() {
 	}
 	
 
-	//* ----------------------------- DESENHAR LINHAS ---------------------------- */
+	//*	DESENHAR LINHAS
 	chkProdColor()
 	//Linha Branca
 	try {
@@ -1161,7 +1224,7 @@ function drwRX() {
 		Anim2
 	)
 
-	//Caso necessite máscara
+	//*	CASO MÁSCARA
 	if (bRXmask == true) {
 		let wmask = []
 		let bmask = []
@@ -1257,7 +1320,7 @@ function drwRX() {
 		// draw.select("#maskRx_" + gID).attr({ opacity: 0.5 })
 	}
 
-	//*Desenhar seta caso necessite
+	//*	CASO SETA
 	if ((nIE == 1 && nGav0 != nGav)  || nGav0==nGavs) {
 		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID, 'arwRx_' + gID)		
 	}
@@ -1266,7 +1329,9 @@ function drwRX() {
 }
 
 
-//* ----------------------- DESENHAR LINHA DE PENEIRADO ---------------------- */
+//* -------------------------------------------------------------------------- */
+//*                         DESENHAR LINHA DE PENEIRADO                        */
+//* -------------------------------------------------------------------------- */
 function drwPN() {
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
@@ -1367,7 +1432,7 @@ function drwPN() {
 		
 	}
 
-//* ----------------------------- DESENHAR LINHAS ---------------------------- */
+//*	DESENHAR LINHAS
 	chkProdColor()
 	//Linha Branca
 	try {
@@ -1429,13 +1494,16 @@ function drwPN() {
 		Anim2
 	)
 
-	//* Desenhar seta caso necessite
+	//* CASO SETA
 	if (nIE == 1 && nGav0 != nGav) {
 		drwSeta(vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID, 'arwPn'+nPn+'_' + gID)
 	}
 }
 
-//* ----------------------- DESENHAR LINHAS DE PRODUTO ----------------------- */
+
+//* -------------------------------------------------------------------------- */
+//*                         DESENHAR LINHAS DE PRODUTO                         */
+//* -------------------------------------------------------------------------- */
 function drwAi() {
 	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
 
@@ -1445,7 +1513,7 @@ function drwAi() {
 	//*	'Ai' - SEMPRE PRESENTE
 	//Linha de fundo escuro
 	var polyline = draw
-		.polyline([[x0, 50],[x0,y0 + yOff]])
+		.polyline([[x0, y0],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
 			stroke: cLinPRa,
@@ -1479,10 +1547,252 @@ function drwAi() {
 
 }
 
+function drwAe() {
+	try {
+		draw.select('#Ae').remove() //Apaga grupo existente
+		draw.select('#maskAe').remove() //Apaga grupo existente
+	} catch (error) {}
+
+	var gAe = draw.group() //Cria Grupo
+	gAe.attr({ id: 'Ae' }) //Atribui nome
+
+	let tmpIE = 0
+	let vLin = []
+	let vLinB = []
+	//* CASO EXISTA
+	if (nGav != nGav0) {
+		
+		tmpIE = 1
+		bRXmask = false
+		cLinBG = bgcolor
+			
+		let Gav0 = 0
+		// let Gav1 = 1
+		let fYOff = 0.5*yOff		//> Em % do yOff
+		
+		//* Linha branca de cima
+		vLinB.push(mG[Gav0][0][0][0])
+		vLinB.push(mG[Gav0][0][0][1]+fYOff)
+		vLinB.push(mG[Gav0][nLado][tmpIE][0])
+		vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		//* Linha branca vertical
+		vLinB.push(mG[Gav0][nLado][tmpIE][0])
+		vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		vLinB.push(mG[nGav][nLado][tmpIE][0])
+		vLinB.push(mG[nGav][nLado][tmpIE][1])
+		//* Linha branca de baixo
+		vLinB.push(mG[nGav][nLado][0][0] + (mG[nGav][nLado][1][0] - mG[nGav][nLado][0][0]) * 0.32)
+		vLinB.push(mG[nGav][nLado][0][1] + (mG[nGav][nLado][1][1] - mG[nGav][nLado][0][1]) * 0.32)
+		vLinB.push(mG[nGav][nLado][tmpIE][0])
+		vLinB.push(mG[nGav][nLado][tmpIE][1])
+
+		vLin.push(mG[Gav0][0][0][0])
+		vLin.push(mG[Gav0][0][0][1]+fYOff)
+		vLin.push(mG[Gav0][nLado][tmpIE][0])
+		vLin.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		vLin.push(mG[nGav][nLado][tmpIE][0])
+		vLin.push(mG[nGav][nLado][tmpIE][1])
+		vLin.push(mG[nGav][0][0][0])
+		vLin.push(mG[nGav][0][0][1])
+	}
+	
+	
+
+	//*	DESENHAR LINHAS
+	//_chkProdColor()
+	cLinPR = cLinPRa 
+	cLinRX = cLinRXa
+	cLinPN = cLinPNa
+	patPn	 =	patPna
+	//Linha Branca
+	try {
+		var polyline = draw
+			.polyline(vLinB)
+			.attr({
+				fill: 'none',
+				stroke: cLinBG,
+				// stroke: 'red',
+				strokeWidth: wLinBG * lwid,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+			.appendTo(draw.select('#Ae'))
+	} catch (error) {}
+
+	//Linha de fundo escuro
+	var polyline = draw
+		.polyline(vLin)
+		.attr({
+			id: 'linAe0',
+			fill: 'none',
+			stroke: cLinPR,
+			strokeWidth: 1 * lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Ae'))
+
+	//Linha principal (animada)
+	var polyline = draw
+		.polyline(vLin)
+		.attr({
+			id: 'linAe1',
+			fill: 'none',
+			stroke: cLinPR,
+			strokeWidth: 2 * lwid,
+			strokeDasharray: strDashRX,
+			strokeDashoffset: 0,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Ae'))
+	Snap.animate(
+		Anim0,
+		Anim1,
+		function (value) {
+			polyline.attr({ strokeDashoffset: value })
+		},
+		Anim2
+	)
 
 
 
-//* -------------------- Função desenhar áreas de posição -------------------- */
+}
+
+function drwBe() {
+	try {
+		draw.select('#Be').remove() //Apaga grupo existente
+		draw.select('#maskBe').remove() //Apaga grupo existente
+	} catch (error) {}
+
+	var gBe = draw.group() //Cria Grupo
+	gBe.attr({ id: 'Be' }) //Atribui nome
+
+	let tmpIE = 0
+	let vLin = []
+	let vLinB = []
+	//* CASO EXISTA
+	if (nGav != nGav0) {
+		
+		tmpIE = 1
+		bRXmask = false
+		cLinBG = bgcolor
+			
+		let Gav0 = 0
+		let fXOff = 15				//> Em pixels
+		let fYOff = 0.5*yOff
+		switch (nLado) {
+			case 1:
+				fYOff = 0.2*yOff
+			case 3:
+				fXOff = -fXOff				//> Em pixels
+				break;
+			default:
+				break;
+		}
+			
+		let fYOff0 = fYOff
+		if (nLado == 1 || nLado == 4) {
+			fYOff0 = fYOff -fXOff*sk/8 //_ + 12.5		//> Em % do yOff
+		}
+
+		
+		//* Linha branca de cima
+		vLinB.push(mG[Gav0][0][0][0]+fXOff)
+		vLinB.push(mG[Gav0][0][0][1])
+		vLinB.push(mG[Gav0][0][0][0]+fXOff)
+		vLinB.push(mG[Gav0][0][0][1]+fYOff0)
+		vLinB.push(mG[Gav0][nLado][tmpIE][0])
+		vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		//* Linha branca vertical
+		vLinB.push(mG[Gav0][nLado][tmpIE][0])
+		vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		vLinB.push(mG[nGav][nLado][tmpIE][0])
+		vLinB.push(mG[nGav][nLado][tmpIE][1])
+		//* Linha branca de baixo
+		vLinB.push(mG[nGav][nLado][0][0] + (mG[nGav][nLado][1][0] - mG[nGav][nLado][0][0]) * 0.32)
+		vLinB.push(mG[nGav][nLado][0][1] + (mG[nGav][nLado][1][1] - mG[nGav][nLado][0][1]) * 0.32)
+		vLinB.push(mG[nGav][nLado][tmpIE][0])
+		vLinB.push(mG[nGav][nLado][tmpIE][1])
+
+		vLin.push(mG[Gav0][0][0][0]+fXOff)
+		vLin.push(mG[Gav0][0][0][1])
+		vLin.push(mG[Gav0][0][0][0]+fXOff)
+		vLin.push(mG[Gav0][0][0][1]+fYOff0)
+		vLin.push(mG[Gav0][nLado][tmpIE][0])
+		vLin.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		vLin.push(mG[nGav][nLado][tmpIE][0])
+		vLin.push(mG[nGav][nLado][tmpIE][1])
+		vLin.push(mG[nGav][0][0][0])
+		vLin.push(mG[nGav][0][0][1])
+	}
+	
+	
+
+	//*	DESENHAR LINHAS
+	//_chkProdColor()
+	cLinPR = cLinPRb 
+	cLinRX = cLinRXb
+	cLinPN = cLinPNb
+	patPn	 =	patPnb
+	//Linha Branca
+	try {
+		var polyline = draw
+			.polyline(vLinB)
+			.attr({
+				fill: 'none',
+				stroke: cLinBG,
+				// stroke: 'red',
+				strokeWidth: wLinBG * lwid,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+			.appendTo(draw.select('#Be'))
+	} catch (error) {}
+
+	//Linha de fundo escuro
+	var polyline = draw
+		.polyline(vLin)
+		.attr({
+			id: 'linBe0',
+			fill: 'none',
+			stroke: cLinPR,
+			strokeWidth: 1 * lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Be'))
+
+	//Linha principal (animada)
+	var polyline = draw
+		.polyline(vLin)
+		.attr({
+			id: 'linBe1',
+			fill: 'none',
+			stroke: cLinPR,
+			strokeWidth: 2 * lwid,
+			strokeDasharray: strDashRX,
+			strokeDashoffset: 0,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#Be'))
+	Snap.animate(
+		Anim0,
+		Anim1,
+		function (value) {
+			polyline.attr({ strokeDashoffset: value })
+		},
+		Anim2
+	)
+
+
+
+}
+
+//* -------------------------------------------------------------------------- */
+//*                          DESENHAR ÁREAS DE POSIÇÃO                         */
+//* -------------------------------------------------------------------------- */
 function drwAreas() {
 	var r = 8
 	var circle = draw
@@ -1527,7 +1837,6 @@ function drwAreas() {
 		.hover(TeHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 }
-
 
 
 function gHoverIN() {
@@ -1612,8 +1921,10 @@ function showSlider() {
 }
 
 
+//* -------------------------------------------------------------------------- */
+//*                         DESENHAR SETA PARA DESTINO                         */
+//* -------------------------------------------------------------------------- */
 
-//* -------------------- FUNÇÃO DESENHAR SETA PARA DESTINO ------------------- */
 function drwSeta(x, y, w, h, clr, grp, id) {
 	var seta = draw
 		.polygon(x, y, x - w / 2, y, x, y + h, x + w / 2, y)
@@ -1628,17 +1939,6 @@ function drwSeta(x, y, w, h, clr, grp, id) {
 		.appendTo(draw.select(grp))
 }
 
-// Desenhar gavetas
-// var myArray = ["F", "T", "D", "E"]
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 //* -------------------------------------------------------------------------- */
 //*                                 RECONSTRUIR                                */
@@ -1661,6 +1961,9 @@ function rebuildGPF() {
 			hideCtrlPts()
 	}
 }
+
+
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -1724,7 +2027,6 @@ isDev ? $('#divMAT').show() : $('#divMAT').hide()
 	
 	
 	
-// });
 	
 	
 	

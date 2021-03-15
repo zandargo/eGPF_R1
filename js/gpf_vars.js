@@ -92,6 +92,7 @@ var yTe = null
 var xT = 0
 var yT = 0
 
+
 //* ------------------------------ Gaveta atual ------------------------------ */
 
 var iGav      = null
