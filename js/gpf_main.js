@@ -430,6 +430,8 @@ var cpPnMove = function (dx, dy) {
 			this.data('origTransform') +
 			(this.data('origTransform') ? 'T' : 't') +
 			[dx, dy],
+		stroke: cLinSel,
+		strokeWidth: 2*lwid,
 	})
 	var bb = this.getBBox()
 	xi = bb.cx
@@ -486,8 +488,12 @@ var cpPnMoveStop = function () {
 	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
 	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1+nPn][1])+'.'+nLado)
 	
-	
+	this.attr({ stroke: 'none' })
+	xT = xv
+	yT = yv
+
 	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
+	drwSelLin()
 	showCtrlPts()
 	
 	propagate()
@@ -506,12 +512,17 @@ var cpRxMove = function (dx, dy) {
 			this.data('origTransform') +
 			(this.data('origTransform') ? 'T' : 't') +
 			[dx, dy],
+		stroke: cLinSel,
+		strokeWidth: 2*lwid,
 	})
 	var bb = this.getBBox()
 	xi = bb.cx
 	yi = bb.cy
 	let s = this.attr('id')
 	s = s.substr(s.length - 3)
+
+	
+
 }
 
 
@@ -525,6 +536,8 @@ var cpRxMoveStart = function () {
 
 
 var cpRxMoveStop = function () {
+	
+	
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -561,10 +574,15 @@ var cpRxMoveStop = function () {
 	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
 	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
 	
+	this.attr({ stroke: 'none' })
+	xT = xv
+	yT = yv
+
 	propagate()
 	reColor()
 
 	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
+	drwSelLin()
 	showCtrlPts()
 	calcHtotal()
 }
@@ -579,6 +597,8 @@ var cpPrMove = function (dx, dy) {
 			this.data('origTransform') +
 			(this.data('origTransform') ? 'T' : 't') +
 			[dx, dy],
+		stroke: cLinSel,
+		strokeWidth: 2*lwid,
 	})
 	var bb = this.getBBox()
 	xi = bb.cx
@@ -652,6 +672,9 @@ var cpPrMoveStop = function () {
 	$('#z-flow-from span').html('G' + pad(nGav0)+'.'+nLado)
 	$('#z-flow-to span').html('G' + pad(mESQ[nGav0][1][1])+'.'+nLado)
 	
+	this.attr({ stroke: 'none' })
+	xT = xv
+	yT = yv
 	propagate()
 	reColor()
 
@@ -666,7 +689,7 @@ var cpPrMoveStop = function () {
 		default:
 			break;
 		}
-
+	drwSelLin()
 
 	showCtrlPts()
 	calcHtotal()
@@ -760,57 +783,63 @@ function drwCtrlPts() {
 }
 
 function showCtrlPts() {
+	//*	G00
+	try {draw.select('#CP_G00').appendTo(draw)
+	} catch (error) {	}
 
+	//* 	LINHA SELEÇÃO
+	try {draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) {console.log(error)}
 	
-	//*	GERAL [GRUPOS]
-		try {
-			draw
-				.select('#CP_G00')
-				.appendTo(draw)
-		} catch (error) {	}
-
-
-	for (let j = nGavs; j >= 0; j--) {
-		iGav = j
-		var gIDtmp = 'G' + pad(iGav)
-		//*	Linha de Peneirado
-		for (let L = 1; L <= 2; L++) {
+	//*	GAVETAS E LINHAS DE FLUXO
+	for (let i = 4; i >= 1; i--){
+		for (let j = nGavs; j >= 0; j--) {
+			iGav = j
+			var gIDtmp = 'G' + pad(iGav)
+			//*	Linha de Peneirado
+			for (let L = 1; L <= 2; L++) {
+				if (mESQ[j][1+L][0]=i) {
+				try {draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
+					} catch (error) { }
+				}
+			}
+			//*	Gaveta
 			try {
-				draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
+				draw.select('#' + gIDtmp).appendTo(draw)
 			} catch (error) {}
+			//*	Chaminé
+			try {
+				draw.select('#Cham_' + gIDtmp).appendTo(draw)
+			} catch (error) {}
+			//*	Linha de Rechaço
+			if (mESQ[j][1][0] = i) {
+				try {
+					draw.select('#Rx_' + gIDtmp).appendTo(draw)
+				} catch (error) { }
+			}
 		}
-		//*	Gaveta
-		try {
-			draw.select('#' + gIDtmp).appendTo(draw)
-		} catch (error) {}
-		//*	Chaminé
-		try {
-			draw.select('#Cham_' + gIDtmp).appendTo(draw)
-		} catch (error) {}
-		//*	Linha de Rechaço
-		try {
-			draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
-		} catch (error) { }
-		//*	Linha Ai
-		try {
-			draw.select('#Ai').appendTo(draw)
-		} catch (error) { }
-		//*	Linha Ae
-		try {
-			draw.select('#Ae').appendTo(draw)
-		} catch (error) { }
-		//*	Linha Be
-		try {
-			draw.select('#Be').appendTo(draw)
-		} catch (error) { }
 	}
 	
+	//*	Linha Ai
+	try {draw.select('#Ai').appendTo(draw)
+	} catch (error) { }
+	//*	Linha Ae
+	try {draw.select('#Ae').appendTo(draw)
+	} catch (error) { }
+	//*	Linha Be
+	try {draw.select('#Be').appendTo(draw)
+	} catch (error) { }
+	
 
+	//* 	CIRC SELEÇÃO
+	try {draw.select('#SelCir').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) {console.log(error)}
 
-	//*	PONTOS
+	//*	PONTOS Ae & Be
 	draw.select('#CP_A').attr({ visibility: 'visible' }).appendTo(draw)
 	draw.select('#CP_B').attr({ visibility: 'visible' }).appendTo(draw)
 
+	//*	PONTOS Rx, Pn1, Pn2
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -829,36 +858,46 @@ function showCtrlPts() {
 			.attr({ visibility: 'visible' })
 			.appendTo(draw)
 	}
+
+	
 }
 
 
 function hideCtrlPts() {
+	//* 	Lin Selec
+	try {
+		draw.select('#SelLin').attr({ visibility: 'hidden' })
+		draw.select('#SelCir').attr({ visibility: 'hidden' })
+	} catch (error) {console.log(error)}
+
 	//* 	Pontos AB
 	try {draw.select('#CP_A').attr({ visibility: 'hidden' })
 		} catch (error) {}
 	try {draw.select('#CP_B').attr({ visibility: 'hidden' })
 		} catch (error) {}
 	
-	for (let j = 32; j >= 0; j--) {
-		iGav = j
-		var gIDtmp = 'G' + pad(iGav)
-		//* Ponto de Rechaço
-		try {
-			draw.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' })
-		} catch (error) {}
-		//*  Ponto de Peneirado
-		try {
-			for (let l = 1; l <= 2; l++) {
-				draw
-					.select('#' + 'CP_Pn' + l + '_' + gIDtmp)
-					.attr({ visibility: 'hidden' })
-					.appendTo(draw)
-			}
-		} catch (error) {}
-		//* Linha de Rechaço
-		try {
-			draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
-		} catch (error) {}
+	for (let i = 4; i >= 1; i--) {
+		for (let j = 32; j >= 0; j--) {
+			iGav = j
+			var gIDtmp = 'G' + pad(iGav)
+			//* Ponto de Rechaço
+			try {
+				draw.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' })
+			} catch (error) { }
+			//*  Ponto de Peneirado
+			try {
+				for (let l = 1; l <= 2; l++) {
+					draw
+						.select('#' + 'CP_Pn' + l + '_' + gIDtmp)
+						.attr({ visibility: 'hidden' })
+						.appendTo(draw)
+				}
+			} catch (error) { }
+			// //* Linha de Rechaço
+			// try {
+			// 	draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
+			// } catch (error) { }
+		}
 	}
 }
 
@@ -968,6 +1007,13 @@ function drwGPF(xC, yC, L, H) {
 }
 
 function hideGPF() {
+
+	//* Ocultar Lin Selec
+	try {
+		draw.select('#SelLin').attr({ visibility: 'hidden' })
+	} catch (error) {console.log(error)}
+
+	//* Ocultar polígonos da gaveta
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -1005,8 +1051,13 @@ function hideGPF() {
 }
 
 function showGPF() {
-	// for (let j = 0; j <= nGavs; j++) {
-	
+	//* Ocultar Lin Selec
+	try {
+		draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) {console.log(error)}
+
+
+	//* Exibir polígonos da gaveta
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -1170,7 +1221,7 @@ function drwRX() {
 		vLinB.push(mG[nGav][nLado][tmpIE][1])
 	}
 	
-
+	try {vSelLin = vLin} catch (error) {console.log(error)}
 	//*	DESENHAR LINHAS
 	chkProdColor()
 	//Linha Branca
@@ -1181,7 +1232,7 @@ function drwRX() {
 				fill: 'none',
 				stroke: cLinBG,
 				// stroke: 'red',
-				strokeWidth: wLinBG * lwid,
+				strokeWidth: wLinBG * lwid+1,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1432,7 +1483,8 @@ function drwPN() {
 		
 	}
 
-//*	DESENHAR LINHAS
+	try {vSelLin = vLinB} catch (error) {console.log(error)}
+	//*	DESENHAR LINHAS
 	chkProdColor()
 	//Linha Branca
 	try {
@@ -1597,7 +1649,8 @@ function drwAe() {
 	}
 	
 	
-
+	try { vSelLin = vLin } catch (error) { console.log(error) }
+	
 	//*	DESENHAR LINHAS
 	//_chkProdColor()
 	cLinPR = cLinPRa 
@@ -1612,7 +1665,7 @@ function drwAe() {
 				fill: 'none',
 				stroke: cLinBG,
 				// stroke: 'red',
-				strokeWidth: wLinBG * lwid,
+				strokeWidth: wLinBG * lwid+1,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1728,7 +1781,7 @@ function drwBe() {
 	}
 	
 	
-
+	try {vSelLin = vLin} catch (error) {console.log(error)}
 	//*	DESENHAR LINHAS
 	//_chkProdColor()
 	cLinPR = cLinPRb 
@@ -1789,6 +1842,119 @@ function drwBe() {
 
 
 }
+
+
+//* -------------------------------------------------------------------------- */
+//*                          DESENHAR LINHA DE SELEÇÃO                         */
+//* -------------------------------------------------------------------------- */
+
+function drwSelLin() {
+	try {
+		draw.select('#circleSel1').remove() 
+		draw.select('#SelLin').remove() //Apaga grupo existente
+		draw.select('#SelCir').remove() //Apaga grupo existente
+
+		//_ draw.select('#maskSL').remove() //Apaga grupo existente
+	} catch (error) {}
+
+	var gSL = draw.group() 		//Cria Grupo
+	gSL.attr({ id: 'SelLin' }) //Atribui nome
+	var gSC = draw.group() 		//Cria Grupo
+	gSC.attr({ id: 'SelCir' }) //Atribui nome
+
+	
+
+	//*	DESENHAR LINHAS
+	var SLwid = 5*lwid
+	var fWid = 2
+	
+	var wSL = 6*lwid
+	var wSC = lwid
+	var fSL = fWid
+	var fSC = 1.25
+
+	var polyline = draw
+		.polyline(vSelLin)
+		.attr({
+			id: 'linSel1',
+			fill: 'none',
+			stroke: cLinSel,
+			strokeWidth: wSL,
+			opacity: 0.75,
+			//_ strokeDasharray: strDashRX,
+			//_ strokeDashoffset: 0,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#SelLin'))
+		
+		var polyline = draw
+			.polyline(vSelLin)
+			.attr({
+				id: 'linSelB',
+				fill: 'none',
+				stroke: cLinBG,
+				strokeWidth: 3*lwid,
+				opacity: 1,
+				//_ strokeDasharray: strDashRX,
+				//_ strokeDashoffset: 0,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+			.appendTo(draw.select('#SelLin'))
+	
+	 var ellipse = draw
+	 		.ellipse(0, 0, 1.5*Alt, 1.5*Alt)
+	 		// .transform('T' + xT + ',' + yT)
+		 .attr({
+				transform: 'T' + xT + ',' + yT,
+	 			id: 'circleSel1',
+	 			fill: 'none',
+	 			stroke: cLinSel,
+	 			strokeWidth: wSC,
+	 			opacity: 0.75,
+	 		})
+	 		.appendTo(draw.select('#SelCir'))
+
+	
+	//_ var gSL = Snap.select('#SelLin')
+	var linSL = gSL.select('#linSel1')
+	var cirSL = gSC.select('#circleSel1')
+	
+	linSLAnimation()
+	function linSLAnimation() {
+		fSL = 1 / fSL
+		wSL = wSL * fSL
+		linSL.stop().animate(
+			{ strokeWidth: wSL}, 
+			800,
+			function(){ 
+				linSL.attr({ strokeWidth: wSL })
+				linSLAnimation()
+			}
+			)
+	}
+
+	 cirSLAnimation()
+	 function cirSLAnimation() {
+	 	fSC = 1 / fSC
+	 	wSC = wSC * fSC
+	 	cirSL.stop().animate(
+	 		{ transform: 'T'+xT+','+yT+'S'+fSC+' '+xT+' '+yT}, 
+	 		800,
+	 		function(){ 
+	 			cirSL.attr({ transform: 'T'+xT+','+yT+'S'+fSC+' '+xT+' '+yT})
+	 			cirSLAnimation()
+			  },
+				mina.linear() 
+	 		)
+	 }
+
+
+
+}
+
+
 
 //* -------------------------------------------------------------------------- */
 //*                          DESENHAR ÁREAS DE POSIÇÃO                         */

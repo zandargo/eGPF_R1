@@ -52,6 +52,8 @@ var cLinPRb = $('#flow-color-box03').css('background-color') //> Cor da linha do
 var cLinRXb = $('#flow-color-box03').css('background-color') //> Cor da linha do RECHAÇO B
 var cLinPNb = $('#flow-color-box04').css('background-color') //> Cor da linha do PENEIRADO B
 
+var cLinSel = Snap.rgb(50,150,50)
+
 var cLinBG = 'white'
 
 // var cCtrlPntRxi = Snap.hsl(0.15,0.2,0.6)	//> Cor do Ponto de controle Rx interno 
@@ -118,6 +120,9 @@ var xf = 0
     yf = 0
 //Máscara
 var bRXmask = false
+
+//Linha de Seleção
+var vSelLin = []
 
 //Esquema
 var hTotal = 0
