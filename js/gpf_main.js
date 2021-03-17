@@ -800,18 +800,20 @@ function showCtrlPts() {
 
 	//* 	LINHA SELEÇÃO
 	try {draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
-	} catch (error) {console.log(error)}
+	} catch (error) {console.log('#SelLin = null')}
 	
 	//*	GAVETAS
 	for (let j = nGavs; j >= 0; j--) {
+		iGav = j
+		var gIDtmp = 'G' + pad(iGav)
 		//*	Gaveta
 		try {
 			draw.select('#' + gIDtmp).appendTo(draw)
-		} catch (error) {console.log(error)}
+		} catch (error) {}
 		//*	Chaminé
 		try {
 			draw.select('#Cham_' + gIDtmp).appendTo(draw)
-		} catch (error) {console.log(error)}
+		} catch (error) {}
 	}
 
 	//*	LINHAS DE FLUXO
@@ -851,7 +853,7 @@ function showCtrlPts() {
 
 	//* 	CIRC SELEÇÃO
 	try {draw.select('#SelCir').attr({ visibility: 'visible' }).appendTo(draw)
-	} catch (error) {console.log(error)}
+	} catch (error) {console.log('#SelCir = null')}
 
 	//*	PONTOS Ae & Be
 	draw.select('#CP_A').attr({ visibility: 'visible' }).appendTo(draw)
@@ -1427,22 +1429,30 @@ function drwPN() {
 		vLinPn.push(mG[nGav0][0][0][1] + Alt)
 		vLinPn.push(mG[nGav0][nLado][tmpIE][0])
 		vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt)
-
-		vLinPr.push(mG[nGav0][nLado][tmpIE][0])
-		vLinPr.push(mG[nGav0][nLado][tmpIE][1] + Alt)
-		vLinPr.push(mG[nGav][nLado][tmpIE][0])
-		vLinPr.push(mG[nGav][nLado][tmpIE][1] + Alt)
-
+		
 		vLinB.push(vLinPn[0])
 		vLinB.push(vLinPn[1])
 		vLinB.push(vLinPn[2])
 		vLinB.push(vLinPn[3])
-		vLinB.push(vLinPr[0])
-		vLinB.push(vLinPr[1])
-		vLinB.push(vLinPr[2])
-		vLinB.push(vLinPr[3])
 
+		if (nGav0 != nGav) {
+			try {
+				vLinPr.push(mG[nGav0][nLado][tmpIE][0])
+				vLinPr.push(mG[nGav0][nLado][tmpIE][1] + Alt)
+				vLinPr.push(mG[nGav][nLado][tmpIE][0])
+				vLinPr.push(mG[nGav][nLado][tmpIE][1] + Alt)
+				
+				vLinB.push(vLinPr[0])
+				vLinB.push(vLinPr[1])
+				vLinB.push(vLinPr[2])
+				vLinB.push(vLinPr[3])
+				
+			} catch (error) {console.log(error)}
+		}
 
+		console.log(vLinPn)
+		console.log(vLinPr)
+		console.log(vLinB)
 	}
 
 	
@@ -1512,7 +1522,7 @@ function drwPN() {
 		vSelLin = []
 		vSelLin.push(vLinPn)
 		vSelLin.push(vLinPr)
-	} catch (error) { console.log(error) }
+	} catch (error) {}
 	//*	DESENHAR LINHAS
 	chkProdColor()
 	//Linha Branca
@@ -1552,28 +1562,31 @@ function drwPN() {
 		Anim2
 	)
 
+
 	//Linha de produto (animada)
-	var polyline2 = draw
-		.polyline(vLinPr)
-		.attr({
-			id: 'linPr'+nPn+'_' + gID,
-			fill: 'none',
-			stroke: cLinPN,
-			strokeWidth: 1.5 * lwid,
-			strokeDasharray: strDashPR,
-			strokeDashoffset: 0,
-			'stroke-linecap': 'round',
-			'stroke-linejoin': 'round',
-		})
-		.appendTo(draw.select('#Pn' + nPn + '_' + gID))
-	Snap.animate(
-		Anim0,
-		Anim1,
-		function (value) {
-			polyline2.attr({ strokeDashoffset: value })
-		},
-		Anim2
-	)
+	if (nGav0 != nGav) {
+		var polyline2 = draw
+			.polyline(vLinPr)
+			.attr({
+				id: 'linPr'+nPn+'_' + gID,
+				fill: 'none',
+				stroke: cLinPN,
+				strokeWidth: 1.5 * lwid,
+				strokeDasharray: strDashPR,
+				strokeDashoffset: 0,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
+		Snap.animate(
+			Anim0,
+			Anim1,
+			function (value) {
+				polyline2.attr({ strokeDashoffset: value })
+			},
+			Anim2
+			)
+	}
 
 	//*	MÁSCARA
 		let wmask = []
@@ -1625,14 +1638,13 @@ function drwPN() {
 			.attr({
 				fill: 'black',
 				stroke: 'black',
-				strokeWidth: lwid*1.5,
+				strokeWidth: lwid,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(draw.select('#maskPn'+nPn+'_' + gID))
-		//Aplica Máscara
+		//*	Aplica Máscara
 		gPn.attr({ mask: draw.select('#maskPn'+nPn+'_' + gID) })
-		// draw.select("#maskRx_" + gID).attr({ opacity: 0.5 })
 	
 
 
@@ -1989,7 +2001,7 @@ function drwSelLin() {
 				fill: 'none',
 				stroke: cLinBG,
 				strokeWidth: wLinBG*lwid,
-				opacity: 1,
+				opacity: 0.9,
 				//_ strokeDasharray: strDashRX,
 				//_ strokeDashoffset: 0,
 				'stroke-linecap': 'round',
