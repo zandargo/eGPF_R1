@@ -1,4 +1,3 @@
-
 //_ TODO	Desenhar 'Ae' e 'Be' como ctrl pnts
 //_ TODO PENEIRADO POR BAIXO DA MESMA COR DO PRODUTO A/B
 //_ TODO	Caso seja o último rechaço, desenhar seta p/ fundo, invés de linha para o centro da gav seguinte
@@ -11,15 +10,15 @@
 //_ TODO 	CPs de Ae e Be não podem dar snap em pontos externos da gaveta (Apenas Pr)
 //_ TODO	Linha'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
 //_			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
+//_ TODO	Criar contorno no último ponto selecionado
 
-//TODO	Criar contorno no último ponto selecionado
 
 //TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
 function propagate() {
-	
+	console.log('propagate()')
 	let dest = 0
 	//* DESCONECTAR PRODUTO
 	
@@ -71,6 +70,7 @@ function propagate() {
 
 //* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
 function reColor() {
+	console.log('reColor()')
 	for (let index = 1; index <= nGavs; index++) { 
 		switch (mESQ[index][0][1]) {
 		case 'A':
@@ -399,6 +399,8 @@ function drwGuias() {
 }
 
 function showGuias() {
+	console.log('showGuias()')
+
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -409,6 +411,8 @@ function showGuias() {
 }
 
 function hideGuias() {
+	console.log('hideGuias()')
+
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -442,6 +446,7 @@ var cpPnMove = function (dx, dy) {
 
 
 var cpPnMoveStart = function () {
+	console.log('cpPnMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
@@ -452,6 +457,7 @@ var cpPnMoveStart = function () {
 
 
 var cpPnMoveStop = function () {
+	console.log('cpPnMoveStop()')
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -507,6 +513,7 @@ var cpPnMoveStop = function () {
 //* -------------------------------------------------------------------------- */
 
 var cpRxMove = function (dx, dy) {
+	
 	this.attr({
 		transform:
 			this.data('origTransform') +
@@ -527,6 +534,7 @@ var cpRxMove = function (dx, dy) {
 
 
 var cpRxMoveStart = function () {
+	console.log('cpRxMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
@@ -536,7 +544,7 @@ var cpRxMoveStart = function () {
 
 
 var cpRxMoveStop = function () {
-	
+	console.log('cpRxMoveStop()')
 	
 	var bb = this.getBBox()
 	xf = bb.cx
@@ -610,6 +618,7 @@ var cpPrMove = function (dx, dy) {
 
 
 var cpPrMoveStart = function () {
+	console.log('cpPrMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	s = s.substr(s.length - 1)
@@ -634,6 +643,7 @@ var cpPrMoveStart = function () {
 
 
 var cpPrMoveStop = function () {
+	console.log('cpPrMoveStop()')
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -783,6 +793,7 @@ function drwCtrlPts() {
 }
 
 function showCtrlPts() {
+	console.log('showCtrlPts() ; iGav='+pad(iGav))
 	//*	G00
 	try {draw.select('#CP_G00').appendTo(draw)
 	} catch (error) {	}
@@ -791,31 +802,38 @@ function showCtrlPts() {
 	try {draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
 	} catch (error) {console.log(error)}
 	
-	//*	GAVETAS E LINHAS DE FLUXO
+	//*	GAVETAS
+	for (let j = nGavs; j >= 0; j--) {
+		//*	Gaveta
+		try {
+			draw.select('#' + gIDtmp).appendTo(draw)
+		} catch (error) {console.log(error)}
+		//*	Chaminé
+		try {
+			draw.select('#Cham_' + gIDtmp).appendTo(draw)
+		} catch (error) {console.log(error)}
+	}
+
+	//*	LINHAS DE FLUXO
 	for (let i = 4; i >= 1; i--){
 		for (let j = nGavs; j >= 0; j--) {
 			iGav = j
 			var gIDtmp = 'G' + pad(iGav)
-			//*	Linha de Peneirado
+			//*	Linhas de Peneirado
 			for (let L = 1; L <= 2; L++) {
-				if (mESQ[j][1+L][0]=i) {
-				try {draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
-					} catch (error) { }
+				if (mESQ[j][1 + L][0] == i) {
+					console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
+					try {draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
+						} catch (error) {console.log(error)}
 				}
 			}
-			//*	Gaveta
-			try {
-				draw.select('#' + gIDtmp).appendTo(draw)
-			} catch (error) {}
-			//*	Chaminé
-			try {
-				draw.select('#Cham_' + gIDtmp).appendTo(draw)
-			} catch (error) {}
-			//*	Linha de Rechaço
-			if (mESQ[j][1][0] = i) {
+			
+			//*	Linhas de Rechaço
+			if (mESQ[j][1][0] == i) {
+				console.log('#Rx_' + gIDtmp+'='+mESQ[j][1][0])
 				try {
 					draw.select('#Rx_' + gIDtmp).appendTo(draw)
-				} catch (error) { }
+				} catch (error) {console.log(error)}
 			}
 		}
 	}
@@ -864,6 +882,7 @@ function showCtrlPts() {
 
 
 function hideCtrlPts() {
+	console.log('hideCtrlPts() ; iGav='+pad(iGav))
 	//* 	Lin Selec
 	try {
 		draw.select('#SelLin').attr({ visibility: 'hidden' })
@@ -907,6 +926,7 @@ function hideCtrlPts() {
 //* -------------------------------------------------------------------------- */
 
 function drwGPF(xC, yC, L, H) {
+	console.log('drwGPF() ; iGav='+pad(iGav))
 	//Borda
 	var brdGav = draw
 		.rect(xC - 1.25 * Larg, yC - yOff / 2, 2.5 * Larg, yOff, 5)
@@ -1007,7 +1027,7 @@ function drwGPF(xC, yC, L, H) {
 }
 
 function hideGPF() {
-
+	console.log('hideGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
 	try {
 		draw.select('#SelLin').attr({ visibility: 'hidden' })
@@ -1051,6 +1071,7 @@ function hideGPF() {
 }
 
 function showGPF() {
+	console.log('showGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
 	try {
 		draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
@@ -1097,6 +1118,7 @@ function showGPF() {
 
 // Função desenhar chaminé
 function drwCham() {
+	console.log('drwCham() ; iGav='+pad(iGav))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
 		draw.select('#Cham_' + gID).remove() //Apaga grupo existente
@@ -1126,6 +1148,7 @@ function drwCham() {
 //* -------------------------------------------------------------------------- */
 //	[[x0, 10],[x0,y0 + yOff]]
 function drwRX() {
+	console.log('drwRX() ; iGav='+pad(nGav0))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
 		draw.select('#Rx_' + gID).remove() //Apaga grupo existente
@@ -1315,7 +1338,7 @@ function drwRX() {
 				bmask.push(mP[3][3][0])
 				bmask.push(mP[3][3][1] + Alt)
 				break
-			case 3:
+			case 3: //Esquerda
 				bmask.push(mP[1][4][0])
 				bmask.push(mP[1][4][1] + Alt)
 				bmask.push(mP[1][4][0])
@@ -1327,7 +1350,7 @@ function drwRX() {
 				bmask.push(mP[4][4][0])
 				bmask.push(mP[4][4][1] + Alt)
 				break
-			case 4:
+			case 4: //Trás
 				bmask.push(mP[1][1][0] + Larg * 0.41)
 				bmask.push(mP[1][1][1] + Alt)
 				bmask.push(mP[1][1][0] + Larg * 0.41)
@@ -1384,6 +1407,7 @@ function drwRX() {
 //*                         DESENHAR LINHA DE PENEIRADO                        */
 //* -------------------------------------------------------------------------- */
 function drwPN() {
+	console.log('drwPN() ; iGav='+pad(nGav0))
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
@@ -1421,6 +1445,7 @@ function drwPN() {
 
 	}
 
+	
 	if (nIE == 0 && nLado != 0) {
 		if (nGav0 == nGav) {
 			tmpIE = 0
@@ -1453,7 +1478,7 @@ function drwPN() {
 		}
 	}
 
-	//Saída por baixo
+	//> Se saída por baixo
 	if (nIE == 0 && nLado == 0 && nGav0 == nGav) {
 		let vBaixo = []
 		calcMat(x0, y0 + nGav0 * yOff, Larg)
@@ -1477,13 +1502,17 @@ function drwPN() {
 			.attr({ id: 'PnD' + nPn + '_' + gID, fill: patPn })
 			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
 	}
-
+	//> Se em direção ao fundo
 	if (nIE == 1 && nGav0 != nGav) {
 		
 		
 	}
 
-	try {vSelLin = vLinB} catch (error) {console.log(error)}
+	try {
+		vSelLin = []
+		vSelLin.push(vLinPn)
+		vSelLin.push(vLinPr)
+	} catch (error) { console.log(error) }
 	//*	DESENHAR LINHAS
 	chkProdColor()
 	//Linha Branca
@@ -1546,6 +1575,68 @@ function drwPN() {
 		Anim2
 	)
 
+	//*	MÁSCARA
+		let wmask = []
+		let bmask = []
+		calcMat(x0, y0 + nGav0 * yOff, Larg)
+		var gmPn = draw.group() //Cria Grupo
+		gmPn.attr({ id: 'maskPn'+nPn+'_' + gID }) //Atribui nome
+		
+		//*	Polígono que mostra
+		wmask.push(0)
+		wmask.push(0)
+		wmask.push(A4x)
+		wmask.push(0)
+		wmask.push(A4x)
+		wmask.push(A4y)
+		wmask.push(0)
+		wmask.push(A4y)
+
+		//*	Polígono que oculta
+		bmask.push(mP[0][1][0])
+		bmask.push(mP[0][1][1]+Alt)
+		bmask.push(mP[0][1][0])
+		bmask.push(mP[0][1][1])
+		bmask.push(mP[0][2][0])
+		bmask.push(mP[0][2][1])
+		bmask.push(mP[0][3][0])
+		bmask.push(mP[0][3][1])
+		bmask.push(mP[0][3][0])
+		bmask.push(mP[0][3][1]+Alt)
+		bmask.push(mP[0][4][0])
+		bmask.push(mP[0][4][1]+Alt)
+	
+	
+		//*	Polígono que mostra
+		var pmask = draw
+			.polygon(wmask)
+			.attr({
+				fill: 'white',
+				stroke: 'white',
+				strokeWidth: lwid,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+			.appendTo(draw.select('#maskPn'+nPn+'_' + gID))
+
+		//*	Polígono que oculta
+		var pmask = draw
+			.polygon(bmask)
+			.attr({
+				fill: 'black',
+				stroke: 'black',
+				strokeWidth: lwid*1.5,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+			.appendTo(draw.select('#maskPn'+nPn+'_' + gID))
+		//Aplica Máscara
+		gPn.attr({ mask: draw.select('#maskPn'+nPn+'_' + gID) })
+		// draw.select("#maskRx_" + gID).attr({ opacity: 0.5 })
+	
+
+
+
 	//* CASO SETA
 	if (nIE == 1 && nGav0 != nGav) {
 		drwSeta(vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID, 'arwPn'+nPn+'_' + gID)
@@ -1600,6 +1691,7 @@ function drwAi() {
 }
 
 function drwAe() {
+	console.log('drwAe()')
 	try {
 		draw.select('#Ae').remove() //Apaga grupo existente
 		draw.select('#maskAe').remove() //Apaga grupo existente
@@ -1713,6 +1805,7 @@ function drwAe() {
 }
 
 function drwBe() {
+	console.log('drwBe()')
 	try {
 		draw.select('#Be').remove() //Apaga grupo existente
 		draw.select('#maskBe').remove() //Apaga grupo existente
@@ -1849,6 +1942,7 @@ function drwBe() {
 //* -------------------------------------------------------------------------- */
 
 function drwSelLin() {
+	console.log('drwSelLin()')
 	try {
 		draw.select('#circleSel1').remove() 
 		draw.select('#SelLin').remove() //Apaga grupo existente
@@ -1868,12 +1962,12 @@ function drwSelLin() {
 	var SLwid = 5*lwid
 	var fWid = 2
 	
-	var wSL = 6*lwid
+	var wSL = wLinBG*lwid+8
 	var wSC = lwid
 	var fSL = fWid
 	var fSC = 1.25
 
-	var polyline = draw
+	var polyline = draw	//> Linha Externa
 		.polyline(vSelLin)
 		.attr({
 			id: 'linSel1',
@@ -1888,13 +1982,13 @@ function drwSelLin() {
 		})
 		.appendTo(draw.select('#SelLin'))
 		
-		var polyline = draw
+		var polyline = draw	//> Linha interna
 			.polyline(vSelLin)
 			.attr({
 				id: 'linSelB',
 				fill: 'none',
 				stroke: cLinBG,
-				strokeWidth: 3*lwid,
+				strokeWidth: wLinBG*lwid,
 				opacity: 1,
 				//_ strokeDasharray: strDashRX,
 				//_ strokeDashoffset: 0,
@@ -1925,6 +2019,7 @@ function drwSelLin() {
 	function linSLAnimation() {
 		fSL = 1 / fSL
 		wSL = wSL * fSL
+		//_ wSL = wSL + fSL
 		linSL.stop().animate(
 			{ strokeWidth: wSL}, 
 			800,
