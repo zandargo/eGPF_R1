@@ -206,3 +206,61 @@ function calcMat(xC, yC, L) {
 	mF[4][1][0] = xC + 3 * f * (mF[4][0][0] - xC) //xTe
 	mF[4][1][1] = yC + 3 * f * (mF[4][0][1] - yC) //yTe
 }
+
+
+function ResetSQMA() {
+	resetMatESQ()
+	draw.clear()
+	nGavs = 32
+	bEditMode = false
+	drwGuias()
+	//*	ITERAÇÕES
+	for (var i = nGavs; i >= 1; i--) {
+		iGav = i
+		var gID = 'G' + pad(iGav)
+		
+		//* --------- POINTS ---------- */
+		calcMat(x0, y0 + yOff * i, Larg, i)
+		
+		//* --------- BLANK ---------- */
+		try {draw.select('#'+gID).remove()
+		} catch (error) {}
+		var gGav = draw.group()
+		gGav.attr({ id: gID })
+		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
+		draw.select('#' + gID).hover(gHoverIN, gHoverOUT)
+		draw.select('#' + gID).click(clkSelGav)
+		
+		//* --------- POSITION ---------- */
+		drwAreas()
+	}
+	
+	drwCtrlPts()
+
+	drwAi()
+	propagate()
+	reColor()
+	
+	nGavs = 28
+	// rebuildGPF()
+	// calcHtotal()
+	$(".slider").val(65)	//.slider("refresh")
+	$(".spanH").html("65")	//.reload();
+	$("#nGav-slider").val(nGavs)	//.slider("refresh")
+	$("#nGavs").html(nGavs)	//.reload();
+	
+	
+	rebuildGPF()
+	calcHtotal()
+	
+	
+	
+
+
+
+
+
+
+	
+
+}

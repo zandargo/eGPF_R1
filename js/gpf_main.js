@@ -146,6 +146,7 @@ function drwSliders() {
 		//* HEIGHT VALUE: CREATE AND CHANGE
 		var span = document.createElement('span')
 		span.id = 'valH' + nGPF
+		span.className = 'spanH'
 		span.innerHTML = input.value
 		div.appendChild(span)
 
@@ -797,10 +798,6 @@ function showCtrlPts() {
 	//*	G00
 	try {draw.select('#CP_G00').appendTo(draw)
 	} catch (error) {	}
-
-	//* 	LINHA SELEÇÃO
-	try {draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
-	} catch (error) {console.log('#SelLin = null')}
 	
 	//*	GAVETAS
 	for (let j = nGavs; j >= 0; j--) {
@@ -815,6 +812,10 @@ function showCtrlPts() {
 			draw.select('#Cham_' + gIDtmp).appendTo(draw)
 		} catch (error) {}
 	}
+
+	//* 	LINHA SELEÇÃO
+	try {draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
+	} catch (error) {console.log('#SelLin = null')}
 
 	//*	LINHAS DE FLUXO
 	for (let i = 4; i >= 1; i--){
@@ -877,8 +878,14 @@ function showCtrlPts() {
 			.select('#' + 'CP_Rx_' + gIDtmp)
 			.attr({ visibility: 'visible' })
 			.appendTo(draw)
-	}
-
+		}
+		
+	// //*	MÁSCARA SelLin
+	// try {draw
+	// 			.select('#maskSelLin')
+	// 			.attr({ visibility: 'visible' })
+	// 			.appendTo(draw)
+	// } catch (error) {}	
 	
 }
 
@@ -897,7 +904,7 @@ function hideCtrlPts() {
 	try {draw.select('#CP_B').attr({ visibility: 'hidden' })
 		} catch (error) {}
 	
-	for (let i = 4; i >= 1; i--) {
+	// for (let i = 4; i >= 1; i--) {
 		for (let j = 32; j >= 0; j--) {
 			iGav = j
 			var gIDtmp = 'G' + pad(iGav)
@@ -919,7 +926,7 @@ function hideCtrlPts() {
 			// 	draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
 			// } catch (error) { }
 		}
-	}
+	// }
 }
 
 
@@ -1229,6 +1236,12 @@ function drwRX() {
 		vLin.push(mG[nGav0][nLado][tmpIE][1])
 		vLin.push(mG[nGav][nLado][tmpIE][0])
 		vLin.push(mG[nGav][nLado][tmpIE][1])
+
+		//_ if (nGav0 == nGav) {
+		//_ 	vLin.push(mG[nGav][nLado][tmpIE][0])
+		//_ 	vLin.push(mG[nGav][nLado][tmpIE][1] + Alt*2.5)
+		//_ }
+
 		//_ $('#z-flow-clog').html(vLin.join(", "))
 	}
 	
@@ -1257,7 +1270,8 @@ function drwRX() {
 				fill: 'none',
 				stroke: cLinBG,
 				// stroke: 'red',
-				strokeWidth: wLinBG * lwid+1,
+				strokeWidth: wLinBG * lwid,
+				opacity: oLinBG,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1368,32 +1382,33 @@ function drwRX() {
 			default:
 				break
 		}
-		//Polígono que mostra
+		//*	Polígono que mostra
 		var pmask = draw
 			.polygon(wmask)
 			.attr({
 				fill: 'white',
 				stroke: 'white',
 				strokeWidth: lwid,
+				//_ opacity:0.5,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(draw.select('#maskRx_' + gID))
 
-		//Polígono que oculta
+		//*	Polígono que oculta
 		var pmask = draw
 			.polygon(bmask)
 			.attr({
 				fill: 'black',
 				stroke: 'black',
 				strokeWidth: lwid,
+				opacity:0.9,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(draw.select('#maskRx_' + gID))
-		//Aplica Máscara
+		//*	Aplica Máscara
 		gRx.attr({ mask: draw.select('#maskRx_' + gID) })
-		// draw.select("#maskRx_" + gID).attr({ opacity: 0.5 })
 	}
 
 	//*	CASO SETA
@@ -1411,24 +1426,29 @@ function drwRX() {
 function drwPN() {
 	console.log('drwPN() ; iGav='+pad(nGav0))
 	cLinBG = bgcolor
-	var gID = 'G' + pad(nGav0) //ID da Gaveta
-	try {
+	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
+	try {													//>	Apaga grupo existente
 		draw.select('#Pn' + nPn + '_' + gID).remove()
-	} catch (error) {} //Apaga grupo existente
+	} catch (error) {} 								
 
-	var gPn = draw.group() //Cria Grupo
-	gPn.attr({ id: 'Pn' + nPn + '_' + gID }) //Atribui nome
+	var gPn = draw.group() 							//>	Cria Grupo
+	gPn.attr({ id: 'Pn' + nPn + '_' + gID }) //>	Atribui nome
 
 	let tmpIE = null
 	let vLinPn = []
 	let vLinPr = []
 	let vLinB = []
+	vLinPn.push(mG[nGav0][0][0][0])
+	vLinPn.push(mG[nGav0][0][0][1] - 0.5 * Alt)	//> Importante. Evita mask clipping.
+	
 	if (nIE == 1) {
 		tmpIE = nIE
 		vLinPn.push(mG[nGav0][0][0][0])
 		vLinPn.push(mG[nGav0][0][0][1] + Alt)
 		vLinPn.push(mG[nGav0][nLado][tmpIE][0])
 		vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt)
+		//_ vLinPn.push(mG[nGav0][nLado][tmpIE][0])
+		//_ vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt*2.5)
 		
 		vLinB.push(vLinPn[0])
 		vLinB.push(vLinPn[1])
@@ -1518,9 +1538,9 @@ function drwPN() {
 		
 	}
 
+	vSelLin = []
+	vSelLin.push(vLinPn)
 	try {
-		vSelLin = []
-		vSelLin.push(vLinPn)
 		vSelLin.push(vLinPr)
 	} catch (error) {}
 	//*	DESENHAR LINHAS
@@ -1533,6 +1553,7 @@ function drwPN() {
 				fill: 'none',
 				stroke: cLinBG,
 				strokeWidth: wLinBG * lwid,
+				opacity: oLinBG,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1588,7 +1609,10 @@ function drwPN() {
 			)
 	}
 
-	//*	MÁSCARA
+	//*	MÁSCARA (GAVETA)
+	console.log('nGav0 = ' + nGav0)
+	console.log('gID = ' + gID)
+	
 		let wmask = []
 		let bmask = []
 		calcMat(x0, y0 + nGav0 * yOff, Larg)
@@ -1618,7 +1642,7 @@ function drwPN() {
 		bmask.push(mP[0][3][1]+Alt)
 		bmask.push(mP[0][4][0])
 		bmask.push(mP[0][4][1]+Alt)
-	
+		console.log(bmask)
 	
 		//*	Polígono que mostra
 		var pmask = draw
@@ -1769,7 +1793,8 @@ function drwAe() {
 				fill: 'none',
 				stroke: cLinBG,
 				// stroke: 'red',
-				strokeWidth: wLinBG * lwid+1,
+				strokeWidth: wLinBG * lwid,
+				opacity: oLinBG,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1902,6 +1927,7 @@ function drwBe() {
 				stroke: cLinBG,
 				// stroke: 'red',
 				strokeWidth: wLinBG * lwid,
+				opacity: oLinBG,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1957,16 +1983,19 @@ function drwSelLin() {
 	console.log('drwSelLin()')
 	try {
 		draw.select('#circleSel1').remove() 
-		draw.select('#SelLin').remove() //Apaga grupo existente
-		draw.select('#SelCir').remove() //Apaga grupo existente
+		draw.select('#SelLin').remove() 		//> Apaga grupo existente
+		draw.select('#maskSelLin').remove() //> Apaga grupo existente
+		draw.select('#SelCir').remove() 		//> Apaga grupo existente
 
 		//_ draw.select('#maskSL').remove() //Apaga grupo existente
 	} catch (error) {}
 
-	var gSL = draw.group() 		//Cria Grupo
-	gSL.attr({ id: 'SelLin' }) //Atribui nome
-	var gSC = draw.group() 		//Cria Grupo
-	gSC.attr({ id: 'SelCir' }) //Atribui nome
+	var gSL = draw.group() 				//> Cria Grupo
+	gSL.attr({ id: 'SelLin' }) 		//> Atribui nome
+	var gmSL = draw.group() 			//> Cria Grupo
+	gmSL.attr({ id: 'maskSelLin' }) 	//> Atribui nome
+	var gSC = draw.group() 				//> Cria Grupo
+	gSC.attr({ id: 'SelCir' }) 		//> Atribui nome
 
 	
 
@@ -1974,7 +2003,7 @@ function drwSelLin() {
 	var SLwid = 5*lwid
 	var fWid = 2
 	
-	var wSL = wLinBG*lwid+8
+	var wSL = wLinBG*lwid+10
 	var wSC = lwid
 	var fSL = fWid
 	var fSC = 1.25
@@ -1986,7 +2015,21 @@ function drwSelLin() {
 			fill: 'none',
 			stroke: cLinSel,
 			strokeWidth: wSL,
-			opacity: 0.75,
+			opacity: 0.5,
+			//_ strokeDasharray: strDashRX,
+			//_ strokeDashoffset: 0,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(draw.select('#SelLin'))
+	var polyline = draw	//> Linha Branca
+		.polyline(vSelLin)
+		.attr({
+			id: 'linSel1',
+			fill: 'none',
+			stroke: cLinBG,
+			strokeWidth: wLinBG*lwid*2,
+			opacity: 0.8,
 			//_ strokeDasharray: strDashRX,
 			//_ strokeDashoffset: 0,
 			'stroke-linecap': 'round',
@@ -1994,33 +2037,47 @@ function drwSelLin() {
 		})
 		.appendTo(draw.select('#SelLin'))
 		
-		var polyline = draw	//> Linha interna
-			.polyline(vSelLin)
-			.attr({
-				id: 'linSelB',
-				fill: 'none',
-				stroke: cLinBG,
-				strokeWidth: wLinBG*lwid,
-				opacity: 0.9,
-				//_ strokeDasharray: strDashRX,
-				//_ strokeDashoffset: 0,
-				'stroke-linecap': 'round',
-				'stroke-linejoin': 'round',
-			})
-			.appendTo(draw.select('#SelLin'))
+	// var polyline = draw	//> Linha interna que exibe
+	// 	.polyline(vSelLin)
+	// 	.attr({
+	// 		id: 'linSelW',
+	// 		fill: 'none',
+	// 		stroke: 'white',
+	// 		strokeWidth: 50,
+	// 		opacity: 1,
+	// 		//_ strokeDasharray: strDashRX,
+	// 		//_ strokeDashoffset: 0,
+	// 		'stroke-linecap': 'round',
+	// 		'stroke-linejoin': 'round',
+	// 	})
+	// 	.appendTo(draw.select('#maskSelLin'))
+	// var polyline = draw	//> Linha interna que oculta
+	// 	.polyline(vSelLin)
+	// 	.attr({
+	// 		id: 'linSelB',
+	// 		fill: 'none',
+	// 		stroke: 'black',
+	// 		strokeWidth: wLinBG*lwid+3,
+	// 		opacity: 1,
+	// 		//_ strokeDasharray: strDashRX,
+	// 		//_ strokeDashoffset: 0,
+	// 		'stroke-linecap': 'round',
+	// 		'stroke-linejoin': 'round',
+	// 	})
+	// 	.appendTo(draw.select('#maskSelLin'))
+		
 	
 	 var ellipse = draw
-	 		.ellipse(0, 0, 1.5*Alt, 1.5*Alt)
-	 		// .transform('T' + xT + ',' + yT)
-		 .attr({
-				transform: 'T' + xT + ',' + yT,
-	 			id: 'circleSel1',
-	 			fill: 'none',
-	 			stroke: cLinSel,
-	 			strokeWidth: wSC,
-	 			opacity: 0.75,
-	 		})
-	 		.appendTo(draw.select('#SelCir'))
+		.ellipse(0, 0, 1.5*Alt, 1.5*Alt)
+		.attr({
+			transform: 'T' + xT + ',' + yT,
+			id: 'circleSel1',
+			fill: 'none',
+			stroke: cLinSel,
+			strokeWidth: wSC,
+			opacity: 0.5,
+		})
+		.appendTo(draw.select('#SelCir'))
 
 	
 	//_ var gSL = Snap.select('#SelLin')
@@ -2057,7 +2114,8 @@ function drwSelLin() {
 	 		)
 	 }
 
-
+	//* MÁSCARA
+	// gSL.attr({ mask: draw.select('#maskSelLin'), 'mask-clip': 'stroke-box'})
 
 }
 
@@ -2244,13 +2302,6 @@ function rebuildGPF() {
 //* -------------------------------------------------------------------------- */
 
 isDev ? $('#divMAT').show() : $('#divMAT').hide()
-
-
-
-
-//* 	QUEDA DO PRODUTO 'A'
-
-
 
 
 

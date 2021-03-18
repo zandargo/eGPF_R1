@@ -17,10 +17,11 @@ var Larg      = 150 												//> Largura da Gaveta
 var Alt       = 8 												//> Altura da gaveta
 var k         = 5 												//> Proporção Gaveta/Coluna
 var x0        = 200 												//> Posição inicial X
-var y0        = 50 												//> Posição inicial Y
+var y0        = 54 												//> Posição inicial Y
 var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
-var wLinBG	  = 4													//> Fator espessura da linha branca
+var wLinBG	  = 2													//> Fator espessura da linha branca
+var oLinBG	  = 0.75												//> Opacidade da linha branca
 var cor0 = 'white' 												//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
 var bgcolor   = $('body').css('background-color')		//> Cor do fundo
@@ -34,7 +35,7 @@ var strDashPN = 2 * lwid + ' ' + 4 * lwid 				//> Padrão de tracejado do PENEIR
 
 var cpAlpha	= 0.65		//> Transparência dos CP
 
-var cCham = Snap.hsl(0, 1, 0.5)								//> Cor da chaminé
+var cCham = Snap.hsl(0, 1, 0.4)												//> Cor da chaminé
 
 var cLinPR0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do PRODUTO neutro
 var cLinRX0 = $('#flow-color-box05').css('background-color')		//> Cor da linha do RECHAÇO neutro
@@ -120,6 +121,7 @@ var xf = 0
     yf = 0
 //Máscara
 var bRXmask = false
+var bPNmask = false
 
 //Linha de Seleção
 var vSelLin = []
@@ -428,39 +430,44 @@ var mCorte = [
 //* -------------------------------------------------------------------------- */
 
 //* ------------------- MATRIZ GERAL DE CONTROLE DO ESQUEMA ------------------ */
-var mESQ = [
-	[
+var mESQ = []
+
+//* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
+function resetMatESQ() {
+	mESQ = []
+	mESQ.push(
+		[
 		[0, 'B'], 		//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
 		[0, 0, 1], 		//> Ae: nLado, 'nPara', nIE
 		[0, 0, 1], 		//> Be: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> ?
-	], 
-	[
+		]
+	)
+	mESQ.push(
+		[
 		[65, 'A'], 		//> Gaveta 01: Altura, Produto
 		[0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> Pn1: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> Pn2: nLado, 'nPara', nIE
 	] 
-]
+	)
+	for (let g = 2; g < nGavs; g++) {
+		let mGav = [
+				[65, ''],
+				[0, 0, 0],
+				[0, 0, 0],
+				[0, 0, 0],
+		]
+		mESQ.push(mGav)
+	}
 
-//* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
-for (let g = 2; g < nGavs; g++) {
-	let mGav = [
-			[65, ''],
+	let mGav = [	
+			[32, ''],
 			[0, 0, 0],
 			[0, 0, 0],
 			[0, 0, 0],
-	]
+		]
 	mESQ.push(mGav)
+
 }
-
-let mGav = [	
-		[32, ''],
-		[0, 0, 0],
-		[0, 0, 0],
-		[0, 0, 0],
-	]
-mESQ.push(mGav)
-
-
-
+resetMatESQ()
