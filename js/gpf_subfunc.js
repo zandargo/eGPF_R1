@@ -14,13 +14,13 @@ function dist(u1, v1, u2, v2) {
 //* 	POSIÇÃO DO MOUSE
 var xM = null
 var yM = null
-draw.mousemove(moveFunc)
-function moveFunc(ev, x, y) {
-	xM = x
-	yM = y
-	var newY = (Math.round(yM / yOff + 0.4) - 1.25) * yOff
-	sGavHover.attr({ y: newY })
-}
+//_ draw.mousemove(moveFunc)
+//_ function moveFunc(ev, x, y) {
+//_ 	xM = x
+//_ 	yM = y
+//_ 	var newY = (Math.round(yM / yOff + 0.4) - 1.25) * yOff
+//_ 	sGavHover.attr({ y: newY })
+//_ }
 
 
 //* ------------------------- CHECAR LETRA DO PRODUTO ------------------------ */
@@ -208,59 +208,111 @@ function calcMat(xC, yC, L) {
 }
 
 
-function ResetSQMA() {
-	resetMatESQ()
-	draw.clear()
-	nGavs = 32
-	bEditMode = false
-	drwGuias()
-	//*	ITERAÇÕES
-	for (var i = nGavs; i >= 1; i--) {
-		iGav = i
-		var gID = 'G' + pad(iGav)
-		
-		//* --------- POINTS ---------- */
-		calcMat(x0, y0 + yOff * i, Larg, i)
-		
-		//* --------- BLANK ---------- */
-		try {draw.select('#'+gID).remove()
-		} catch (error) {}
-		var gGav = draw.group()
-		gGav.attr({ id: gID })
-		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
-		draw.select('#' + gID).hover(gHoverIN, gHoverOUT)
-		draw.select('#' + gID).click(clkSelGav)
-		
-		//* --------- POSITION ---------- */
-		drwAreas()
-	}
-	
-	drwCtrlPts()
+//* -------------------------------------------------------------------------- */
+//*                            LIMPAR ESQUEMA (NOVO)                           */
+//* -------------------------------------------------------------------------- */
 
-	drwAi()
+function ResetSQMA() {
+	
+	resetMatESQ()
+
+	
+
+	//> Ponto do produto A
+	try {
+		objCP = draw.select('#CP_A')
+		.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]*0.75))
+	} catch (error) {}
+	//> Ponto do produto B
+	try {
+		objCP = draw.select('#CP_B')
+		.transform('t' + (mG[1][0][0][0]) + ',10') //  (mG[1][0][0][1]/3))
+	} catch (error) {}
+	//> Linha Ae
+	try {
+		draw.select('#Ae').remove() //Apaga grupo existente
+		draw.select('#maskAe').remove() //Apaga grupo existente
+	} catch (error) {}
+
+	//> Linha Be
+	try {
+		draw.select('#Be').remove() //Apaga grupo existente
+		draw.select('#maskBe').remove() //Apaga grupo existente
+	} catch (error) {}
+	
+	//> Sel Lin
+	try {
+		draw.select('#circleSel1').remove() 
+		draw.select('#SelLin').remove() 		// Apaga grupo existente
+		draw.select('#maskSelLin').remove() // Apaga grupo existente
+		draw.select('#SelCir').remove() 		// Apaga grupo existente
+	} catch (error) {}
+
+	for (let g = 1; g <= 32; g++) {
+		iGav = g
+		gID = 'G' + pad(iGav)
+		
+		//> Ponto de Rechaço
+		try {objCP = draw.select('#CP_Rx_' + gID)
+			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1])
+		} catch (error) {}
+		
+		//> Pontos de Peneirado
+		try {objCP = draw.select('#CP_Pn1_' + gID)
+			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1])
+		} catch (error) {}
+		try {objCP = draw.select('#CP_Pn2_' + gID)
+			.transform('t' + (mG[g][0][0][0] + Larg / 5) + ',' + mG[g][0][0][1])
+		} catch (error) {}
+	
+		//> Linha de Rechaço
+		try {
+			draw.select('#Rx_' + gID).remove() 			//Apaga grupo existente
+			draw.select('#maskRx_' + gID).remove() 	//Apaga grupo existente
+		} catch (error) {}
+
+		//> Linhas de Peneirado
+		try {
+			draw.select('#Pn1_' + gID).remove()				//Apaga grupo existente
+			draw.select('#maskPn1_' + gID).remove()		//Apaga grupo existente
+		} catch (error) {} 
+		try {
+			draw.select('#Pn2_' + gID).remove()				//Apaga grupo existente
+			draw.select('#maskPn2_' + gID).remove()		//Apaga grupo existente
+		} catch (error) {} 
+	
+		//> Chaminé
+		try {
+			draw.select('#Cham_' + gID).remove() //Apaga grupo existente
+		} catch (error) {}
+
+	}
+
 	propagate()
 	reColor()
-	
 	nGavs = 28
-	// rebuildGPF()
-	// calcHtotal()
-	$(".slider").val(65)	//.slider("refresh")
-	$(".spanH").html("65")	//.reload();
-	$("#nGav-slider").val(nGavs)	//.slider("refresh")
-	$("#nGavs").html(nGavs)	//.reload();
-	
-	
+	$(".slider").val(65)	
+	$(".spanH").html("65")	
+	$("#nGav-slider").val(nGavs)
+	$("#nGavs").html(nGavs)
+	calcHtotal()
+	$('#z-flow-prod span').html('')
+	$('#z-flow-type span').html('')
+	$('#z-flow-from span').html('')
+	$('#z-flow-to span').html('')
+
 	rebuildGPF()
 	calcHtotal()
-	
-	
-	
+	// calcHtotal()
+	// $('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
+	// $( "#divESQ" ).load(window.location.href + " #divESQ" )
+	// $("#divESQ").load(" #divESQ > *")
+}
 
 
-
-
-
-
-	
-
+//* -------------------------------------------------------------------------- */
+//*                                ABRIR ESQUEMA                               */
+//* -------------------------------------------------------------------------- */
+function LoadSQMA() {
+	console.log('LoadSQMA()')
 }

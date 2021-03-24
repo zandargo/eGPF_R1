@@ -199,13 +199,16 @@ function calcHtotal() {
 		let nGPF = pad(index)
 		let source = document.getElementById('rngG' + nGPF)
 		let j = 1 * index
-		mESQ[j][0][0] = parseInt(source.value, 10)
-		$('#codGPF' + pad(index)).html(calcCOD(index))
-		$('#matGPF' + pad(index))
+		try {
+			mESQ[j][0][0] = parseInt(source.value, 10)
+			$('#codGPF' + pad(index)).html(calcCOD(index))
+			$('#matGPF' + pad(index))
 			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
 			// .css({ 'font-size': '9pt' })
+		} catch (error) {}
 	}
 	//* ÚLTIMA GAVETA
+		console.log('nGavs='+nGavs)
 		mESQ[nGavs][0][0] = 32
 		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
 		$('#matGPF' + pad(nGavs))
@@ -839,18 +842,23 @@ function showCtrlPts() {
 				} catch (error) {console.log(error)}
 			}
 		}
+	
+		//*	Linha Ai
+		
+			try {draw.select('#Ai').appendTo(draw)
+			} catch (error) { }
+		
+		//*	Linha Ae
+		if (mESQ[0][1][0] == i) {
+			try {draw.select('#Ae').appendTo(draw)
+			} catch (error) { }
+		}
+		//*	Linha Be
+		if (mESQ[0][2][0] == i) {
+			try {draw.select('#Be').appendTo(draw)
+			} catch (error) { }
+		}
 	}
-	
-	//*	Linha Ai
-	try {draw.select('#Ai').appendTo(draw)
-	} catch (error) { }
-	//*	Linha Ae
-	try {draw.select('#Ae').appendTo(draw)
-	} catch (error) { }
-	//*	Linha Be
-	try {draw.select('#Be').appendTo(draw)
-	} catch (error) { }
-	
 
 	//* 	CIRC SELEÇÃO
 	try {draw.select('#SelCir').attr({ visibility: 'visible' }).appendTo(draw)
@@ -1429,6 +1437,7 @@ function drwPN() {
 	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
 	try {													//>	Apaga grupo existente
 		draw.select('#Pn' + nPn + '_' + gID).remove()
+		draw.select('#maskPn' + nPn + '_' + gID).remove()
 	} catch (error) {} 								
 
 	var gPn = draw.group() 							//>	Cria Grupo
@@ -1986,8 +1995,6 @@ function drwSelLin() {
 		draw.select('#SelLin').remove() 		//> Apaga grupo existente
 		draw.select('#maskSelLin').remove() //> Apaga grupo existente
 		draw.select('#SelCir').remove() 		//> Apaga grupo existente
-
-		//_ draw.select('#maskSL').remove() //Apaga grupo existente
 	} catch (error) {}
 
 	var gSL = draw.group() 				//> Cria Grupo
@@ -2126,45 +2133,46 @@ function drwSelLin() {
 //* -------------------------------------------------------------------------- */
 function drwAreas() {
 	var r = 8
+	let dOp = 0
 	var circle = draw
 		.circle(mF[1][0][0], mF[1][0][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(FiHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var circle = draw
 		.circle(mF[2][0][0], mF[2][0][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(DiHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var circle = draw
 		.circle(mF[3][0][0], mF[3][0][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(EiHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var circle = draw
 		.circle(mF[4][0][0], mF[4][0][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(TiHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var r = 10
 	var circle = draw
 		.circle(mF[1][1][0], mF[1][1][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(FeHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var circle = draw
 		.circle(mF[2][1][0], mF[2][1][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(DeHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var circle = draw
 		.circle(mF[3][1][0], mF[3][1][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 })
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(EeHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 	var circle = draw
 		.circle(mF[4][1][0], mF[4][1][1], r)
-		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: 0 }) //Verificar
+		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp }) //Verificar
 		.hover(TeHoverIN, ladoHoverOUT)
 		.appendTo(draw.select('#' + gID))
 }
@@ -2177,7 +2185,7 @@ function gHoverIN() {
 
 function gHoverOUT() {
 	gIDhover = this.attr('id')
-	sGavHover.attr({ text: '' })
+	// sGavHover.attr({ text: '' })
 }
 
 var clkSelGav = function () {
@@ -2303,9 +2311,9 @@ function rebuildGPF() {
 
 isDev ? $('#divMAT').show() : $('#divMAT').hide()
 
-
-
 //*	ITERAÇÕES
+
+
 	for (var i = nGavs; i >= 1; i--) {
 		iGav = i
 		var gID = 'G' + pad(iGav)
@@ -2358,3 +2366,4 @@ isDev ? $('#divMAT').show() : $('#divMAT').hide()
 	
 	
 	
+

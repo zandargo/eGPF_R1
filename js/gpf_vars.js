@@ -20,7 +20,7 @@ var x0        = 200 												//> Posição inicial X
 var y0        = 54 												//> Posição inicial Y
 var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
-var wLinBG	  = 2													//> Fator espessura da linha branca
+var wLinBG	  = 3													//> Fator espessura da linha branca
 var oLinBG	  = 0.75												//> Opacidade da linha branca
 var cor0 = 'white' 												//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
@@ -99,7 +99,7 @@ var yT = 0
 //* ------------------------------ Gaveta atual ------------------------------ */
 
 var iGav      = null
-var gID
+var gID       = null
 var gIDhover  = ''
 var bEditMode = false
 var iGavSel   = null
@@ -113,6 +113,7 @@ var sIE       = ''
 var s         = ''
 var L         = ''
 var nAB       = 0
+var objCP     = null
 
 //Move
 var xi = 0
@@ -129,30 +130,32 @@ var vSelLin = []
 //Esquema
 var hTotal = 0
 
-let wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
+var wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
 
 
 
 //* ----------------------------- TEXTO GPF HOVER ---------------------------- */
-var sGavHover = draw.text(x0 + (Larg * wf) / 2 - 40, 250, gIDhover)
-sGavHover.attr({
-	'font-size': 12,
-	fill: 'lightgray',
-	'font-family': 'Roboto, Consolas, Calibri, Arial Narrow',
-	// 'font-weight': 'bold',
-})
+//_ var sGavHover = draw.text(x0 + (Larg * wf) / 2 - 40, 250, gIDhover)
+//_ sGavHover.attr({
+//_ 	'font-size': 12,
+//_ 	fill: 'lightgray',
+//_ 	'font-family': 'Roboto, Consolas, Calibri, Arial Narrow',
+//_ 	// 'font-weight': 'bold',
+//_ })
 
 
 //* -------------------------------------------------------------------------- */
 //*                       PENEIRADOS DE SAÍDA PELO FUNDO                       */
 //* -------------------------------------------------------------------------- */
 
-var strkDashArr = 1   * lwid + ',' + 3 * lwid	//> 	strokeDasharray
+var strkDashArr = 1.0 * lwid + ',' + 3 * lwid	//> 	strokeDasharray
 var strkDashOff = 0  									//>	strokeDashoffset
 var strokeWidth = 1.5 * lwid							//>	strokeWidth
 
-//! 3 Pn fundo??? (cor A, cor B, cor desconectado)
-const patPn0 = draw
+// 3 Pn fundo??? (cor A, cor B, cor desconectado)
+
+// function drwPnD() { }
+var patPn0 = draw
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPN0,
@@ -163,7 +166,7 @@ const patPn0 = draw
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-const patPna = draw
+var patPna = draw
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPNa,
@@ -174,7 +177,7 @@ const patPna = draw
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-const patPnb = draw
+var patPnb = draw
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPNb,
@@ -189,7 +192,9 @@ const patPnb = draw
 var patPn = patPn0
 
 var patOffset = 0
+
 animatePnD()
+
 
 function animatePnD() {
 	patOffset += 900000
@@ -435,6 +440,8 @@ var mESQ = []
 //* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
 function resetMatESQ() {
 	mESQ = []
+	let mGav = []
+	//_ console.log(mESQ)
 	mESQ.push(
 		[
 		[0, 'B'], 		//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
@@ -452,7 +459,7 @@ function resetMatESQ() {
 	] 
 	)
 	for (let g = 2; g < nGavs; g++) {
-		let mGav = [
+		mGav = [
 				[65, ''],
 				[0, 0, 0],
 				[0, 0, 0],
@@ -461,7 +468,7 @@ function resetMatESQ() {
 		mESQ.push(mGav)
 	}
 
-	let mGav = [	
+	mGav = [	
 			[32, ''],
 			[0, 0, 0],
 			[0, 0, 0],

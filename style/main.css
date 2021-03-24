@@ -735,9 +735,10 @@ footer div p {
   border-radius: 10px;
   border: 1px solid #a7b6be;
   margin: 20px 0;
-  padding: 50px 0;
+  padding: 50px 0px;
   height: 2200px;
   overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 #flow-main #divESQ #svgESQ {
