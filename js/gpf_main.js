@@ -2010,9 +2010,9 @@ function drwSelLin() {
 	var SLwid = 5*lwid
 	var fWid = 2
 	
-	var wSL = wLinBG*lwid+10
+	var wSL = wLinBG*lwid+12
 	var wSC = lwid
-	var fSL = fWid
+	var fSL = 1.5 //fWid
 	var fSC = 1.25
 
 	var polyline = draw	//> Linha Externa
