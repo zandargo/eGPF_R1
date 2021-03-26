@@ -165,17 +165,21 @@ $.get("./pages/rbn_defs1.html", function(data){
 //*                                 TESTES SQL                                 */
 //* -------------------------------------------------------------------------- */
 
-$('#wrp-chart').append(`<p>.<br></p>`)
-let sql = `SELECT NoSQMN, Rev FROM Reg_SQMN`
+$('#wrp-chart').append(`<p>.<br><br><br></p>`)
+let sql = ''
+
+$('#wrp-chart').append(`<p>.<br><br><br></p>`)
+sql = `SELECT NoSQMN, Rev FROM Reg_SQMN`
 db.each(sql, [], (err, row) => {
-  if (err) {
-    throw err
-  }
-  	$('#wrp-chart').append(`<p>Esquemino Nº ${row.NoSQMN}-${row.Rev} </p>`)
+	if (err) {throw err}
+	$('#wrp-chart').append(`<p>Esquemino Nº ${row.NoSQMN}-${row.Rev} </p>`)
 })
 
 
-
-
-
+$('#wrp-defs1').append(`<p>.<br> <nbsp> <br> <nbsp> <br> <nbsp> </p>`)
+sql = `SELECT NoSQMA, Rev FROM Reg_SQMA`
+db.each(sql, [], (err, row) => {
+	if (err) {throw err}
+	$('#wrp-defs1').append(`<p>Esquema Nº ${row.NoSQMA}-${row.Rev} </p>`)
+})
 	

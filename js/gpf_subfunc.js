@@ -11,6 +11,29 @@ function dist(u1, v1, u2, v2) {
 }
 
 
+//*	LADO: STR TO INT
+function nLadoStr2Int(sLado) {
+	let nL = 0
+	switch (sLado) {
+		case 'F':
+			nL = 1
+			break
+		case 'D':
+			nL = 2
+			break
+		case 'E':
+			nL = 3
+			break
+		case 'T':
+			nL = 4
+			break
+		default:
+			break
+	}
+	return nL
+}
+
+
 //* 	POSIÇÃO DO MOUSE
 var xM = null
 var yM = null
@@ -315,4 +338,7 @@ function ResetSQMA() {
 //* -------------------------------------------------------------------------- */
 function LoadSQMA() {
 	console.log('LoadSQMA()')
+	resetMatESQ()
+	
+
 }

@@ -20,9 +20,9 @@ var x0        = 200 												//> Posição inicial X
 var y0        = 54 												//> Posição inicial Y
 var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
-var wLinBG	  = 3													//> Fator espessura da linha branca
+var wLinBG	  = 4													//> Fator espessura da linha branca
 var oLinBG	  = 0.75												//> Opacidade da linha branca
-var cor0 = 'white' 												//> Cor de fundo
+var cor0 	  = 'white' 										//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
 var bgcolor   = $('body').css('background-color')		//> Cor do fundo
 var sk        = 5 												//> Skew
@@ -444,7 +444,7 @@ function resetMatESQ() {
 	//_ console.log(mESQ)
 	mESQ.push(
 		[
-		[0, 'B'], 		//> Gaveta 00: Altura, Produto - ALTURA: NÃO SE APLICA
+		[0,'B',0], 		//> Gaveta 00: Altura, Produto, Corte - ALTURA/CORTE: NÃO SE APLICA
 		[0, 0, 1], 		//> Ae: nLado, 'nPara', nIE
 		[0, 0, 1], 		//> Be: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> ?
@@ -452,7 +452,7 @@ function resetMatESQ() {
 	)
 	mESQ.push(
 		[
-		[65, 'A'], 		//> Gaveta 01: Altura, Produto
+		[65,'A',0], 	//> Gaveta 01: Altura, Produto, Corte
 		[0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> Pn1: nLado, 'nPara', nIE
 		[0, 0, 0], 		//> Pn2: nLado, 'nPara', nIE
@@ -460,7 +460,7 @@ function resetMatESQ() {
 	)
 	for (let g = 2; g < nGavs; g++) {
 		mGav = [
-				[65, ''],
+				[65,'',0],
 				[0, 0, 0],
 				[0, 0, 0],
 				[0, 0, 0],
@@ -469,7 +469,7 @@ function resetMatESQ() {
 	}
 
 	mGav = [	
-			[32, ''],
+			[32,'',0],
 			[0, 0, 0],
 			[0, 0, 0],
 			[0, 0, 0],

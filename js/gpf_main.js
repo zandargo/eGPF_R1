@@ -12,6 +12,7 @@
 //_			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
 //_ TODO	Criar contorno no último ponto selecionado
 
+//TODO	CPs ficam inativos onclick "Novo" (Limpar)
 
 //TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
@@ -253,6 +254,35 @@ function calcCOD(nGav) {
 		}
 	}
 	//* Código de usinagem
+	let u = 0
+	u += mESQ[nGav][1][0] * 10000
+	
+
+	let parc = 3 	// TODO ---------------------------------Criar código para calcular o corte partial
+	
+	
+	//*	1 - Quando o Rx da de baixo sai pelo canal
+	if (mESQ[nGav+1][1][2]==1 && nGav<nGavs) {
+		u += parc * 10**(4-mESQ[nGav+1][1][0])
+	}
+	//*	2 - Quando algum Rx||Pn chega na de baixo
+	for (let i = 1; i <= nGav; i++) {
+		for (let j = 1; j <= 3; j++) {
+			if (mESQ[i][j][1]==(nGav+1) && mESQ[i][j][2]==0) {	//> nPara=GPFabaixo e nIE=interno 
+				u += parc * 10**(4-mESQ[i][j][0])
+			}
+		}
+	}
+
+	//*	3 - Quando algum Pr chega na de baixo (Ae || Be)
+
+
+	for (let index = 0; index < mCorte.length; index++) {
+		if (u == mCorte[index][0]) {
+			sCod += mCorte[index][1]
+			break
+		}
+	}
 
 	//* FIM
 	return sCod
@@ -1178,7 +1208,7 @@ function drwRX() {
 	let tmpIE = null
 	let vLin = []
 	let vLinB = []
-	//* CASO CP INTERNO (mesmo se o Rx for externo)
+	//* 	CASO CP INTERNO (mesmo se o Rx for externo)
 	if (nIE == 0 && nLado != 0) {
 		bRXmask = true
 		if (nGav0 == nGav) {		//* Rechaço pela chaminé
@@ -1234,7 +1264,9 @@ function drwRX() {
 			vLin.push(mG[nGav][0][0][1])
 		}
 	}
-	if (nIE == 1) {
+	
+	//*	CASO CP EXTERNO
+	if (nIE == 1 ) {
 		bRXmask = false
 		tmpIE = nIE
 		
@@ -1245,6 +1277,13 @@ function drwRX() {
 		vLin.push(mG[nGav][nLado][tmpIE][0])
 		vLin.push(mG[nGav][nLado][tmpIE][1])
 
+		cLinBG = bgcolor
+		//* Linha branca horizontal
+		vLinB.push(mG[nGav0][nLado][0][0] + (mG[nGav0][nLado][1][0] - mG[nGav0][nLado][0][0]) * 0.32)
+		vLinB.push(mG[nGav0][nLado][0][1] + (mG[nGav0][nLado][1][1] - mG[nGav0][nLado][0][1]) * 0.32)
+		vLinB.push(mG[nGav0][nLado][tmpIE][0])
+		vLinB.push(mG[nGav0][nLado][tmpIE][1])
+
 		//_ if (nGav0 == nGav) {
 		//_ 	vLin.push(mG[nGav][nLado][tmpIE][0])
 		//_ 	vLin.push(mG[nGav][nLado][tmpIE][1] + Alt*2.5)
@@ -1253,13 +1292,9 @@ function drwRX() {
 		//_ $('#z-flow-clog').html(vLin.join(", "))
 	}
 	
+	//*	CASO CP EXTERNO E GAVETA ABAIXO
 	if (nIE == 1 && nGav0 != nGav) {
-		cLinBG = bgcolor
-		//* Linha branca de cima
-		vLinB.push(mG[nGav0][nLado][0][0] + (mG[nGav0][nLado][1][0] - mG[nGav0][nLado][0][0]) * 0.32)
-		vLinB.push(mG[nGav0][nLado][0][1] + (mG[nGav0][nLado][1][1] - mG[nGav0][nLado][0][1]) * 0.32)
-		vLinB.push(mG[nGav0][nLado][tmpIE][0])
-		vLinB.push(mG[nGav0][nLado][tmpIE][1])
+		
 		//* Linha branca vertical
 		vLinB.push(mG[nGav0][nLado][tmpIE][0])
 		vLinB.push(mG[nGav0][nLado][tmpIE][1])
@@ -1450,6 +1485,7 @@ function drwPN() {
 	vLinPn.push(mG[nGav0][0][0][0])
 	vLinPn.push(mG[nGav0][0][0][1] - 0.5 * Alt)	//> Importante. Evita mask clipping.
 	
+	//*	CASO CP EXTERNO
 	if (nIE == 1) {
 		tmpIE = nIE
 		vLinPn.push(mG[nGav0][0][0][0])
@@ -1459,10 +1495,14 @@ function drwPN() {
 		//_ vLinPn.push(mG[nGav0][nLado][tmpIE][0])
 		//_ vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt*2.5)
 		
-		vLinB.push(vLinPn[0])
-		vLinB.push(vLinPn[1])
-		vLinB.push(vLinPn[2])
-		vLinB.push(vLinPn[3])
+		// vLinB.push(vLinPn[0])
+		// vLinB.push(vLinPn[1])
+		// vLinB.push(vLinPn[2])
+		// vLinB.push(vLinPn[3])
+		vLinB.push(mG[nGav0][0][0][0])
+		vLinB.push(mG[nGav0][0][0][1] + Alt)
+		vLinB.push(mG[nGav0][nLado][tmpIE][0])
+		vLinB.push(mG[nGav0][nLado][tmpIE][1] + Alt)
 
 		if (nGav0 != nGav) {
 			try {
@@ -1479,12 +1519,12 @@ function drwPN() {
 			} catch (error) {console.log(error)}
 		}
 
-		console.log(vLinPn)
-		console.log(vLinPr)
-		console.log(vLinB)
+		//_ console.log(vLinPn)
+		//_ console.log(vLinPr)
+		//_ console.log(vLinB)
 	}
 
-	
+	//*	CASO CP INTERNO E LADO != CENTRO
 	if (nIE == 0 && nLado != 0) {
 		if (nGav0 == nGav) {
 			tmpIE = 0
@@ -1567,7 +1607,7 @@ function drwPN() {
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
-	} catch (error) {}
+	} catch (error) {console.log(error)}
 
 	//Linha principal (animada)
 	var polyline1 = draw
@@ -1576,7 +1616,7 @@ function drwPN() {
 			id: 'linPn'+nPn+'_' + gID,
 			fill: 'none',
 			stroke: cLinPN,
-			strokeWidth: 1.5 * lwid,
+			strokeWidth: 1.6 * lwid,
 			strokeDasharray: strDashPN,
 			strokeDashoffset: 0,
 			'stroke-linecap': 'round',
@@ -2010,7 +2050,7 @@ function drwSelLin() {
 	var SLwid = 5*lwid
 	var fWid = 2
 	
-	var wSL = wLinBG*lwid+12
+	var wSL = wLinBG*lwid+10
 	var wSC = lwid
 	var fSL = 1.5 //fWid
 	var fSC = 1.25
@@ -2035,7 +2075,7 @@ function drwSelLin() {
 			id: 'linSel1',
 			fill: 'none',
 			stroke: cLinBG,
-			strokeWidth: wLinBG*lwid*2,
+			strokeWidth: wLinBG*lwid+4,
 			opacity: 0.8,
 			//_ strokeDasharray: strDashRX,
 			//_ strokeDashoffset: 0,
