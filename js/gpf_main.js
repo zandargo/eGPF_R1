@@ -285,6 +285,7 @@ function calcCOD(nGav) {
 	}
 
 	//* FIM
+	mESQ[nGav][0][2] = u
 	return sCod
 }
 
