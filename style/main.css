@@ -702,9 +702,10 @@ footer div p {
 }
 
 #flow-main #divMAT {
-  width: 150px;
-  margin: 20px 40px;
+  width: 80px;
+  margin: 20px 0px;
   margin-top: 100px;
+  margin-left: 40px;
   color: #6c8693;
 }
 
@@ -720,6 +721,33 @@ footer div p {
 }
 
 #flow-main #divMAT .matcontainer .matValue {
+  font-size: 9pt;
+  -ms-flex-item-align: center;
+      -ms-grid-row-align: center;
+      align-self: center;
+  margin: auto 10px;
+  font-weight: 300;
+}
+
+#flow-main #divCUT {
+  width: 80px;
+  margin: 20px 0px;
+  margin-top: 100px;
+  color: #6c8693;
+}
+
+#flow-main #divCUT .matcontainer {
+  height: 64px;
+  width: 64px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+#flow-main #divCUT .matcontainer .matValue {
   font-size: 9pt;
   -ms-flex-item-align: center;
       -ms-grid-row-align: center;

@@ -19,7 +19,7 @@
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
 function propagate() {
-	console.log('propagate()')
+	//_ console.log('propagate()')
 	let dest = 0
 	//* DESCONECTAR PRODUTO
 	
@@ -71,7 +71,7 @@ function propagate() {
 
 //* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
 function reColor() {
-	console.log('reColor()')
+	//_ console.log('reColor()')
 	for (let index = 1; index <= nGavs; index++) { 
 		switch (mESQ[index][0][1]) {
 		case 'A':
@@ -187,6 +187,7 @@ function drwSliders() {
 }
 
 
+
 //* -------------------------------------------------------------------------- */
 //*                      CALCULAR ALTURA TOTAL DAS GAVETAS                     */
 //* -------------------------------------------------------------------------- */
@@ -194,6 +195,8 @@ function calcHtotal() {
 	//* G00 (PRODUTO B)
 	$('#matGPF' + pad(0))
 			.html(mESQ[0][0]+'<br>'+mESQ[0][1]+'<br>'+mESQ[0][2]+'<br>'+mESQ[0][3])
+	$('#matCUT' + pad(0))
+			.html(mCOD1[0][0]+'<br>'+mCOD1[0][1]+'<br>'+mCOD1[0][2]+'<br>'+mCOD1[0][3])
 
 	//* PRIMEIRA À PENÚLTIMA
 	for (let index = 1; index < nGavs; index++) {
@@ -205,11 +208,12 @@ function calcHtotal() {
 			$('#codGPF' + pad(index)).html(calcCOD(index))
 			$('#matGPF' + pad(index))
 			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
-			// .css({ 'font-size': '9pt' })
+			$('#matCUT' + pad(index))
+			.html(mCOD1[index][0]+'<br>'+mCOD1[index][1]+'<br>'+mCOD1[index][2]+'<br>'+mCOD1[index][3])
 		} catch (error) {}
 	}
 	//* ÚLTIMA GAVETA
-		console.log('nGavs='+nGavs)
+		//_ console.log('nGavs='+nGavs)
 		mESQ[nGavs][0][0] = 32
 		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
 		$('#matGPF' + pad(nGavs))
@@ -220,8 +224,9 @@ function calcHtotal() {
 		hTotal = hTotal + 1 * parseInt(mESQ[index][0][0])
 		if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
 	}
-	let target = document.getElementById('hTotal')
-	target.innerHTML = '&nbsp' + hTotal + 'mm'
+	//_ let target = document.getElementById('hTotal')
+	//_ target.innerHTML = '&nbsp' + hTotal + 'mm'
+	$('#hTotal').html('&nbsp' + hTotal + 'mm');
 
 	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
 	// $('#z-flow-clog').html('calcHtotal()=' + hTotal)
@@ -255,28 +260,38 @@ function calcCOD(nGav) {
 	}
 	//* Código de usinagem
 	let u = 0
+	mCOD1[nGav][0]=[0, 0, 0, 0, 0]
 	u += mESQ[nGav][1][0] * 10000
-	
+	mCOD1[nGav][0][0] = mESQ[nGav][1][0]
 
 	let parc = 3 	// TODO ---------------------------------Criar código para calcular o corte partial
 	
 	
 	//*	1 - Quando o Rx da de baixo sai pelo canal
-	if (mESQ[nGav+1][1][2]==1 && nGav<nGavs) {
-		u += parc * 10**(4-mESQ[nGav+1][1][0])
-	}
+				//> LEMBRETE: Pode haver corte parcial
+	try {
+		if (mESQ[nGav + 1][1][2] == 1 && nGav < nGavs) {
+			u += parc * 10 ** (4 - mESQ[nGav + 1][1][0])
+			mCOD1[nGav][0][(mESQ[nGav + 1][1][0])] = parc
+		}
+	} catch (error) {console.log('ERRO EM calcCOD(nGav); nGav=' + nGav)}
+	
 	//*	2 - Quando algum Rx||Pn chega na de baixo
+				//> LEMBRETE: Nesse caso nunca há corte parcial
 	for (let i = 1; i <= nGav; i++) {
 		for (let j = 1; j <= 3; j++) {
 			if (mESQ[i][j][1]==(nGav+1) && mESQ[i][j][2]==0) {	//> nPara=GPFabaixo e nIE=interno 
-				u += parc * 10**(4-mESQ[i][j][0])
+				u += parc * 10 ** (4 - mESQ[i][j][0])
+				mCOD1[nGav][0][(mESQ[i][j][0])] = parc
 			}
 		}
 	}
 
 	//*	3 - Quando algum Pr chega na de baixo (Ae || Be)
+				//> LEMBRETE: Nesse caso nunca há corte parcial
 
 
+	//*	Procura na tabela de corte
 	for (let index = 0; index < mCorte.length; index++) {
 		if (u == mCorte[index][0]) {
 			sCod += mCorte[index][1]
@@ -285,7 +300,7 @@ function calcCOD(nGav) {
 	}
 
 	//* FIM
-	mESQ[nGav][0][2] = u
+	//_ mESQ[nGav][0][2] = u
 	return sCod
 }
 
@@ -294,8 +309,9 @@ function calcCOD(nGav) {
 //* -------------------------------------------------------------------------- */
 
 function drwCOD() {
+	let nGPF = ''
 	//* Div Matriz Esquema
-		let nGPF = pad(0)
+		nGPF = pad(0)
 		var div = document.createElement('div')
 		div.id = 'div-matGPF' + nGPF
 		div.className = 'matcontainer'
@@ -305,6 +321,22 @@ function drwCOD() {
 		h2.className = 'matValue'
 		// h2.innerHTML = 'GPF65'
 		div.appendChild(h2)
+
+		
+	//* Div Matriz Corte
+		nGPF = pad(0)
+		var div = document.createElement('div')
+		div.id = 'div-matCUT' + nGPF
+		div.className = 'matcontainer'
+		document.getElementById('divCUT').appendChild(div)
+		h2 = document.createElement('h2')
+		h2.id = 'matCUT' + nGPF
+		h2.className = 'matValue'
+		// h2.innerHTML = '000000'
+		div.appendChild(h2)
+
+
+	
 
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
@@ -332,6 +364,20 @@ function drwCOD() {
 		h2.className = 'matValue'
 		// h2.innerHTML = 'GPF65'
 		div.appendChild(h2)
+
+		//* Div Matriz Corte
+		div = document.createElement('div')
+		div.id = 'div-matCUT' + nGPF
+		div.className = 'matcontainer'
+		document.getElementById('divCUT').appendChild(div)
+		h2 = document.createElement('h2')
+		h2.id = 'matCUT' + nGPF
+		h2.className = 'matValue'
+		// h2.innerHTML = 'GPF65'
+		div.appendChild(h2)
+
+
+
 
 	}
 }
@@ -434,7 +480,7 @@ function drwGuias() {
 }
 
 function showGuias() {
-	console.log('showGuias()')
+	//_ console.log('showGuias()')
 
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
@@ -446,7 +492,7 @@ function showGuias() {
 }
 
 function hideGuias() {
-	console.log('hideGuias()')
+	//_ console.log('hideGuias()')
 
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
@@ -481,7 +527,7 @@ var cpPnMove = function (dx, dy) {
 
 
 var cpPnMoveStart = function () {
-	console.log('cpPnMoveStart()')
+	//_ console.log('cpPnMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
@@ -492,7 +538,7 @@ var cpPnMoveStart = function () {
 
 
 var cpPnMoveStop = function () {
-	console.log('cpPnMoveStop()')
+	//_ console.log('cpPnMoveStop()')
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -569,7 +615,7 @@ var cpRxMove = function (dx, dy) {
 
 
 var cpRxMoveStart = function () {
-	console.log('cpRxMoveStart()')
+	//_ console.log('cpRxMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
@@ -579,7 +625,7 @@ var cpRxMoveStart = function () {
 
 
 var cpRxMoveStop = function () {
-	console.log('cpRxMoveStop()')
+	//_ console.log('cpRxMoveStop()')
 	
 	var bb = this.getBBox()
 	xf = bb.cx
@@ -653,7 +699,7 @@ var cpPrMove = function (dx, dy) {
 
 
 var cpPrMoveStart = function () {
-	console.log('cpPrMoveStart()')
+	//_ console.log('cpPrMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	s = s.substr(s.length - 1)
@@ -678,7 +724,7 @@ var cpPrMoveStart = function () {
 
 
 var cpPrMoveStop = function () {
-	console.log('cpPrMoveStop()')
+	//_ console.log('cpPrMoveStop()')
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -828,7 +874,7 @@ function drwCtrlPts() {
 }
 
 function showCtrlPts() {
-	console.log('showCtrlPts() ; iGav='+pad(iGav))
+	//_ console.log('showCtrlPts() ; iGav='+pad(iGav))
 	//*	G00
 	try {draw.select('#CP_G00').appendTo(draw)
 	} catch (error) {	}
@@ -859,7 +905,7 @@ function showCtrlPts() {
 			//*	Linhas de Peneirado
 			for (let L = 1; L <= 2; L++) {
 				if (mESQ[j][1 + L][0] == i) {
-					console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
+					//_ console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
 					try {draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
 						} catch (error) {console.log(error)}
 				}
@@ -867,7 +913,7 @@ function showCtrlPts() {
 			
 			//*	Linhas de Rechaço
 			if (mESQ[j][1][0] == i) {
-				console.log('#Rx_' + gIDtmp+'='+mESQ[j][1][0])
+				//_ console.log('#Rx_' + gIDtmp+'='+mESQ[j][1][0])
 				try {
 					draw.select('#Rx_' + gIDtmp).appendTo(draw)
 				} catch (error) {console.log(error)}
@@ -930,7 +976,7 @@ function showCtrlPts() {
 
 
 function hideCtrlPts() {
-	console.log('hideCtrlPts() ; iGav='+pad(iGav))
+	//_ console.log('hideCtrlPts() ; iGav='+pad(iGav))
 	//* 	Lin Selec
 	try {
 		draw.select('#SelLin').attr({ visibility: 'hidden' })
@@ -974,7 +1020,7 @@ function hideCtrlPts() {
 //* -------------------------------------------------------------------------- */
 
 function drwGPF(xC, yC, L, H) {
-	console.log('drwGPF() ; iGav='+pad(iGav))
+	//_ console.log('drwGPF() ; iGav='+pad(iGav))
 	//Borda
 	var brdGav = draw
 		.rect(xC - 1.25 * Larg, yC - yOff / 2, 2.5 * Larg, yOff, 5)
@@ -1075,7 +1121,7 @@ function drwGPF(xC, yC, L, H) {
 }
 
 function hideGPF() {
-	console.log('hideGPF() ; iGav='+pad(iGav))
+	//_ console.log('hideGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
 	try {
 		draw.select('#SelLin').attr({ visibility: 'hidden' })
@@ -1119,7 +1165,7 @@ function hideGPF() {
 }
 
 function showGPF() {
-	console.log('showGPF() ; iGav='+pad(iGav))
+	//_ console.log('showGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
 	try {
 		draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
@@ -1166,7 +1212,7 @@ function showGPF() {
 
 // Função desenhar chaminé
 function drwCham() {
-	console.log('drwCham() ; iGav='+pad(iGav))
+	//_ console.log('drwCham() ; iGav='+pad(iGav))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
 		draw.select('#Cham_' + gID).remove() //Apaga grupo existente
@@ -1196,7 +1242,7 @@ function drwCham() {
 //* -------------------------------------------------------------------------- */
 //	[[x0, 10],[x0,y0 + yOff]]
 function drwRX() {
-	console.log('drwRX() ; iGav='+pad(nGav0))
+	//_ console.log('drwRX() ; iGav='+pad(nGav0))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
 		draw.select('#Rx_' + gID).remove() //Apaga grupo existente
@@ -1468,7 +1514,7 @@ function drwRX() {
 //*                         DESENHAR LINHA DE PENEIRADO                        */
 //* -------------------------------------------------------------------------- */
 function drwPN() {
-	console.log('drwPN() ; iGav='+pad(nGav0))
+	//_ console.log('drwPN() ; iGav='+pad(nGav0))
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
 	try {													//>	Apaga grupo existente
@@ -1660,8 +1706,8 @@ function drwPN() {
 	}
 
 	//*	MÁSCARA (GAVETA)
-	console.log('nGav0 = ' + nGav0)
-	console.log('gID = ' + gID)
+	//_ console.log('nGav0 = ' + nGav0)
+	//_ console.log('gID = ' + gID)
 	
 		let wmask = []
 		let bmask = []
@@ -1692,7 +1738,7 @@ function drwPN() {
 		bmask.push(mP[0][3][1]+Alt)
 		bmask.push(mP[0][4][0])
 		bmask.push(mP[0][4][1]+Alt)
-		console.log(bmask)
+		//_ console.log(bmask)
 	
 		//*	Polígono que mostra
 		var pmask = draw
@@ -1777,7 +1823,7 @@ function drwAi() {
 }
 
 function drwAe() {
-	console.log('drwAe()')
+	//_ console.log('drwAe()')
 	try {
 		draw.select('#Ae').remove() //Apaga grupo existente
 		draw.select('#maskAe').remove() //Apaga grupo existente
@@ -1892,7 +1938,7 @@ function drwAe() {
 }
 
 function drwBe() {
-	console.log('drwBe()')
+	//_ console.log('drwBe()')
 	try {
 		draw.select('#Be').remove() //Apaga grupo existente
 		draw.select('#maskBe').remove() //Apaga grupo existente
@@ -2030,7 +2076,7 @@ function drwBe() {
 //* -------------------------------------------------------------------------- */
 
 function drwSelLin() {
-	console.log('drwSelLin()')
+	//_ console.log('drwSelLin()')
 	try {
 		draw.select('#circleSel1').remove() 
 		draw.select('#SelLin').remove() 		//> Apaga grupo existente

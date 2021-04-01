@@ -482,19 +482,19 @@ resetMatESQ()
 var mCOD1 = []
 function resetMatCOD1() {
 	mCOD1 = []
-	let mUsi = []
+	let mCut = []
 
-	mUsi = [				//> Usinagem da gaveta 00
-		[0, 0, 0, 0]	//> 
-		[0, 0, 0, 0]	//> 
-		[0, 0, 0, 0]	//> 
-		[0, 0, 0, 0]	//> 
-	]
-	for (let g = 0; g <= nGavs; g++) {
-		mCOD1.push(mUsi)
+	for (let g = 0; g <= 32; g++) {
+		mCut = [				//> Usinagem da gaveta 00
+			[0, 0, 0, 0, 0],	//> Usado [Rx,F,D,E,T]
+			[0, 0, 0, 0, 0],	//> 
+			[0, 0, 0, 0, 0],	//> 
+			[0, 0, 0, 0, 0],	//> 
+		]
+		mCOD1.push(mCut)
 	}
 }
-
+resetMatCOD1()
 
 
 

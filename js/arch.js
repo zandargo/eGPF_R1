@@ -182,4 +182,3 @@ db.each(sql, [], (err, row) => {
 	if (err) {throw err}
 	$('#wrp-defs1').append(`<p>Esquema Nº ${row.NoSQMA}-${row.Rev} </p>`)
 })
-	
