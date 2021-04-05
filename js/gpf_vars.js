@@ -22,6 +22,7 @@ var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
 var wLinBG	  = 4													//> Fator espessura da linha branca
 var oLinBG	  = 0.75												//> Opacidade da linha branca
+var oMskGPF	  = 0.9												//> Opacidade da máscara das linhas sob a gaveta
 var cor0 	  = 'white' 										//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
 var bgcolor   = $('body').css('background-color')		//> Cor do fundo

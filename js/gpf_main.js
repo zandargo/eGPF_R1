@@ -1492,7 +1492,7 @@ function drwRX() {
 				fill: 'black',
 				stroke: 'black',
 				strokeWidth: lwid,
-				opacity:0.9,
+				opacity: oMskGPF,
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
@@ -1757,6 +1757,7 @@ function drwPN() {
 			.polygon(bmask)
 			.attr({
 				fill: 'black',
+				opacity: oMskGPF,
 				stroke: 'black',
 				strokeWidth: lwid,
 				'stroke-linecap': 'round',
