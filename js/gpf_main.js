@@ -1848,10 +1848,12 @@ function drwAe() {
 		let fYOff = 0.5*yOff		//> Em % do yOff
 		
 		//* Linha branca de cima
-		vLinB.push(mG[Gav0][0][0][0])
-		vLinB.push(mG[Gav0][0][0][1]+fYOff)
-		vLinB.push(mG[Gav0][nLado][tmpIE][0])
-		vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		if (nLado!=1) {			//> Pela frente bagunça a gaveta
+			vLinB.push(mG[Gav0][0][0][0])
+			vLinB.push(mG[Gav0][0][0][1]+fYOff)
+			vLinB.push(mG[Gav0][nLado][tmpIE][0])
+			vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
+		}
 		//* Linha branca vertical
 		vLinB.push(mG[Gav0][nLado][tmpIE][0])
 		vLinB.push(mG[Gav0][nLado][tmpIE][1]+fYOff)
@@ -2398,6 +2400,7 @@ function rebuildGPF() {
 //* -------------------------------------------------------------------------- */
 
 isDev ? $('#divMAT').show() : $('#divMAT').hide()
+isDev ? $('#divCUT').show() : $('#divCUT').hide()
 
 //*	ITERAÇÕES
 
