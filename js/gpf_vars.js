@@ -1,4 +1,5 @@
-const draw = Snap('#svgESQ')
+const drawSQMA    = Snap('#svgESQ')
+const drawFND = Snap('#svgFND')
 
 //*	 Definições iniciais
 var A4x = 500
@@ -20,7 +21,7 @@ var x0        = 200 												//> Posição inicial X
 var y0        = 54 												//> Posição inicial Y
 var yOff      = 64 												//> Offset entre gavetas
 var lwid      = 2 												//> Largura de linha geral
-var wLinBG	  = 3.2													//> Fator espessura da linha branca
+var wLinBG	  = 3.2												//> Fator espessura da linha branca
 var oLinBG	  = 0.9												//> Opacidade da linha branca
 var oMskGPF	  = 0.9												//> Opacidade da máscara das linhas sob a gaveta
 var cor0 	  = 'white' 										//> Cor de fundo
@@ -156,7 +157,7 @@ var strokeWidth = 1.5 * lwid							//>	strokeWidth
 // 3 Pn fundo??? (cor A, cor B, cor desconectado)
 
 // function drwPnD() { }
-var patPn0 = draw
+var patPn0 = drawSQMA
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPN0,
@@ -167,7 +168,7 @@ var patPn0 = draw
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-var patPna = draw
+var patPna = drawSQMA
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPNa,
@@ -178,7 +179,7 @@ var patPna = draw
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-var patPnb = draw
+var patPnb = drawSQMA
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPNb,
@@ -430,6 +431,12 @@ var mCorte = [
 ]
 
 
+//* -------------------------------------------------------------------------- */
+//*                               MATRIZ DO FUNDO                              */
+//* -------------------------------------------------------------------------- */
+
+var mFND = []
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -487,8 +494,8 @@ function resetMatCOD1() {
 
 	for (let g = 0; g <= 32; g++) {
 		mCut = [				//> Usinagem da gaveta 00
-			[0, 0, 0, 0, 0],	//> Usado [Rx,F,D,E,T]
-			[0, 0, 0, 0, 0],	//> 
+			[0, 0, 0, 0, 0],	//> Cod Corte [Rx,F,D,E,T]
+			[0, 0, 0, 0, 0],	//> Usado [_,F,D,E,T]
 			[0, 0, 0, 0, 0],	//> 
 			[0, 0, 0, 0, 0],	//> 
 		]

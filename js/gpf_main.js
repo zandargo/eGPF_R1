@@ -95,22 +95,22 @@ function reColor() {
 		}
 		var gIDtmp = 'G' + pad(index)
 		//*	COLORIR RECHAÇO
-		try { draw.select('#' + 'linRx0_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
-		try { draw.select('#' + 'linRx1_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
-		try { draw.select('#' + 'arwRx_'  + gIDtmp).attr({ fill  : cLinRX }) } catch (error) {}
+		try { drawSQMA.select('#' + 'linRx0_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
+		try { drawSQMA.select('#' + 'linRx1_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
+		try { drawSQMA.select('#' + 'arwRx_'  + gIDtmp).attr({ fill  : cLinRX }) } catch (error) {}
 		//*	COLORIR PENEIRADO
-		try { draw.select('#' + 'linPn1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'linPn2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'linPr1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'linPr2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'arwPn1_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'arwPn2_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'PnD1_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
-		try { draw.select('#' + 'PnD2_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
+		try { drawSQMA.select('#' + 'linPn1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'linPn2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'linPr1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'linPr2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'arwPn1_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'arwPn2_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'PnD1_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
+		try { drawSQMA.select('#' + 'PnD2_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
 		//*	COLORIR CPoints
-		try { draw.select('#' + 'CP_Rx_'  + gIDtmp).attr({ fill: cLinRX }) } catch (error) {}
-		try { draw.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
-		try { draw.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'CP_Rx_'  + gIDtmp).attr({ fill: cLinRX }) } catch (error) {}
+		try { drawSQMA.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
+		try { drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 	}
 }
 
@@ -427,7 +427,7 @@ function drwGuias() {
 	let swid = 0.5 * lwid
 	calcMat(x0, y0, Larg)
 
-	var gGui = draw.group()
+	var gGui = drawSQMA.group()
 	gGui.attr({ id: 'Guia_G00' })
 	//_ var ellipse = draw
 	//_ 		.ellipse(mF[0][1][0], mF[0][1][1] -2 -Alt/2, Alt , Alt/2)
@@ -439,43 +439,43 @@ function drwGuias() {
 		var gIDtmp = 'G' + pad(iGav)
 		//* 	Pontos
 		calcMat(x0, y0 + yOff * j, Larg)
-		var gGui = draw.group()
+		var gGui = drawSQMA.group()
 		gGui.attr({ id: 'Guia_' + gIDtmp })
 		//*	Linhas
-		var polyline = draw
+		var polyline = drawSQMA
 			.polyline(mF[1])
 			.attr({ stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		var polyline = draw
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		var polyline = drawSQMA
 			.polyline(mF[2])
 			.attr({ stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		var polyline = draw
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		var polyline = drawSQMA
 			.polyline(mF[3])
 			.attr({ stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		var polyline = draw
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		var polyline = drawSQMA
 			.polyline(mF[4])
 			.attr({ stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
 		//*	Círculos
-		var ellipse = draw
+		var ellipse = drawSQMA
 			.ellipse(mF[1][1][0], mF[1][1][1], Alt / 2, Alt)
 			.attr({ fill: 'none', stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		var ellipse = draw
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		var ellipse = drawSQMA
 			.ellipse(mF[2][1][0], mF[2][1][1], Alt, Alt)
 			.attr({ fill: 'none', stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		var ellipse = draw
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		var ellipse = drawSQMA
 			.ellipse(mF[3][1][0], mF[3][1][1], Alt, Alt)
 			.attr({ fill: 'none', stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		var ellipse = draw
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		var ellipse = drawSQMA
 			.ellipse(mF[4][1][0], mF[4][1][1], Alt / 2, Alt)
 			.attr({ fill: 'none', stroke: 'gray', strokeWidth: swid })
-			.appendTo(draw.select('#' + 'Guia_' + gIDtmp))
-		draw.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 })
+			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
+		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 })
 	}
 }
 
@@ -486,7 +486,7 @@ function showGuias() {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//_ draw.select('#' + "Guia_" + gIDtmp).remove()
-		draw.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 })
+		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 })
 		// paper.append('#' + 'Guia_' + gIDtmp)
 	}
 }
@@ -498,7 +498,7 @@ function hideGuias() {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		try {
-			draw.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 })
+			drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 })
 		} catch (error) {}
 	}
 }
@@ -530,6 +530,7 @@ var cpPnMoveStart = function () {
 	//_ console.log('cpPnMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
+	//_ console.log('cpPnMoveStart: id=' + s)
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
@@ -618,9 +619,11 @@ var cpRxMoveStart = function () {
 	//_ console.log('cpRxMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
-	nGav0 = parseInt(s.substr(s.length - 2), 10)
-	nGav = mESQ[nGav0][1][1]
-	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1][1])][0][1] = '' } 
+	//_ console.log('cpRxMoveStart: id=' + s)
+	nGav0 = parseInt(s.substr(s.length - 2), 10)		//> Gaveta de origem
+	nGav = mESQ[nGav0][1][1]								//> Gaveta de destino
+	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1][1])][0][1] = '' }
+	removUsed(this.attr('id'))
 }
 
 
@@ -657,6 +660,8 @@ var cpRxMoveStop = function () {
 	mESQ[nGav0][1][0] = nLado	//> nLado
 	mESQ[nGav0][1][1] = nGav	//> nPara
 	mESQ[nGav0][1][2] = nIE		//> nIE
+
+	setUsed(this.attr('id'))
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -791,10 +796,10 @@ var cpPrMoveStop = function () {
 //* -------------------------------------------------------------------------- */
 function drwCtrlPts() {
 	//* Grupo 0
-	var gCP = draw.group()
+	var gCP = drawSQMA.group()
 	gCP.attr({ id: 'CP_G00'})
 	//* Ponto do produto A
-		var ellipse = draw
+		var ellipse = drawSQMA
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]*0.75))
 			.attr({
@@ -805,10 +810,10 @@ function drwCtrlPts() {
 				visibility: 'hidden',
 				opacity: cpAlpha,
 			})
-			.appendTo(draw.select('#' + 'CP_G00'))
+			.appendTo(drawSQMA.select('#' + 'CP_G00'))
 			.drag(cpPrMove, cpPrMoveStart, cpPrMoveStop)
 	//* Ponto do produto B
-		var ellipse = draw
+		var ellipse = drawSQMA
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + (mG[1][0][0][0]) + ',10') //  (mG[1][0][0][1]/3))
 			.attr({
@@ -819,7 +824,7 @@ function drwCtrlPts() {
 				visibility: 'hidden',
 				opacity: cpAlpha,
 			})
-			.appendTo(draw.select('#' + 'CP_G00'))
+			.appendTo(drawSQMA.select('#' + 'CP_G00'))
 			.drag(cpPrMove, cpPrMoveStart, cpPrMoveStop)
 
 	
@@ -827,10 +832,10 @@ function drwCtrlPts() {
 		iGav = g
 		var gIDtmp = 'G' + pad(iGav)
 		//* Grupo
-		var gCP = draw.group()
+		var gCP = drawSQMA.group()
 		gCP.attr({ id: 'CP_' + gIDtmp })
 		//* Ponto de Rechaço
-		var ellipse = draw
+		var ellipse = drawSQMA
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1])
 			.attr({
@@ -841,10 +846,10 @@ function drwCtrlPts() {
 				visibility: 'hidden',
 				opacity: cpAlpha,
 			})
-			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
+			.appendTo(drawSQMA.select('#' + 'CP_' + gIDtmp))
 			.drag(cpRxMove, cpRxMoveStart, cpRxMoveStop)
 		//* Pontos de Peneirado
-		var ellipse = draw
+		var ellipse = drawSQMA
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1])
 			.attr({
@@ -855,9 +860,9 @@ function drwCtrlPts() {
 				visibility: 'hidden',
 				opacity: cpAlpha,
 			})
-			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
+			.appendTo(drawSQMA.select('#' + 'CP_' + gIDtmp))
 			.drag(cpPnMove, cpPnMoveStart, cpPnMoveStop)
-		var ellipse = draw
+		var ellipse = drawSQMA
 			.ellipse(0, 0, Alt, Alt)
 			.transform('t' + (mG[g][0][0][0] + Larg / 5) + ',' + mG[g][0][0][1])
 			.attr({
@@ -868,7 +873,7 @@ function drwCtrlPts() {
 				visibility: 'hidden',
 				opacity: cpAlpha,
 			})
-			.appendTo(draw.select('#' + 'CP_' + gIDtmp))
+			.appendTo(drawSQMA.select('#' + 'CP_' + gIDtmp))
 			.drag(cpPnMove, cpPnMoveStart, cpPnMoveStop)
 	}
 }
@@ -876,7 +881,7 @@ function drwCtrlPts() {
 function showCtrlPts() {
 	//_ console.log('showCtrlPts() ; iGav='+pad(iGav))
 	//*	G00
-	try {draw.select('#CP_G00').appendTo(draw)
+	try {drawSQMA.select('#CP_G00').appendTo(drawSQMA)
 	} catch (error) {	}
 	
 	//*	GAVETAS
@@ -885,16 +890,16 @@ function showCtrlPts() {
 		var gIDtmp = 'G' + pad(iGav)
 		//*	Gaveta
 		try {
-			draw.select('#' + gIDtmp).appendTo(draw)
+			drawSQMA.select('#' + gIDtmp).appendTo(drawSQMA)
 		} catch (error) {}
 		//*	Chaminé
 		try {
-			draw.select('#Cham_' + gIDtmp).appendTo(draw)
+			drawSQMA.select('#Cham_' + gIDtmp).appendTo(drawSQMA)
 		} catch (error) {}
 	}
 
 	//* 	LINHA SELEÇÃO
-	try {draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
+	try {drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 	} catch (error) {console.log('#SelLin = null')}
 
 	//*	LINHAS DE FLUXO
@@ -906,7 +911,7 @@ function showCtrlPts() {
 			for (let L = 1; L <= 2; L++) {
 				if (mESQ[j][1 + L][0] == i) {
 					//_ console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
-					try {draw.select('#Pn' + L + '_' + gIDtmp).appendTo(draw)
+					try {drawSQMA.select('#Pn' + L + '_' + gIDtmp).appendTo(drawSQMA)
 						} catch (error) {console.log(error)}
 				}
 			}
@@ -915,54 +920,54 @@ function showCtrlPts() {
 			if (mESQ[j][1][0] == i) {
 				//_ console.log('#Rx_' + gIDtmp+'='+mESQ[j][1][0])
 				try {
-					draw.select('#Rx_' + gIDtmp).appendTo(draw)
+					drawSQMA.select('#Rx_' + gIDtmp).appendTo(drawSQMA)
 				} catch (error) {console.log(error)}
 			}
 		}
 	
 		//*	Linha Ai
 		
-			try {draw.select('#Ai').appendTo(draw)
+			try {drawSQMA.select('#Ai').appendTo(drawSQMA)
 			} catch (error) { }
 		
 		//*	Linha Ae
 		if (mESQ[0][1][0] == i) {
-			try {draw.select('#Ae').appendTo(draw)
+			try {drawSQMA.select('#Ae').appendTo(drawSQMA)
 			} catch (error) { }
 		}
 		//*	Linha Be
 		if (mESQ[0][2][0] == i) {
-			try {draw.select('#Be').appendTo(draw)
+			try {drawSQMA.select('#Be').appendTo(drawSQMA)
 			} catch (error) { }
 		}
 	}
 
 	//* 	CIRC SELEÇÃO
-	try {draw.select('#SelCir').attr({ visibility: 'visible' }).appendTo(draw)
+	try {drawSQMA.select('#SelCir').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 	} catch (error) {console.log('#SelCir = null')}
 
 	//*	PONTOS Ae & Be
-	draw.select('#CP_A').attr({ visibility: 'visible' }).appendTo(draw)
-	draw.select('#CP_B').attr({ visibility: 'visible' }).appendTo(draw)
+	drawSQMA.select('#CP_A').attr({ visibility: 'visible' }).appendTo(drawSQMA)
+	drawSQMA.select('#CP_B').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 
 	//*	PONTOS Rx, Pn1, Pn2
 	for (let j = nGavs; j >= 1; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//* Pontos de Peneirado
-		draw
+		drawSQMA
 			.select('#' + 'CP_Pn1_' + gIDtmp)
 			.attr({ visibility: 'visible' })
-			.appendTo(draw)
-		draw
+			.appendTo(drawSQMA)
+		drawSQMA
 			.select('#' + 'CP_Pn2_' + gIDtmp)
 			.attr({ visibility: 'visible' })
-			.appendTo(draw)
+			.appendTo(drawSQMA)
 		//*	Ponto de Rechaço
-		draw
+		drawSQMA
 			.select('#' + 'CP_Rx_' + gIDtmp)
 			.attr({ visibility: 'visible' })
-			.appendTo(draw)
+			.appendTo(drawSQMA)
 		}
 		
 	// //*	MÁSCARA SelLin
@@ -979,14 +984,14 @@ function hideCtrlPts() {
 	//_ console.log('hideCtrlPts() ; iGav='+pad(iGav))
 	//* 	Lin Selec
 	try {
-		draw.select('#SelLin').attr({ visibility: 'hidden' })
-		draw.select('#SelCir').attr({ visibility: 'hidden' })
+		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' })
+		drawSQMA.select('#SelCir').attr({ visibility: 'hidden' })
 	} catch (error) {console.log(error)}
 
 	//* 	Pontos AB
-	try {draw.select('#CP_A').attr({ visibility: 'hidden' })
+	try {drawSQMA.select('#CP_A').attr({ visibility: 'hidden' })
 		} catch (error) {}
-	try {draw.select('#CP_B').attr({ visibility: 'hidden' })
+	try {drawSQMA.select('#CP_B').attr({ visibility: 'hidden' })
 		} catch (error) {}
 	
 	// for (let i = 4; i >= 1; i--) {
@@ -995,15 +1000,15 @@ function hideCtrlPts() {
 			var gIDtmp = 'G' + pad(iGav)
 			//* Ponto de Rechaço
 			try {
-				draw.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' })
+				drawSQMA.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' })
 			} catch (error) { }
 			//*  Ponto de Peneirado
 			try {
 				for (let l = 1; l <= 2; l++) {
-					draw
+					drawSQMA
 						.select('#' + 'CP_Pn' + l + '_' + gIDtmp)
 						.attr({ visibility: 'hidden' })
-						.appendTo(draw)
+						.appendTo(drawSQMA)
 				}
 			} catch (error) { }
 			// //* Linha de Rechaço
@@ -1022,7 +1027,7 @@ function hideCtrlPts() {
 function drwGPF(xC, yC, L, H) {
 	//_ console.log('drwGPF() ; iGav='+pad(iGav))
 	//Borda
-	var brdGav = draw
+	var brdGav = drawSQMA
 		.rect(xC - 1.25 * Larg, yC - yOff / 2, 2.5 * Larg, yOff, 5)
 		.attr({
 			fill: 'none',
@@ -1031,7 +1036,7 @@ function drwGPF(xC, yC, L, H) {
 			'stroke-width': 0,
 		})
 	brdGav.attr({ id: 'brd' + gID })
-	brdGav.appendTo(draw.select('#' + gID))
+	brdGav.appendTo(drawSQMA.select('#' + gID))
 	//_ brdGav.hover(brdHoverIN, brdHoverOUT)
 
 	//* Contorno principal
@@ -1047,7 +1052,7 @@ function drwGPF(xC, yC, L, H) {
 	var y5 = mP[0][4][1] + H //5
 	var x6 = x1
 	var y6 = y1 + H //6
-	var polygon = draw
+	var polygon = drawSQMA
 		.polygon(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6)
 		.attr({
 			fill: 'white',
@@ -1056,75 +1061,75 @@ function drwGPF(xC, yC, L, H) {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 
 	//* Linhas internas
 	xi = mP[0][4][0]
 	yi = mP[0][4][1] //i
-	var polygon = draw.polygon(x6, y6, x1, y1, xi, yi, x5, y5).attr({
+	var polygon = drawSQMA.polygon(x6, y6, x1, y1, xi, yi, x5, y5).attr({
 		fill: 'white',
 		stroke: 'black',
 		'stroke-width': lwid,
 		'stroke-linecap': 'round',
 		'stroke-linejoin': 'round',
 	})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 
-	var polygon = draw.polygon(xi, yi, x3, y3, x4, y4, x5, y5).attr({
+	var polygon = drawSQMA.polygon(xi, yi, x3, y3, x4, y4, x5, y5).attr({
 		fill: 'white',
 		stroke: 'black',
 		'stroke-width': lwid,
 		'stroke-linecap': 'round',
 		'stroke-linejoin': 'round',
 	})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 
 	//Canto 1
-	var polygon = draw.polygon(mP[1].slice(1, 5)).attr({
+	var polygon = drawSQMA.polygon(mP[1].slice(1, 5)).attr({
 		fill: 'black',
 		stroke: 'black',
 		'stroke-width': lwid,
 		'stroke-linecap': 'round',
 		'stroke-linejoin': 'round',
 	})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 
 	//Canto 2
-	var polygon = draw.polygon(mP[2].slice(1, 5)).attr({
+	var polygon = drawSQMA.polygon(mP[2].slice(1, 5)).attr({
 		fill: 'black',
 		stroke: 'black',
 		'stroke-width': lwid,
 		'stroke-linecap': 'round',
 		'stroke-linejoin': 'round',
 	})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 
 	//Canto 3
-	var polygon = draw.polygon(mP[3].slice(1, 5)).attr({
+	var polygon = drawSQMA.polygon(mP[3].slice(1, 5)).attr({
 		fill: 'black',
 		stroke: 'black',
 		'stroke-width': lwid,
 		'stroke-linecap': 'round',
 		'stroke-linejoin': 'round',
 	})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 
 	//Canto 4
-	var polygon = draw.polygon(mP[4].slice(1, 5)).attr({
+	var polygon = drawSQMA.polygon(mP[4].slice(1, 5)).attr({
 		fill: 'black',
 		stroke: 'black',
 		'stroke-width': lwid,
 		'stroke-linecap': 'round',
 		'stroke-linejoin': 'round',
 	})
-	polygon.appendTo(draw.select('#' + gID))
+	polygon.appendTo(drawSQMA.select('#' + gID))
 }
 
 function hideGPF() {
 	//_ console.log('hideGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
 	try {
-		draw.select('#SelLin').attr({ visibility: 'hidden' })
+		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' })
 	} catch (error) {console.log(error)}
 
 	//* Ocultar polígonos da gaveta
@@ -1133,34 +1138,34 @@ function hideGPF() {
 		var gIDtmp = 'G' + pad(iGav)
 		//* Ocultar Chaminés
 		try {
-			draw.select('#' + gIDtmp).attr({ visibility: 'hidden' })
-			draw.select('#Cham_' + gIDtmp).attr({ visibility: 'hidden' })
+			drawSQMA.select('#' + gIDtmp).attr({ visibility: 'hidden' })
+			drawSQMA.select('#Cham_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
 		//* Ocultar Rx
 		try {
-			draw.select('#Rx_' + gIDtmp).attr({ visibility: 'hidden' })
+			drawSQMA.select('#Rx_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
 		//* Ocultar Pn1
 		try {
-			draw.select('#Pn1_' + gIDtmp).attr({ visibility: 'hidden' })
+			drawSQMA.select('#Pn1_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) {}
 		//* Ocultar Pn2
 		try {
-			draw.select('#Pn2_' + gIDtmp).attr({ visibility: 'hidden' })
+			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'hidden' })
 		} catch (error) { }
 	}
 
 	//* Ocultar Ai
 	try {
-		draw.select('#Ai').attr({ visibility: 'hidden' })
+		drawSQMA.select('#Ai').attr({ visibility: 'hidden' })
 	} catch (error) { }
 	//* Ocultar Ae
 	try {
-		draw.select('#Ae').attr({ visibility: 'hidden' })
+		drawSQMA.select('#Ae').attr({ visibility: 'hidden' })
 	} catch (error) { }
 	//* Ocultar Be
 	try {
-		draw.select('#Be').attr({ visibility: 'hidden' })
+		drawSQMA.select('#Be').attr({ visibility: 'hidden' })
 	} catch (error) { }
 }
 
@@ -1168,7 +1173,7 @@ function showGPF() {
 	//_ console.log('showGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
 	try {
-		draw.select('#SelLin').attr({ visibility: 'visible' }).appendTo(draw)
+		drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 	} catch (error) {console.log(error)}
 
 
@@ -1179,34 +1184,34 @@ function showGPF() {
 		//* Exibir Chaminés
 		try {
 			// draw.select("#" + gIDtmp).attr({ opacity: 0 })
-			draw.select('#' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
-			draw.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
+			drawSQMA.select('#' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
+			drawSQMA.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
 		} catch (error) {}
 		//* Exibir Rx
 		try {
-			draw.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
+			drawSQMA.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
 		} catch (error) {}
 		//* Exibir Pn1
 		try {
-			draw.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
+			drawSQMA.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
 		} catch (error) {}
 		//* Exibir Pn2
 		try {
-			draw.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(draw)
+			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
 		} catch (error) { }
 	}
 
 	//* Exibir Ai
 	try {
-		draw.select('#Ai').attr({ visibility: 'visible' }).appendTo(draw)
+		drawSQMA.select('#Ai').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 	} catch (error) { }
 	//* Exibir Ae
 	try {
-		draw.select('#Ae').attr({ visibility: 'visible' }).appendTo(draw)
+		drawSQMA.select('#Ae').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 	} catch (error) { }
 	//* Exibir Be
 	try {
-		draw.select('#Be').attr({ visibility: 'visible' }).appendTo(draw)
+		drawSQMA.select('#Be').attr({ visibility: 'visible' }).appendTo(drawSQMA)
 	} catch (error) { }
 }
 
@@ -1215,13 +1220,13 @@ function drwCham() {
 	//_ console.log('drwCham() ; iGav='+pad(iGav))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
-		draw.select('#Cham_' + gID).remove() //Apaga grupo existente
+		drawSQMA.select('#Cham_' + gID).remove() //Apaga grupo existente
 	} catch (error) {}
 	calcMat(x0, y0 + nGav0 * yOff, Larg) //Calcula os pontos de desenho
-	var gCham = draw.group() //Cria Grupo Chaminé
+	var gCham = drawSQMA.group() //Cria Grupo Chaminé
 	gCham.attr({ id: 'Cham_' + gID }) //Atribui nome
 
-	var polygon = draw
+	var polygon = drawSQMA
 		.polygon(mC[nLado].slice(1, 5))
 		.attr({
 			fill: 'none',
@@ -1230,7 +1235,7 @@ function drwCham() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#' + 'Cham_' + gID))
+		.appendTo(drawSQMA.select('#' + 'Cham_' + gID))
 	if (nIE == 1 || nGav0 != nGav) {
 		// polygon.attr({ fill: 'darkred' })
 		polygon.attr({ fill: cCham })
@@ -1245,11 +1250,11 @@ function drwRX() {
 	//_ console.log('drwRX() ; iGav='+pad(nGav0))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
 	try {
-		draw.select('#Rx_' + gID).remove() //Apaga grupo existente
-		draw.select('#maskRx_' + gID).remove() //Apaga grupo existente
+		drawSQMA.select('#Rx_' + gID).remove() //Apaga grupo existente
+		drawSQMA.select('#maskRx_' + gID).remove() //Apaga grupo existente
 	} catch (error) {}
 
-	var gRx = draw.group() //Cria Grupo
+	var gRx = drawSQMA.group() //Cria Grupo
 	gRx.attr({ id: 'Rx_' + gID }) //Atribui nome
 
 	let tmpIE = null
@@ -1354,7 +1359,7 @@ function drwRX() {
 	chkProdColor()
 	//Linha Branca
 	try {
-		var polyline = draw
+		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
 				fill: 'none',
@@ -1365,11 +1370,11 @@ function drwRX() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#Rx_' + gID))
+			.appendTo(drawSQMA.select('#Rx_' + gID))
 	} catch (error) {}
 
 	//Linha de fundo escuro
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline(vLin)
 		.attr({
 			id: 'linRx0_' + gID,
@@ -1379,10 +1384,10 @@ function drwRX() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Rx_' + gID))
+		.appendTo(drawSQMA.select('#Rx_' + gID))
 
 	//Linha principal (animada)
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline(vLin)
 		.attr({
 			id: 'linRx1_' + gID,
@@ -1394,7 +1399,7 @@ function drwRX() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Rx_' + gID))
+		.appendTo(drawSQMA.select('#Rx_' + gID))
 	Snap.animate(
 		Anim0,
 		Anim1,
@@ -1409,7 +1414,7 @@ function drwRX() {
 		let wmask = []
 		let bmask = []
 		calcMat(x0, y0 + nGav0 * yOff, Larg)
-		var gmRx = draw.group() //Cria Grupo
+		var gmRx = drawSQMA.group() //Cria Grupo
 		gmRx.attr({ id: 'maskRx_' + gID }) //Atribui nome
 		//Polígono que mostra
 
@@ -1473,7 +1478,7 @@ function drwRX() {
 				break
 		}
 		//*	Polígono que mostra
-		var pmask = draw
+		var pmask = drawSQMA
 			.polygon(wmask)
 			.attr({
 				fill: 'white',
@@ -1483,10 +1488,10 @@ function drwRX() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#maskRx_' + gID))
+			.appendTo(drawSQMA.select('#maskRx_' + gID))
 
 		//*	Polígono que oculta
-		var pmask = draw
+		var pmask = drawSQMA
 			.polygon(bmask)
 			.attr({
 				fill: 'black',
@@ -1496,9 +1501,9 @@ function drwRX() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#maskRx_' + gID))
+			.appendTo(drawSQMA.select('#maskRx_' + gID))
 		//*	Aplica Máscara
-		gRx.attr({ mask: draw.select('#maskRx_' + gID) })
+		gRx.attr({ mask: drawSQMA.select('#maskRx_' + gID) })
 	}
 
 	//*	CASO SETA
@@ -1518,11 +1523,11 @@ function drwPN() {
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
 	try {													//>	Apaga grupo existente
-		draw.select('#Pn' + nPn + '_' + gID).remove()
-		draw.select('#maskPn' + nPn + '_' + gID).remove()
+		drawSQMA.select('#Pn' + nPn + '_' + gID).remove()
+		drawSQMA.select('#maskPn' + nPn + '_' + gID).remove()
 	} catch (error) {} 								
 
-	var gPn = draw.group() 							//>	Cria Grupo
+	var gPn = drawSQMA.group() 							//>	Cria Grupo
 	gPn.attr({ id: 'Pn' + nPn + '_' + gID }) //>	Atribui nome
 
 	let tmpIE = null
@@ -1623,10 +1628,10 @@ function drwPN() {
 		vBaixo.push(mP[1][1][0])
 		vBaixo.push(mP[1][1][1] + 3 * Alt)
 
-		var r = draw
+		var r = drawSQMA
 			.polygon(vBaixo)
 			.attr({ id: 'PnD' + nPn + '_' + gID, fill: patPn })
-			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
+			.appendTo(drawSQMA.select('#Pn' + nPn + '_' + gID))
 	}
 	//> Se em direção ao fundo
 	if (nIE == 1 && nGav0 != nGav) {
@@ -1643,7 +1648,7 @@ function drwPN() {
 	chkProdColor()
 	//Linha Branca
 	try {
-		var polyline = draw
+		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
 				fill: 'none',
@@ -1653,11 +1658,11 @@ function drwPN() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
+			.appendTo(drawSQMA.select('#Pn' + nPn + '_' + gID))
 	} catch (error) {console.log(error)}
 
 	//Linha principal (animada)
-	var polyline1 = draw
+	var polyline1 = drawSQMA
 		.polyline(vLinPn)
 		.attr({
 			id: 'linPn'+nPn+'_' + gID,
@@ -1669,7 +1674,7 @@ function drwPN() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Pn' + nPn + '_' + gID))
+		.appendTo(drawSQMA.select('#Pn' + nPn + '_' + gID))
 	Snap.animate(
 		Anim0,
 		Anim1,
@@ -1682,7 +1687,7 @@ function drwPN() {
 
 	//Linha de produto (animada)
 	if (nGav0 != nGav) {
-		var polyline2 = draw
+		var polyline2 = drawSQMA
 			.polyline(vLinPr)
 			.attr({
 				id: 'linPr'+nPn+'_' + gID,
@@ -1694,7 +1699,7 @@ function drwPN() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#Pn' + nPn + '_' + gID))
+			.appendTo(drawSQMA.select('#Pn' + nPn + '_' + gID))
 		Snap.animate(
 			Anim0,
 			Anim1,
@@ -1712,7 +1717,7 @@ function drwPN() {
 		let wmask = []
 		let bmask = []
 		calcMat(x0, y0 + nGav0 * yOff, Larg)
-		var gmPn = draw.group() //Cria Grupo
+		var gmPn = drawSQMA.group() //Cria Grupo
 		gmPn.attr({ id: 'maskPn'+nPn+'_' + gID }) //Atribui nome
 		
 		//*	Polígono que mostra
@@ -1741,7 +1746,7 @@ function drwPN() {
 		//_ console.log(bmask)
 	
 		//*	Polígono que mostra
-		var pmask = draw
+		var pmask = drawSQMA
 			.polygon(wmask)
 			.attr({
 				fill: 'white',
@@ -1750,10 +1755,10 @@ function drwPN() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#maskPn'+nPn+'_' + gID))
+			.appendTo(drawSQMA.select('#maskPn'+nPn+'_' + gID))
 
 		//*	Polígono que oculta
-		var pmask = draw
+		var pmask = drawSQMA
 			.polygon(bmask)
 			.attr({
 				fill: 'black',
@@ -1763,9 +1768,9 @@ function drwPN() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#maskPn'+nPn+'_' + gID))
+			.appendTo(drawSQMA.select('#maskPn'+nPn+'_' + gID))
 		//*	Aplica Máscara
-		gPn.attr({ mask: draw.select('#maskPn'+nPn+'_' + gID) })
+		gPn.attr({ mask: drawSQMA.select('#maskPn'+nPn+'_' + gID) })
 	
 
 
@@ -1783,12 +1788,12 @@ function drwPN() {
 function drwAi() {
 	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
 
-	var gAi = draw.group() //Cria Grupo
+	var gAi = drawSQMA.group() //Cria Grupo
 	gAi.attr({ id: 'Ai'}) //Atribui nome
 
 	//*	'Ai' - SEMPRE PRESENTE
 	//Linha de fundo escuro
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline([[x0, y0],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
@@ -1797,10 +1802,10 @@ function drwAi() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Ai'))
+		.appendTo(drawSQMA.select('#Ai'))
 
 	//Linha principal (animada)
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline([[x0, 50],[x0,y0 + yOff]])
 		.attr({
 			fill: 'none',
@@ -1811,7 +1816,7 @@ function drwAi() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Ai'))
+		.appendTo(drawSQMA.select('#Ai'))
 	Snap.animate(
 		Anim0,
 		Anim1,
@@ -1826,11 +1831,11 @@ function drwAi() {
 function drwAe() {
 	//_ console.log('drwAe()')
 	try {
-		draw.select('#Ae').remove() //Apaga grupo existente
-		draw.select('#maskAe').remove() //Apaga grupo existente
+		drawSQMA.select('#Ae').remove() //Apaga grupo existente
+		drawSQMA.select('#maskAe').remove() //Apaga grupo existente
 	} catch (error) {}
 
-	var gAe = draw.group() //Cria Grupo
+	var gAe = drawSQMA.group() //Cria Grupo
 	gAe.attr({ id: 'Ae' }) //Atribui nome
 
 	let tmpIE = 0
@@ -1886,7 +1891,7 @@ function drwAe() {
 	patPn	 =	patPna
 	//Linha Branca
 	try {
-		var polyline = draw
+		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
 				fill: 'none',
@@ -1897,11 +1902,11 @@ function drwAe() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#Ae'))
+			.appendTo(drawSQMA.select('#Ae'))
 	} catch (error) {}
 
 	//Linha de fundo escuro
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline(vLin)
 		.attr({
 			id: 'linAe0',
@@ -1911,10 +1916,10 @@ function drwAe() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Ae'))
+		.appendTo(drawSQMA.select('#Ae'))
 
 	//Linha principal (animada)
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline(vLin)
 		.attr({
 			id: 'linAe1',
@@ -1926,7 +1931,7 @@ function drwAe() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Ae'))
+		.appendTo(drawSQMA.select('#Ae'))
 	Snap.animate(
 		Anim0,
 		Anim1,
@@ -1943,11 +1948,11 @@ function drwAe() {
 function drwBe() {
 	//_ console.log('drwBe()')
 	try {
-		draw.select('#Be').remove() //Apaga grupo existente
-		draw.select('#maskBe').remove() //Apaga grupo existente
+		drawSQMA.select('#Be').remove() //Apaga grupo existente
+		drawSQMA.select('#maskBe').remove() //Apaga grupo existente
 	} catch (error) {}
 
-	var gBe = draw.group() //Cria Grupo
+	var gBe = drawSQMA.group() //Cria Grupo
 	gBe.attr({ id: 'Be' }) //Atribui nome
 
 	let tmpIE = 0
@@ -2019,7 +2024,7 @@ function drwBe() {
 	patPn	 =	patPnb
 	//Linha Branca
 	try {
-		var polyline = draw
+		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
 				fill: 'none',
@@ -2030,11 +2035,11 @@ function drwBe() {
 				'stroke-linecap': 'round',
 				'stroke-linejoin': 'round',
 			})
-			.appendTo(draw.select('#Be'))
+			.appendTo(drawSQMA.select('#Be'))
 	} catch (error) {}
 
 	//Linha de fundo escuro
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline(vLin)
 		.attr({
 			id: 'linBe0',
@@ -2044,10 +2049,10 @@ function drwBe() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Be'))
+		.appendTo(drawSQMA.select('#Be'))
 
 	//Linha principal (animada)
-	var polyline = draw
+	var polyline = drawSQMA
 		.polyline(vLin)
 		.attr({
 			id: 'linBe1',
@@ -2059,7 +2064,7 @@ function drwBe() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#Be'))
+		.appendTo(drawSQMA.select('#Be'))
 	Snap.animate(
 		Anim0,
 		Anim1,
@@ -2081,17 +2086,17 @@ function drwBe() {
 function drwSelLin() {
 	//_ console.log('drwSelLin()')
 	try {
-		draw.select('#circleSel1').remove() 
-		draw.select('#SelLin').remove() 		//> Apaga grupo existente
-		draw.select('#maskSelLin').remove() //> Apaga grupo existente
-		draw.select('#SelCir').remove() 		//> Apaga grupo existente
+		drawSQMA.select('#circleSel1').remove() 
+		drawSQMA.select('#SelLin').remove() 		//> Apaga grupo existente
+		drawSQMA.select('#maskSelLin').remove() //> Apaga grupo existente
+		drawSQMA.select('#SelCir').remove() 		//> Apaga grupo existente
 	} catch (error) {}
 
-	var gSL = draw.group() 				//> Cria Grupo
+	var gSL = drawSQMA.group() 				//> Cria Grupo
 	gSL.attr({ id: 'SelLin' }) 		//> Atribui nome
-	var gmSL = draw.group() 			//> Cria Grupo
+	var gmSL = drawSQMA.group() 			//> Cria Grupo
 	gmSL.attr({ id: 'maskSelLin' }) 	//> Atribui nome
-	var gSC = draw.group() 				//> Cria Grupo
+	var gSC = drawSQMA.group() 				//> Cria Grupo
 	gSC.attr({ id: 'SelCir' }) 		//> Atribui nome
 
 	
@@ -2105,7 +2110,7 @@ function drwSelLin() {
 	var fSL = 1.5 //fWid
 	var fSC = 1.25
 
-	var polyline = draw	//> Linha Externa
+	var polyline = drawSQMA	//> Linha Externa
 		.polyline(vSelLin)
 		.attr({
 			id: 'linSel1',
@@ -2118,8 +2123,8 @@ function drwSelLin() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#SelLin'))
-	var polyline = draw	//> Linha Branca
+		.appendTo(drawSQMA.select('#SelLin'))
+	var polyline = drawSQMA	//> Linha Branca
 		.polyline(vSelLin)
 		.attr({
 			id: 'linSel1',
@@ -2132,7 +2137,7 @@ function drwSelLin() {
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-		.appendTo(draw.select('#SelLin'))
+		.appendTo(drawSQMA.select('#SelLin'))
 		
 	// var polyline = draw	//> Linha interna que exibe
 	// 	.polyline(vSelLin)
@@ -2164,7 +2169,7 @@ function drwSelLin() {
 	// 	.appendTo(draw.select('#maskSelLin'))
 		
 	
-	 var ellipse = draw
+	 var ellipse = drawSQMA
 		.ellipse(0, 0, 1.5*Alt, 1.5*Alt)
 		.attr({
 			transform: 'T' + xT + ',' + yT,
@@ -2174,7 +2179,7 @@ function drwSelLin() {
 			strokeWidth: wSC,
 			opacity: 0.5,
 		})
-		.appendTo(draw.select('#SelCir'))
+		.appendTo(drawSQMA.select('#SelCir'))
 
 	
 	//_ var gSL = Snap.select('#SelLin')
@@ -2224,47 +2229,47 @@ function drwSelLin() {
 function drwAreas() {
 	var r = 8
 	let dOp = 0
-	var circle = draw
+	var circle = drawSQMA
 		.circle(mF[1][0][0], mF[1][0][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(FiHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
-	var circle = draw
+		.appendTo(drawSQMA.select('#' + gID))
+	var circle = drawSQMA
 		.circle(mF[2][0][0], mF[2][0][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(DiHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
-	var circle = draw
+		.appendTo(drawSQMA.select('#' + gID))
+	var circle = drawSQMA
 		.circle(mF[3][0][0], mF[3][0][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(EiHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
-	var circle = draw
+		.appendTo(drawSQMA.select('#' + gID))
+	var circle = drawSQMA
 		.circle(mF[4][0][0], mF[4][0][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(TiHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
+		.appendTo(drawSQMA.select('#' + gID))
 	var r = 10
-	var circle = draw
+	var circle = drawSQMA
 		.circle(mF[1][1][0], mF[1][1][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(FeHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
-	var circle = draw
+		.appendTo(drawSQMA.select('#' + gID))
+	var circle = drawSQMA
 		.circle(mF[2][1][0], mF[2][1][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(DeHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
-	var circle = draw
+		.appendTo(drawSQMA.select('#' + gID))
+	var circle = drawSQMA
 		.circle(mF[3][1][0], mF[3][1][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp })
 		.hover(EeHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
-	var circle = draw
+		.appendTo(drawSQMA.select('#' + gID))
+	var circle = drawSQMA
 		.circle(mF[4][1][0], mF[4][1][1], r)
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp }) //Verificar
 		.hover(TeHoverIN, ladoHoverOUT)
-		.appendTo(draw.select('#' + gID))
+		.appendTo(drawSQMA.select('#' + gID))
 }
 
 
@@ -2355,7 +2360,7 @@ function showSlider() {
 //* -------------------------------------------------------------------------- */
 
 function drwSeta(x, y, w, h, clr, grp, id) {
-	var seta = draw
+	var seta = drawSQMA
 		.polygon(x, y, x - w / 2, y, x, y + h, x + w / 2, y)
 		.attr({
 			id,
@@ -2365,7 +2370,7 @@ function drwSeta(x, y, w, h, clr, grp, id) {
 			'stroke-linecap': 'miter',
 			'stroke-linejoin': 'miter',
 		})
-		.appendTo(draw.select(grp))
+		.appendTo(drawSQMA.select(grp))
 }
 
 
@@ -2413,11 +2418,11 @@ isDev ? $('#divCUT').show() : $('#divCUT').hide()
 		calcMat(x0, y0 + yOff * i, Larg, i)
 		
 		//* --------- BLANK ---------- */
-		var gGav = draw.group()
+		var gGav = drawSQMA.group()
 		gGav.attr({ id: gID })
 		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
-		draw.select('#' + gID).hover(gHoverIN, gHoverOUT)
-		draw.select('#' + gID).click(clkSelGav)
+		drawSQMA.select('#' + gID).hover(gHoverIN, gHoverOUT)
+		drawSQMA.select('#' + gID).click(clkSelGav)
 		
 		//* --------- POSITION ---------- */
 		drwAreas()

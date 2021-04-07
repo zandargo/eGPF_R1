@@ -801,3 +801,16 @@ footer div p {
   margin-bottom: 24px;
   margin-left: 10px;
 }
+
+#divFundo {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #a7b6be;
+  margin: 20px 0;
+  padding: 50px 0px;
+  height: 320px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}

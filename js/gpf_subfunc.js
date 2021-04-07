@@ -243,32 +243,32 @@ function ResetSQMA() {
 
 	//> Ponto do produto A
 	try {
-		objCP = draw.select('#CP_A')
+		objCP = drawSQMA.select('#CP_A')
 		.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]*0.75))
 	} catch (error) {}
 	//> Ponto do produto B
 	try {
-		objCP = draw.select('#CP_B')
+		objCP = drawSQMA.select('#CP_B')
 		.transform('t' + (mG[1][0][0][0]) + ',10') //  (mG[1][0][0][1]/3))
 	} catch (error) {}
 	//> Linha Ae
 	try {
-		draw.select('#Ae').remove() //Apaga grupo existente
-		draw.select('#maskAe').remove() //Apaga grupo existente
+		drawSQMA.select('#Ae').remove() //Apaga grupo existente
+		drawSQMA.select('#maskAe').remove() //Apaga grupo existente
 	} catch (error) {}
 
 	//> Linha Be
 	try {
-		draw.select('#Be').remove() //Apaga grupo existente
-		draw.select('#maskBe').remove() //Apaga grupo existente
+		drawSQMA.select('#Be').remove() //Apaga grupo existente
+		drawSQMA.select('#maskBe').remove() //Apaga grupo existente
 	} catch (error) {}
 	
 	//> Sel Lin
 	try {
-		draw.select('#circleSel1').remove() 
-		draw.select('#SelLin').remove() 		// Apaga grupo existente
-		draw.select('#maskSelLin').remove() // Apaga grupo existente
-		draw.select('#SelCir').remove() 		// Apaga grupo existente
+		drawSQMA.select('#circleSel1').remove() 
+		drawSQMA.select('#SelLin').remove() 		// Apaga grupo existente
+		drawSQMA.select('#maskSelLin').remove() // Apaga grupo existente
+		drawSQMA.select('#SelCir').remove() 		// Apaga grupo existente
 	} catch (error) {}
 
 	for (let g = 1; g <= 32; g++) {
@@ -276,37 +276,37 @@ function ResetSQMA() {
 		gID = 'G' + pad(iGav)
 		
 		//> Ponto de Rechaço
-		try {objCP = draw.select('#CP_Rx_' + gID)
+		try {objCP = drawSQMA.select('#CP_Rx_' + gID)
 			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1])
 		} catch (error) {}
 		
 		//> Pontos de Peneirado
-		try {objCP = draw.select('#CP_Pn1_' + gID)
+		try {objCP = drawSQMA.select('#CP_Pn1_' + gID)
 			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1])
 		} catch (error) {}
-		try {objCP = draw.select('#CP_Pn2_' + gID)
+		try {objCP = drawSQMA.select('#CP_Pn2_' + gID)
 			.transform('t' + (mG[g][0][0][0] + Larg / 5) + ',' + mG[g][0][0][1])
 		} catch (error) {}
 	
 		//> Linha de Rechaço
 		try {
-			draw.select('#Rx_' + gID).remove() 			//Apaga grupo existente
-			draw.select('#maskRx_' + gID).remove() 	//Apaga grupo existente
+			drawSQMA.select('#Rx_' + gID).remove() 			//Apaga grupo existente
+			drawSQMA.select('#maskRx_' + gID).remove() 	//Apaga grupo existente
 		} catch (error) {}
 
 		//> Linhas de Peneirado
 		try {
-			draw.select('#Pn1_' + gID).remove()				//Apaga grupo existente
-			draw.select('#maskPn1_' + gID).remove()		//Apaga grupo existente
+			drawSQMA.select('#Pn1_' + gID).remove()				//Apaga grupo existente
+			drawSQMA.select('#maskPn1_' + gID).remove()		//Apaga grupo existente
 		} catch (error) {} 
 		try {
-			draw.select('#Pn2_' + gID).remove()				//Apaga grupo existente
-			draw.select('#maskPn2_' + gID).remove()		//Apaga grupo existente
+			drawSQMA.select('#Pn2_' + gID).remove()				//Apaga grupo existente
+			drawSQMA.select('#maskPn2_' + gID).remove()		//Apaga grupo existente
 		} catch (error) {} 
 	
 		//> Chaminé
 		try {
-			draw.select('#Cham_' + gID).remove() //Apaga grupo existente
+			drawSQMA.select('#Cham_' + gID).remove() //Apaga grupo existente
 		} catch (error) {}
 
 	}
@@ -339,6 +339,98 @@ function ResetSQMA() {
 function LoadSQMA() {
 	console.log('LoadSQMA()')
 	resetMatESQ()
-	
-
 }
+
+
+
+//* -------------------------------------------------------------------------- */
+//*                         FUNÇÕES DA MATRIZ DE CORTE                         */
+//* -------------------------------------------------------------------------- */
+
+function removUsed(id) {
+	let aType = id.split("_")
+	let cpType = aType[1]
+	let iCP1 = 0
+	let tmpLin = 0
+	let tmpLado = 0
+	switch (cpType) {
+		case 'Rx':
+			iCP1 = 1
+			tmpLin = 1
+			break
+		case 'Pn1':
+			iCP1 = 0
+			tmpLin = 2
+			break
+		case 'Pn2':
+			iCP1 = 0
+			tmpLin = 3
+			break
+		default:
+			iCP1 = 0
+			tmpLin = 1
+			break
+	}
+	tmpLado = mESQ[nGav0][tmpLin][0]
+
+	//* Se CP no canal, limpa o lado usado na matriz
+	if (nGav != nGav0) {
+		if (mESQ[nGav0][tmpLin][2] == 1) {								//> Externo e com seta
+			//* Limpa de nGav0 até o fundo
+			for (let g = nGav0; g <= nGavs; g++) {
+				mCOD1[g][tmpLin][tmpLado] -= 1
+			}
+		}
+		if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
+			//* Limpa de nGav0 até nGav
+			for (let g = nGav0; g <= nGav; g++) {
+				mCOD1[g][tmpLin][tmpLado] -= 1
+			}
+		}
+	}
+}
+
+
+function setUsed(id) {
+	let aType = id.split("_")
+	let cpType = aType[1]
+	let iCP1 = 0
+	let tmpLin = 0
+	let tmpLado = 0
+	switch (cpType) {
+		case 'Rx':
+			iCP1 = 1
+			tmpLin = 1
+			break
+		case 'Pn1':
+			iCP1 = 0
+			tmpLin = 2
+			break
+		case 'Pn2':
+			iCP1 = 0
+			tmpLin = 3
+			break
+		default:
+			iCP1 = 0
+			tmpLin = 1
+			break
+	}
+	tmpLado = mESQ[nGav0][tmpLin][0]
+
+	//* Se CP no canal, limpa o lado usado na matriz
+	if (nGav != nGav0) {
+		if (mESQ[nGav0][tmpLin][2] == 1) {								//> Externo e com seta
+			//* Limpa de nGav0 até o fundo
+			for (let g = nGav0; g <= nGavs; g++) {
+				mCOD1[g][tmpLin][tmpLado] += 1
+			}
+		}
+		if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
+			//* Limpa de nGav0 até nGav
+			for (let g = nGav0; g <= nGav; g++) {
+				mCOD1[g][tmpLin][tmpLado] += 1
+			}
+		}
+	}
+}
+

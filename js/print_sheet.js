@@ -1,4 +1,5 @@
-
+//* INATIVO
+//* Caso seja reutilizado, verificar se a constante 'draw' mantém o nome ou foi substituída pelo 'drawSQMA'
 	
 //drwFolha();
 function drwFolha() {
