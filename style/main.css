@@ -803,14 +803,22 @@ footer div p {
 }
 
 #divFundo {
+  display: -ms-grid;
+  display: grid;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
   border-radius: 10px;
   border: 1px solid #a7b6be;
   margin: 20px 0;
-  padding: 50px 0px;
-  height: 320px;
+  padding: 0px 0px;
+  height: 360px;
   overflow-y: hidden;
   overflow-x: hidden;
+}
+
+#divFundo #svgFND {
+  width: 300px;
+  height: 380px;
+  place-self: start center;
 }

@@ -112,6 +112,8 @@ function reColor() {
 		try { drawSQMA.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 		try { drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 	}
+
+	recolorBTM()
 }
 
 
@@ -217,7 +219,9 @@ function calcHtotal() {
 		mESQ[nGavs][0][0] = 32
 		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
 		$('#matGPF' + pad(nGavs))
-			.html(mESQ[nGavs][0]+'<br>'+mESQ[nGavs][1]+'<br>'+mESQ[nGavs][2]+'<br>'+mESQ[nGavs][3])
+		.html(mESQ[nGavs][0] + '<br>' + mESQ[nGavs][1] + '<br>' + mESQ[nGavs][2] + '<br>' + mESQ[nGavs][3])
+		$('#matCUT' + pad(nGavs))
+		.html(mCOD1[nGavs][0]+'<br>'+mCOD1[nGavs][1]+'<br>'+mCOD1[nGavs][2]+'<br>'+mCOD1[nGavs][3])
 
 	hTotal = 0
 	for (let index = 1; index <= nGavs; index++) {
@@ -534,7 +538,8 @@ var cpPnMoveStart = function () {
 	nGav0 = parseInt(s.substr(s.length - 2), 10)
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
-	if (nGav!=0 && nGav!=nGav0) { mESQ[(1*mESQ[nGav0][1+nPn][1])][0][1] = '' } 
+	if (nGav != 0 && nGav != nGav0) { mESQ[(1 * mESQ[nGav0][1 + nPn][1])][0][1] = '' }
+	removUsed(this.attr('id'))
 }
 
 
@@ -570,6 +575,8 @@ var cpPnMoveStop = function () {
 	mESQ[nGav0][1+nPn][0] = nLado		//> nLado
 	mESQ[nGav0][1+nPn][1] = nGav		//> nPara
 	mESQ[nGav0][1+nPn][2] = nIE		//> nIE
+
+	setUsed(this.attr('id'))
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -725,6 +732,7 @@ var cpPrMoveStart = function () {
 	//_ console.log('nGav0='+nGav0)
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][nAB][1])][0][1] = '' } 
 	$('#z-flow-prod span').html(s = s.substr(s.length - 1))
+	removUsed(this.attr('id'))
 }
 
 
@@ -761,7 +769,7 @@ var cpPrMoveStop = function () {
 	mESQ[nGav0][nAB][1] = nGav		//> nPara
 	mESQ[nGav0][nAB][2] = 1			//> nIE [Sempre externo]
 
-
+	setUsed(this.attr('id'))
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')

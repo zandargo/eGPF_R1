@@ -32,6 +32,27 @@ function nLadoStr2Int(sLado) {
 	}
 	return nL
 }
+//*	LADO: INT TO STR
+function nLadoInt2Str(iLado) {
+	let sL = ''
+	switch (iLado) {
+		case 1:
+			sL = 'F'
+			break
+		case 2:
+			sL = 'D'
+			break
+		case 3:
+			sL = 'E'
+			break
+		case 4:
+			sL = 'T'
+			break
+		default:
+			break
+	}
+	return sL
+}
 
 
 //* 	POSIÇÃO DO MOUSE
@@ -374,17 +395,17 @@ function removUsed(id) {
 	tmpLado = mESQ[nGav0][tmpLin][0]
 
 	//* Se CP no canal, limpa o lado usado na matriz
-	if (nGav != nGav0) {
+	if (nGav != nGav0 && tmpLado != 0) {
 		if (mESQ[nGav0][tmpLin][2] == 1) {								//> Externo e com seta
 			//* Limpa de nGav0 até o fundo
 			for (let g = nGav0; g <= nGavs; g++) {
-				mCOD1[g][tmpLin][tmpLado] -= 1
+				mCOD1[g][1][tmpLado] -= 1
 			}
 		}
 		if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
 			//* Limpa de nGav0 até nGav
 			for (let g = nGav0; g <= nGav; g++) {
-				mCOD1[g][tmpLin][tmpLado] -= 1
+				mCOD1[g][1][tmpLado] -= 1
 			}
 		}
 	}
@@ -418,17 +439,17 @@ function setUsed(id) {
 	tmpLado = mESQ[nGav0][tmpLin][0]
 
 	//* Se CP no canal, limpa o lado usado na matriz
-	if (nGav != nGav0) {
+	if (nGav != nGav0 && tmpLado != 0) {
 		if (mESQ[nGav0][tmpLin][2] == 1) {								//> Externo e com seta
 			//* Limpa de nGav0 até o fundo
 			for (let g = nGav0; g <= nGavs; g++) {
-				mCOD1[g][tmpLin][tmpLado] += 1
+				mCOD1[g][1][tmpLado] += 1
 			}
 		}
 		if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
 			//* Limpa de nGav0 até nGav
 			for (let g = nGav0; g <= nGav; g++) {
-				mCOD1[g][tmpLin][tmpLado] += 1
+				mCOD1[g][1][tmpLado] += 1
 			}
 		}
 	}

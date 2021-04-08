@@ -24,7 +24,9 @@ var lwid      = 2 												//> Largura de linha geral
 var wLinBG	  = 3.2												//> Fator espessura da linha branca
 var oLinBG	  = 0.9												//> Opacidade da linha branca
 var oMskGPF	  = 0.9												//> Opacidade da máscara das linhas sob a gaveta
-var cor0 	  = 'white' 										//> Cor de fundo
+var oFND0	  = 0.25												//> Opacidade fundo inativo
+var oFND1	  = 0.75												//> Opacidade fundo ativo
+var cor0 = 'white' 										//> Cor de fundo
 var cor1      = 'black' 										//> Cor de linha
 var bgcolor   = $('body').css('background-color')		//> Cor do fundo
 var sk        = 5 												//> Skew
@@ -67,6 +69,10 @@ var cCtrlPntRxi = cLinPR0	//> Cor do Ponto de controle Rx interno
 var cCtrlPntRxe = cLinPR0	//> Cor do Ponto de controle Rx externo
 var cCtrlPntPni = cLinPN0	//> Cor do Ponto de controle Pn interno 
 var cCtrlPntPne = cLinPN0	//> Cor do Ponto de controle Pn externo
+
+var fndBlur01 = drawFND.filter(Snap.filter.blur(1))
+var fndBlur02 = drawFND.filter(Snap.filter.blur(2))
+var fndBlur05 = drawFND.filter(Snap.filter.blur(5))
 
 //* --------------------------- Definições Animação -------------------------- */
 
@@ -435,8 +441,51 @@ var mCorte = [
 //*                               MATRIZ DO FUNDO                              */
 //* -------------------------------------------------------------------------- */
 
-var mFND = []
+var mFND = [
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> GERAL
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> F1
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> F2
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> D1
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> D2
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> E1
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> E2
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> T1
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> T2
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> PORTA
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Fi (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Fe (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Di (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> De (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Ei (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Ee (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Ti (Rect)
+	[[0, 0],[0, 0],[0, 0],[0, 0]],		//> Te (Rect)
+]
 
+var wFND = 200														//> Largura do fundo
+var wFNDs = 50														//> Largura do quadrado menor
+var xcFND = $('#svgFND').width()/2							//> x do centro
+var ycFND = $('#svgFND').height()/2 - 32					//> y do centro
+var cFNDbg = $('#sidebar').css('background-color')
+var offCH = 20														//> Offset dos dutos int/ext do canal
+var hCH = parseInt(0.85*offCH,10)							//> Altura dos dutos int/ext do canal
+var xcPorta = xcFND
+var ycPorta = ycFND + wFND / 2 + 3*offCH
+var hPorta = 25
+
+
+var mActBTM = [		
+	[[0,0,0],				//> 00 - Ativo, Selecionado, Origem
+	 [0,0,0]],				//> ([nLado] [1|2] [Ativo|Selecionado|Origem])
+	[[0,0,0],				//> F1
+	 [0,0,0]],				//> F2
+	[[0,0,0],				//> D1
+	 [0,0,0]],				//> D2
+	[[0,0,0],				//> E1
+	 [0,0,0]],				//> E2
+	[[0,0,0],				//> T1
+	 [0,0,0]],				//> T2
+]		
 
 
 //* -------------------------------------------------------------------------- */
