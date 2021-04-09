@@ -399,13 +399,13 @@ function removUsed(id) {
 		if (mESQ[nGav0][tmpLin][2] == 1) {								//> Externo e com seta
 			//* Limpa de nGav0 até o fundo
 			for (let g = nGav0; g <= nGavs; g++) {
-				mCOD1[g][1][tmpLado] -= 1
+				mCOD1[g][1][tmpLado]>0 ? mCOD1[g][1][tmpLado] -= 1 : mCOD1[g][1][tmpLado]=0
 			}
 		}
-		if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
+		else if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
 			//* Limpa de nGav0 até nGav
 			for (let g = nGav0; g <= nGav; g++) {
-				mCOD1[g][1][tmpLado] -= 1
+				mCOD1[g][1][tmpLado]>0 ? mCOD1[g][1][tmpLado] -= 1 : mCOD1[g][1][tmpLado]=0
 			}
 		}
 	}
@@ -417,7 +417,6 @@ function setUsed(id) {
 	let cpType = aType[1]
 	let iCP1 = 0
 	let tmpLin = 0
-	let tmpLado = 0
 	switch (cpType) {
 		case 'Rx':
 			iCP1 = 1
@@ -436,22 +435,23 @@ function setUsed(id) {
 			tmpLin = 1
 			break
 	}
-	tmpLado = mESQ[nGav0][tmpLin][0]
+	let tmpLado = mESQ[nGav0][tmpLin][0]
 
 	//* Se CP no canal, limpa o lado usado na matriz
 	if (nGav != nGav0 && tmpLado != 0) {
-		if (mESQ[nGav0][tmpLin][2] == 1) {								//> Externo e com seta
+		if (mESQ[nGav0][tmpLin][2] == 1 && nGav0>0) {								//> Externo e com seta ()
 			//* Limpa de nGav0 até o fundo
 			for (let g = nGav0; g <= nGavs; g++) {
 				mCOD1[g][1][tmpLado] += 1
 			}
 		}
-		if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
+		else if (mESQ[nGav0][1][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
 			//* Limpa de nGav0 até nGav
 			for (let g = nGav0; g <= nGav; g++) {
 				mCOD1[g][1][tmpLado] += 1
 			}
 		}
+		
 	}
 }
 

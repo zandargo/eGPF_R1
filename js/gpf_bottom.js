@@ -31,40 +31,40 @@ function calcmFND() {
 	mFND[2][3][1] = ycFND + wFND/2
 	//*	D1
 	mFND[3][0][0] = xcFND + wFNDs/2
-	mFND[3][0][1] = ycFND + wFNDs/2
+	mFND[3][0][1] = ycFND + 0
 	mFND[3][1][0] = xcFND + wFNDs/2
-	mFND[3][1][1] = ycFND + 0
+	mFND[3][1][1] = ycFND - wFNDs/2
 	mFND[3][2][0] = xcFND + wFND/2
-	mFND[3][2][1] = ycFND + 0
+	mFND[3][2][1] = ycFND - wFND/2
 	mFND[3][3][0] = xcFND + wFND/2
-	mFND[3][3][1] = ycFND + wFND/2
+	mFND[3][3][1] = ycFND + 0
 	//*	D2
 	mFND[4][0][0] = xcFND + wFNDs/2
-	mFND[4][0][1] = ycFND + 0
+	mFND[4][0][1] = ycFND + wFNDs/2
 	mFND[4][1][0] = xcFND + wFNDs/2
-	mFND[4][1][1] = ycFND - wFNDs/2
+	mFND[4][1][1] = ycFND + 0
 	mFND[4][2][0] = xcFND + wFND/2
-	mFND[4][2][1] = ycFND - wFND/2
+	mFND[4][2][1] = ycFND + 0
 	mFND[4][3][0] = xcFND + wFND/2
-	mFND[4][3][1] = ycFND + 0
+	mFND[4][3][1] = ycFND + wFND/2
 	//*	E1
 	mFND[5][0][0] = xcFND - wFND/2
-	mFND[5][0][1] = ycFND + wFND/2
+	mFND[5][0][1] = ycFND + 0
 	mFND[5][1][0] = xcFND - wFND/2
-	mFND[5][1][1] = ycFND + 0
+	mFND[5][1][1] = ycFND - wFND/2
 	mFND[5][2][0] = xcFND - wFNDs/2
-	mFND[5][2][1] = ycFND + 0
+	mFND[5][2][1] = ycFND - wFNDs/2
 	mFND[5][3][0] = xcFND - wFNDs/2
-	mFND[5][3][1] = ycFND + wFNDs/2
+	mFND[5][3][1] = ycFND + 0
 	//*	E2
 	mFND[6][0][0] = xcFND - wFND/2
-	mFND[6][0][1] = ycFND + 0
+	mFND[6][0][1] = ycFND + wFND/2
 	mFND[6][1][0] = xcFND - wFND/2
-	mFND[6][1][1] = ycFND - wFND/2
+	mFND[6][1][1] = ycFND + 0
 	mFND[6][2][0] = xcFND - wFNDs/2
-	mFND[6][2][1] = ycFND - wFNDs/2
+	mFND[6][2][1] = ycFND + 0
 	mFND[6][3][0] = xcFND - wFNDs/2
-	mFND[6][3][1] = ycFND + 0
+	mFND[6][3][1] = ycFND + wFNDs/2
 	//*	T1
 	mFND[7][0][0] = xcFND - wFNDs/2
 	mFND[7][0][1] = ycFND - wFNDs/2
@@ -186,8 +186,6 @@ function drwBTM() {
 
 
 	//*	INÍCIO
-	
-
 	calcmFND()
 	let mSai = ['PORTA','F1','F2','D1','D2','E1','E2','T1','T2']
 	let mDut = ['','Fi','Fe','Di','De','Ei','Ee','Ti','Te']
@@ -230,6 +228,7 @@ function drwBTM() {
 			'stroke-linejoin': 'round',
 			opacity: 0.25,
 		})
+		.click(function(e) {clickBTM(mSai[f])})
 	}
 
 	for (let f = 10; f <= 17; f++) {					//> DUTOS DO CANAL
@@ -256,8 +255,8 @@ drwBTM()
 recolorBTM()
 function recolorBTM() {
 
-
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		//> Lado Usado: controla a opacidade
 		if (mCOD1[nGavs][1][tmpLado] > 0) {		//> [1] :  Array de duto usado
 			mActBTM[tmpLado][0][0]=1
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"1").attr({opacity: oFND1})
@@ -270,9 +269,24 @@ function recolorBTM() {
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND0})
 		}
 
-		
-		
-		
+		//> Selecionado: controla a cor
+		let tmpColor = null
+		for (let i = 0; i <= 1; i++) {
+			if (mActBTM[tmpLado][i][1]==1) {		//> Se selecionado
+				switch (mESQ[nGav0][0][1]) {
+					case 'A':
+						tmpColor = cLinPRa
+						break;
+					case 'B':
+						tmpColor = cLinPRb
+						break;
+					default:
+						tmpColor = cLinPR0
+						break;
+				}
+				drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + (i+1)).attr({ fill: tmpColor })
+			}
+		}
 	}
 
 
@@ -280,6 +294,18 @@ function recolorBTM() {
 
 
 //* ---------------------------- CLICAR NAS SAÍDAS --------------------------- */
+
+//> Ao clicar, SE ativo E bEditMode ENTÃO: Se ñ-selecionado, assume A|B, matSelecionado=1
+//>													 Else, assume cor neutra, matSelecionado=0
 function clickBTM(sSaida) {
+	console.log('clickBTM(): ' + sSaida)
+
+	//_let mSai = ['PORTA', 'F1', 'F2', 'D1', 'D2', 'E1', 'E2', 'T1', 'T2']
 	
+	let tmpLado = nLadoStr2Int(sSaida.charAt(0))
+	let tmp12 = parseInt(sSaida.charAt(1),10)-1
+	if ( mActBTM[tmpLado][tmp12][1] == 1 ) {
+		
+	}
+
 }

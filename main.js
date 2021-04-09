@@ -30,11 +30,13 @@ if (env === 'development') {
 //* -------------------------------------------------------------------------- */
 //_ process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV !== 'production'
+var nWid = 0
+isDev ? nWid = 1600 : nWid = 1400
 
 //* Main Window 
 function createMainWindow() {
 	const mainWindow = new BrowserWindow({
-		width : 1200,
+		width : nWid,
 		height: 800,
 		minWidth: 600,
 		minHeight: 400,
