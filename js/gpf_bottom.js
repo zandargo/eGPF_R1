@@ -241,9 +241,9 @@ function drwBTM() {
 		tmpX /= 4
 		tmpY /= 4
 
-		var circle = drawFND
-		.circle(tmpX, tmpY, 2)
-		.attr({fill: 'black'})
+		// var circle = drawFND
+		// .circle(tmpX, tmpY, 2)
+		// .attr({fill: 'black'})
 
 		var text = drawFND									//> TEXTO DO FUNDO
 		.text(tmpX, tmpY, '')
