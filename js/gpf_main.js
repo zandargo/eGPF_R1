@@ -539,12 +539,13 @@ var cpPnMoveStart = function () {
 	L = this.attr('id')
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
 	if (nGav != 0 && nGav != nGav0) { mESQ[(1 * mESQ[nGav0][1 + nPn][1])][0][1] = '' }
-	removUsed(this.attr('id'))
+	//_removUsed(this.attr('id'))
 }
 
 
 var cpPnMoveStop = function () {
 	//_ console.log('cpPnMoveStop()')
+	sCPtype = 'Pn'
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -576,7 +577,8 @@ var cpPnMoveStop = function () {
 	mESQ[nGav0][1+nPn][1] = nGav		//> nPara
 	mESQ[nGav0][1+nPn][2] = nIE		//> nIE
 
-	setUsed(this.attr('id'))
+	//_setUsed(this.attr('id'))
+	recalcUsed()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -630,13 +632,13 @@ var cpRxMoveStart = function () {
 	nGav0 = parseInt(s.substr(s.length - 2), 10)		//> Gaveta de origem
 	nGav = mESQ[nGav0][1][1]								//> Gaveta de destino
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1][1])][0][1] = '' }
-	removUsed(this.attr('id'))
+	//_removUsed(this.attr('id'))
 }
 
 
 var cpRxMoveStop = function () {
 	//_ console.log('cpRxMoveStop()')
-	
+	sCPtype = 'Rx'
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -668,7 +670,8 @@ var cpRxMoveStop = function () {
 	mESQ[nGav0][1][1] = nGav	//> nPara
 	mESQ[nGav0][1][2] = nIE		//> nIE
 
-	setUsed(this.attr('id'))
+	//_setUsed(this.attr('id'))
+	recalcUsed()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -732,12 +735,13 @@ var cpPrMoveStart = function () {
 	//_ console.log('nGav0='+nGav0)
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][nAB][1])][0][1] = '' } 
 	$('#z-flow-prod span').html(s = s.substr(s.length - 1))
-	removUsed(this.attr('id'))
+	//_removUsed(this.attr('id'))
 }
 
 
 var cpPrMoveStop = function () {
 	//_ console.log('cpPrMoveStop()')
+	sCPtype = 'Pr'
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -769,7 +773,8 @@ var cpPrMoveStop = function () {
 	mESQ[nGav0][nAB][1] = nGav		//> nPara
 	mESQ[nGav0][nAB][2] = 1			//> nIE [Sempre externo]
 
-	setUsed(this.attr('id'))
+	//_setUsed(this.attr('id'))
+	recalcUsed()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')
@@ -920,7 +925,7 @@ function showCtrlPts() {
 				if (mESQ[j][1 + L][0] == i) {
 					//_ console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
 					try {drawSQMA.select('#Pn' + L + '_' + gIDtmp).appendTo(drawSQMA)
-						} catch (error) {console.log(error)}
+						} catch (error) {console.log(`Erro: drawSQMA.select('#Pn' + ${L} + '_' + ${gIDtmp}).appendTo(drawSQMA)`)}
 				}
 			}
 			
@@ -929,7 +934,7 @@ function showCtrlPts() {
 				//_ console.log('#Rx_' + gIDtmp+'='+mESQ[j][1][0])
 				try {
 					drawSQMA.select('#Rx_' + gIDtmp).appendTo(drawSQMA)
-				} catch (error) {console.log(error)}
+				} catch (error) {console.log(`Erro: drawSQMA.select('#Rx_' + ${gIDtmp}).appendTo(drawSQMA)`)}
 			}
 		}
 	

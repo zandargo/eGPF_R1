@@ -189,7 +189,9 @@ function drwBTM() {
 	calcmFND()
 	let mSai = ['PORTA','F1','F2','D1','D2','E1','E2','T1','T2']
 	let mDut = ['','Fi','Fe','Di','De','Ei','Ee','Ti','Te']
-	
+	let aDomBL = ['','hanging','hanging','middle','middle','middle','middle','text-top','text-top']
+	let aTxAnc = ['','middle','middle','start','start','end','end','middle','middle']
+
 	var polygon = drawFND								//> PORTA
 		.polygon(mFND[9])
 		.attr({
@@ -226,9 +228,36 @@ function drwBTM() {
 			'stroke-width': 5*lwid,
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
-			opacity: 0.25,
+			opacity: oFND0,
 		})
 		.click(function(e) {clickBTM(mSai[f])})
+	
+		let tmpX = 0
+		let tmpY = 0
+		for (let i = 0; i <= 3; i++) {
+			tmpX += mFND[f][i][0]
+			tmpY += mFND[f][i][1]
+		}
+		tmpX /= 4
+		tmpY /= 4
+
+		var circle = drawFND
+		.circle(tmpX, tmpY, 2)
+		.attr({fill: 'black'})
+
+		var text = drawFND									//> TEXTO DO FUNDO
+		.text(tmpX, tmpY, '')
+		.attr({
+			id: 'txtFND_'+mSai[f],
+			fill: cFNDbg,
+			'font-size': "18pt",
+			'font-weight': 500,
+			'dominant-baseline': aDomBL[f],
+			'text-anchor': aTxAnc[f],
+			opacity: 1,
+		})
+
+
 	}
 
 	for (let f = 10; f <= 17; f++) {					//> DUTOS DO CANAL
@@ -254,7 +283,13 @@ drwBTM()
 //* ---------------------------- RECOLORIR SAÍDAS ---------------------------- */
 recolorBTM()
 function recolorBTM() {
-
+	let tmpColor = null
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		for (let i = 0; i <= 1; i++) {
+			try {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
+			} catch (error) {}
+		}
+	}
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		//> Lado Usado: controla a opacidade
 		if (mCOD1[nGavs][1][tmpLado] > 0) {		//> [1] :  Array de duto usado
@@ -262,30 +297,26 @@ function recolorBTM() {
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"1").attr({opacity: oFND1})
 			mActBTM[tmpLado][1][0]=1
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND1})
-		} else {
-			mActBTM[tmpLado][0][0]=0
-			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "1").attr({ opacity: oFND0 })
-			mActBTM[tmpLado][1][0]=0
-			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND0})
-		}
-
-		//> Selecionado: controla a cor
-		let tmpColor = null
-		for (let i = 0; i <= 1; i++) {
-			if (mActBTM[tmpLado][i][1]==1) {		//> Se selecionado
-				switch (mESQ[nGav0][0][1]) {
-					case 'A':
-						tmpColor = cLinPRa
-						break;
-					case 'B':
-						tmpColor = cLinPRb
-						break;
-					default:
-						tmpColor = cLinPR0
-						break;
+		
+			//> Selecionado: controla a cor
+			
+			for (let i = 0; i <= 1; i++) {
+				if (mActBTM[tmpLado][i][1] == 1) {		//> Se selecionado
+					console.log(`tmpColor = window['cLin'+${mActBTM[tmpLado][i][2].toUpperCase()}+${mActBTM[tmpLado][i][3].toLowerCase()}]`)
+					tmpColor = window['cLin'+mActBTM[tmpLado][i][2].toUpperCase()+mActBTM[tmpLado][i][3].toLowerCase()]
+				} else {
+					tmpColor = cLinRX0
 				}
 				drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + (i+1)).attr({ fill: tmpColor })
 			}
+
+		} else {
+			//> Zerar se lado não estiver sendo usado
+			mActBTM[tmpLado][0]=[0,0,'','',0,'']
+			mActBTM[tmpLado][1]=[0,0,'','',0,'']
+			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "1").attr({ opacity: oFND0, fill: cLinRX0 })
+			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "2").attr({ opacity: oFND0, fill: cLinRX0 })
+			
 		}
 	}
 
@@ -299,13 +330,30 @@ function recolorBTM() {
 //>													 Else, assume cor neutra, matSelecionado=0
 function clickBTM(sSaida) {
 	console.log('clickBTM(): ' + sSaida)
-
 	//_let mSai = ['PORTA', 'F1', 'F2', 'D1', 'D2', 'E1', 'E2', 'T1', 'T2']
-	
 	let tmpLado = nLadoStr2Int(sSaida.charAt(0))
-	let tmp12 = parseInt(sSaida.charAt(1),10)-1
-	if ( mActBTM[tmpLado][tmp12][1] == 1 ) {
-		
+	let tmp12 = parseInt(sSaida.charAt(1), 10) - 1
+	let sAB = mESQ[nGav0][0][1] + ''
+	//*	SE ativo E bEditMode, etc...
+	if ( mActBTM[tmpLado][tmp12][0] == 1 && bEditMode && nGav0 > 0 && tmpLado == nLado && nGav0 != nGav) {	
+		if (mActBTM[tmpLado][tmp12][1] == 0) {	//>	Se ñ-selecionado,
+			mActBTM[tmpLado][tmp12][1] = 1	//> Set selec
+			mActBTM[tmpLado][tmp12][2] = sCPtype.toUpperCase()		//> Set Prod
+			mActBTM[tmpLado][tmp12][3] = sAB.toUpperCase()			//> Set A|B
+			mActBTM[tmpLado][tmp12][4] = nGav0							//> Set Orig
+			mActBTM[tmpLado][tmp12][5] = sCPtype							//! Set Nome: Calcular o nome do produto
+			//_drawFND.select(`#txtFND_${sSaida}`).attr({text: sSaida})
+		} else {
+			mActBTM[tmpLado][tmp12][1] = 0		//> Set unsel
+			mActBTM[tmpLado][tmp12][2] = ''		//> Set Prod
+			mActBTM[tmpLado][tmp12][3] = ''		//> Set A|B
+			mActBTM[tmpLado][tmp12][4] = null	//> Set Orig
+			mActBTM[tmpLado][tmp12][5] = ''							//! Set Nome: Calcular o nome do produto
+			//_drawFND.select(`#txtFND_${sSaida}`).attr({text: ''})
+		}
+		//_ drawFND.select("#FND_"+sSaida).attr({fill: tmpColor})
+
 	}
 
+	recolorBTM()
 }
