@@ -167,8 +167,43 @@ function calcmFND() {
 	mFND[17][2][1] = ycFND - wFND/2 - offCH
 	mFND[17][3][0] = xcFND + wFND/2
 	mFND[17][3][1] = ycFND - wFND/2 - 2*offCH
-
-
+	
+	//*	DVF
+	mFND[18][0][0] = xcFND - offCH/2
+	mFND[18][0][1] = ycFND + wFND/2
+	mFND[18][1][0] = xcFND + offCH/2
+	mFND[18][1][1] = ycFND + wFND/2
+	mFND[18][2][0] = xcFND + offCH/2
+	mFND[18][2][1] = ycFND + wFND/2 + 2*offCH
+	mFND[18][3][0] = xcFND - offCH/2
+	mFND[18][3][1] = ycFND + wFND/2 + 2*offCH
+	//*	DVD
+	mFND[19][0][0] = xcFND + wFND/2
+	mFND[19][0][1] = ycFND + offCH/2
+	mFND[19][1][0] = xcFND + wFND/2
+	mFND[19][1][1] = ycFND - offCH/2
+	mFND[19][2][0] = xcFND + wFND/2 + 2*offCH
+	mFND[19][2][1] = ycFND - offCH/2
+	mFND[19][3][0] = xcFND + wFND/2 + 2*offCH
+	mFND[19][3][1] = ycFND + offCH/2
+	//*	DVE
+	mFND[20][0][0] = xcFND - wFND/2
+	mFND[20][0][1] = ycFND + offCH/2
+	mFND[20][1][0] = xcFND - wFND/2
+	mFND[20][1][1] = ycFND - offCH/2
+	mFND[20][2][0] = xcFND - wFND/2 - 2*offCH
+	mFND[20][2][1] = ycFND - offCH/2
+	mFND[20][3][0] = xcFND - wFND/2 - 2*offCH
+	mFND[20][3][1] = ycFND + offCH/2
+	//*	DVT
+	mFND[21][0][0] = xcFND - offCH/2
+	mFND[21][0][1] = ycFND - wFND/2
+	mFND[21][1][0] = xcFND + offCH/2
+	mFND[21][1][1] = ycFND - wFND/2
+	mFND[21][2][0] = xcFND + offCH/2
+	mFND[21][2][1] = ycFND - wFND/2 - 2*offCH
+	mFND[21][3][0] = xcFND - offCH/2
+	mFND[21][3][1] = ycFND - wFND/2 - 2*offCH
 	
 }
 
@@ -182,6 +217,36 @@ function drwBTM() {
 	// 	.attr({
 	// 			fill: 'grey',
 	// 		})
+
+
+	// var polyline = drawFND
+	// .polyline(xcFND, ycFND, xcFND+20, ycFND, )
+	// .attr({
+	// 	fill: 'none',
+	// 	// stroke: cLinBG,
+	// 	stroke: 'red',
+	// 	strokeWidth: wLinBG * lwid,
+	// 	opacity: oLinBG,
+	// 	'stroke-linecap': 'round',
+	// 	'stroke-linejoin': 'round',
+	// })
+
+	// var circle = drawFND.circle(5,5,lwid).attr({fill: 'dodgerblue',stroke:'none'});
+	// //---(xBB, yBB, widthBB, heightBB, refX, refY)---
+	// var circleMarker=circle.marker(0,0,10,10,5,5)
+
+	// var arrowPath=drawFND.path("M 2 59 L 293 148 L 1 243 L 121 151 Z").attr({fill:'purple',stroke:'black',strokeWidth:5})
+	// var arrowMarker=arrowPath.marker(0,0,8000,8000,60,150).attr({markerUnits:'strokeWidth', markerWidth:300,markerHeight:300,orient:"auto" })
+
+	// polyline.attr({markerStart:circleMarker})
+	// polyline.attr({markerEnd:arrowMarker})
+   // //  polyline.attr({markerEnd:circleMarker})
+
+
+
+
+
+
 
 
 
@@ -256,8 +321,6 @@ function drwBTM() {
 			'text-anchor': aTxAnc[f],
 			opacity: 1,
 		})
-
-
 	}
 
 	for (let f = 10; f <= 17; f++) {					//> DUTOS DO CANAL
@@ -276,7 +339,25 @@ function drwBTM() {
 		})
 	}
 
+	for (let d = 18; d <= 21; d++) {					//> Desvios verticais
+		var polygon = drawFND
+		.polygon(mFND[d])
+		.attr({
+			id: 'dvFND_'+nLadoInt2Str(d-17),
+			fill: cLinPN0,
+			stroke: cFNDbg,
+			'stroke-width': 2*lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+			opacity: 0,
+			visibility: 'visible',
+			// visibility: 'hidden',
+		})
+		.click(function (e) { clickDV('dvFND_' + nLadoInt2Str(d - 17)) })
+		
 	}
+
+}
 drwBTM()
 
 
@@ -292,7 +373,7 @@ function recolorBTM() {
 	}
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		//> Lado Usado: controla a opacidade
-		if (mCOD1[nGavs][1][tmpLado] > 0) {		//> [1] :  Array de duto usado
+		if (mCOD1[nGavs][1][tmpLado] > 0 || (nGav0==nGavs && mESQ[nGav0][1][0]==tmpLado)) {		//> [1] :  Array de duto usado
 			mActBTM[tmpLado][0][0]=1
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"1").attr({opacity: oFND1})
 			mActBTM[tmpLado][1][0]=1
@@ -304,23 +385,17 @@ function recolorBTM() {
 				if (mActBTM[tmpLado][i][1] == 1) {		//> Se selecionado
 					console.log(`tmpColor = window['cLin'+${mActBTM[tmpLado][i][2].toUpperCase()}+${mActBTM[tmpLado][i][3].toLowerCase()}]`)
 					tmpColor = window['cLin'+mActBTM[tmpLado][i][2].toUpperCase()+mActBTM[tmpLado][i][3].toLowerCase()]
-				} else {
-					tmpColor = cLinRX0
-				}
+				} else {tmpColor = cLinRX0}
 				drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + (i+1)).attr({ fill: tmpColor })
 			}
-
 		} else {
 			//> Zerar se lado não estiver sendo usado
 			mActBTM[tmpLado][0]=[0,0,'','',0,'']
 			mActBTM[tmpLado][1]=[0,0,'','',0,'']
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "1").attr({ opacity: oFND0, fill: cLinRX0 })
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "2").attr({ opacity: oFND0, fill: cLinRX0 })
-			
 		}
 	}
-
-
 }
 
 
@@ -342,6 +417,7 @@ function clickBTM(sSaida) {
 			mActBTM[tmpLado][tmp12][3] = sAB.toUpperCase()			//> Set A|B
 			mActBTM[tmpLado][tmp12][4] = nGav0							//> Set Orig
 			mActBTM[tmpLado][tmp12][5] = sCPtype							//! Set Nome: Calcular o nome do produto
+			recalcProd()
 			//_drawFND.select(`#txtFND_${sSaida}`).attr({text: sSaida})
 		} else {
 			mActBTM[tmpLado][tmp12][1] = 0		//> Set unsel
@@ -352,8 +428,59 @@ function clickBTM(sSaida) {
 			//_drawFND.select(`#txtFND_${sSaida}`).attr({text: ''})
 		}
 		//_ drawFND.select("#FND_"+sSaida).attr({fill: tmpColor})
-
 	}
 
 	recolorBTM()
 }
+
+
+
+//* ------------------------ CLICAR NO DESVIO VERTICAL ----------------------- */
+function clickDV(tmpLado) {
+	console.log(tmpLado)
+	
+}
+
+
+function recalcProd() {
+	// let aPnA = []
+	// let aRxA = []
+	// let aPnB = []
+	// let aRxB = []
+
+
+	//TODO 	Definir condição para evitar pushes repetidos
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		for (let i = 0; i <= 1; i++) {
+			
+			switch (mActBTM[tmpLado][i][2]) {
+				case 'RX':
+					mActBTM[tmpLado][i][3] == 'A' ?
+						aRxA.push(mActBTM[tmpLado][i][4]) : aRxB.push(mActBTM[tmpLado][i][4])
+					break;
+				case 'PN':
+					mActBTM[tmpLado][i][3] == 'A' ?
+						aPnA.push(mActBTM[tmpLado][i][4]) : aPnB.push(mActBTM[tmpLado][i][4])
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	aPnA.sort(function(a, b) {
+		return a - b
+	})
+	aRxA.sort(function(a, b) {
+		return a - b
+	})
+	aPnB.sort(function(a, b) {
+		return a - b
+	})
+	aRxB.sort(function(a, b) {
+		return a - b
+	})
+
+	
+}
+

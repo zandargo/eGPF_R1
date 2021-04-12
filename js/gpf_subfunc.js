@@ -54,6 +54,18 @@ function nLadoInt2Str(iLado) {
 	return sL
 }
 
+//*	CONV: INT TO ROMAN
+function romanize(num) {
+  var lookup = {M:1000,CM:900,D:500,CD:400,C:100,XC:90,L:50,XL:40,X:10,IX:9,V:5,IV:4,I:1},roman = '',i;
+  for ( i in lookup ) {
+    while ( num >= lookup[i] ) {
+      roman += i;
+      num -= lookup[i];
+    }
+  }
+  return roman;
+}
+
 
 //* 	POSIÇÃO DO MOUSE
 var xM = null
@@ -355,99 +367,8 @@ function LoadSQMA() {
 //* -------------------------------------------------------------------------- */
 //*                         FUNÇÕES DA MATRIZ DE CORTE                         */
 //* -------------------------------------------------------------------------- */
-//! OBSOLETAS:
-function removUsed(id) {
-	let aType = id.split("_")
-	let cpType = aType[1]
-	sCPtype = cpType //> Guardar tipo para ref na cor do fundo
-	let iCP1 = 0
-	let tmpLin = 0
-	let tmpGav = parseInt(aType[2].substr(1,2),10)
-	switch (cpType) {
-		case 'Rx':
-			iCP1 = 1
-			tmpLin = 1
-			break
-		case 'Pn1':
-			iCP1 = 0
-			tmpLin = 2
-			break
-		case 'Pn2':
-			iCP1 = 0
-			tmpLin = 3
-			break
-		default:
-			iCP1 = 0
-			tmpLin = 1
-			break
-	}
-	let tmpLado = mESQ[tmpGav][tmpLin][0]
 
-	//* Se CP no canal, limpa o lado usado na matriz
-	if (nGav != nGav0 && tmpLado != 0) {
-		if (mESQ[nGav0][tmpLin][2] == 1 && tmpGav > nGav0) {								//> Externo e com seta
-			console.log(`removUsed(${id}): mESQ[${nGav0}][${tmpLin}][2] == 1 && ${tmpGav} > ${nGav0}`)
-			//* Limpa de nGav0 até o fundo
-			for (let g = nGav0; g <= nGavs; g++) {
-				mCOD1[g][1][tmpLado]>0 ? mCOD1[g][1][tmpLado] -= 1 : mCOD1[g][1][tmpLado]=0
-			}
-		}
-		else if (mESQ[nGav0][tmpLin][2] == 0 && tmpGav > (nGav0 + iCP1)) {	//> CP Int com uso do canal
-			console.log(`removUsed(${id}): mESQ[${nGav0}][${tmpLin}][2] == 0 && ${tmpGav} > (${nGav0} + ${iCP1})`)
-			//* Limpa de nGav0 até nGav
-			for (let g = nGav0; g <= nGav; g++) {
-				mCOD1[g][1][tmpLado]>0 ? mCOD1[g][1][tmpLado] -= 1 : mCOD1[g][1][tmpLado]=0
-			}
-		}
-	}
-}
-function setUsed(id) {
-	let aType = id.split("_")
-	let cpType = aType[1]
-	sCPtype = cpType //> Guardar tipo para ref na cor do fundo
-	let iCP1 = 0
-	let tmpLin = 0
-	switch (cpType) {
-		case 'Rx':
-			iCP1 = 1
-			tmpLin = 1
-			break
-		case 'Pn1':
-			iCP1 = 0
-			tmpLin = 2
-			break
-		case 'Pn2':
-			iCP1 = 0
-			tmpLin = 3
-			break
-		default:
-			iCP1 = 0
-			tmpLin = 1
-			break
-	}
-	let tmpLado = mESQ[nGav0][tmpLin][0]
-
-	//* Se CP no canal, limpa o lado usado na matriz
-	if (nGav != nGav0 && tmpLado != 0) {
-		if (mESQ[nGav0][tmpLin][2] == 1 && nGav0>0) {								//> Externo e com seta ()
-			//* Limpa de nGav0 até o fundo
-			for (let g = nGav0; g <= nGavs; g++) {
-				mCOD1[g][1][tmpLado] += 1
-			}
-		}
-		else if (mESQ[nGav0][tmpLin][2] == 0 && nGav > (nGav0+iCP1)) {	//> CP Int com uso do canal
-			//* Limpa de nGav0 até nGav
-			for (let g = nGav0; g <= nGav; g++) {
-				mCOD1[g][1][tmpLado] += 1
-			}
-		}
-		
-	}
-}
-
-//* 	ATUAL
 function recalcUsed() {
-	let iCP1 = 0
 	for (let g = 1; g <= nGavs; g++) {
 		mCOD1[g][1] = [0, 0, 0, 0, 0]
 	}
@@ -457,12 +378,7 @@ function recalcUsed() {
 				for (let tmpG = g; tmpG <= nGavs; tmpG++) {
 					mCOD1[tmpG][1][mESQ[g][i][0]] += 1
 				}
-				//_i == 1 ? sCPtype = 'Rx' : sCPtype = 'Pn'
-
 			}
 		}
-			
-			
 	}
-	
 }
