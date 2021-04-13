@@ -328,11 +328,11 @@ function drwBTM() {
 			id: 'txtSQMAfnd_'+mSai[f],
 			fill: $('#divCOD').css('color'),
 			'font-size': "14pt",
-			'font-weight': 500,
+			'font-weight': 700,
 			'dominant-baseline': 'middle',
 			'text-anchor': 'middle',
-			opacity: 0.8,
-			visibility: 'hidden'
+			// opacity: 0.8,
+			// visibility: 'hidden'
 		})
 
 
@@ -385,6 +385,14 @@ function recolorBTM() {
 		for (let i = 0; i <= 1; i++) {
 			try {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
 			} catch (error) {}
+			//* Reposicionar texto de fundo no esquema
+			try {
+				drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`)
+					.attr({ text: mActBTM[tmpLado][i][5] })
+					.transform(`t${mG[mActBTM[tmpLado][i][4]][tmpLado][1][0]-20},${mG[mActBTM[tmpLado][i][4]][tmpLado][1][1]}`)
+					.appendTo(drawSQMA)
+			} catch (error) { }
+			
 		}
 	}
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
@@ -440,16 +448,20 @@ function clickBTM(sSaida) {
 			console.log(`mESQ[${nGav0}][${nLin0}][3] = ${mESQ[nGav0][nLin0][3]}`)
 		
 			//* Se FND (Orig+Rx/Pn) já tiver sido escolhido, zera o outro e define o atual
+			//* (É possível um produto volumoso sair por duas saídas)
 			let nOther = Math.abs(tmp12-1)
 			if (mActBTM[tmpLado][nOther][1] == 1 &&
 				mActBTM[tmpLado][nOther][4] == mActBTM[tmpLado][tmp12][4] &&
 				mActBTM[tmpLado][tmp12][2] == mActBTM[tmpLado][nOther][2]) {
-					mActBTM[tmpLado][nOther][1] = 0		//> Set unsel
-					mActBTM[tmpLado][nOther][2] = ''		//> Set Prod
-					mActBTM[tmpLado][nOther][3] = ''		//> Set A|B
-					mActBTM[tmpLado][nOther][4] = null	//> Set Orig
-					mActBTM[tmpLado][nOther][5] = ''
+			// 		mActBTM[tmpLado][nOther][1] = 0		//> Set unsel
+			// 		mActBTM[tmpLado][nOther][2] = ''		//> Set Prod
+			// 		mActBTM[tmpLado][nOther][3] = ''		//> Set A|B
+			// 		mActBTM[tmpLado][nOther][4] = null	//> Set Orig
+			// 		mActBTM[tmpLado][nOther][5] = ''
+					mActBTM[tmpLado][tmp12][5] = mActBTM[tmpLado][nOther][5]
 			}
+
+
 		} else {
 			mActBTM[tmpLado][tmp12][1] = 0		//> Set unsel
 			mActBTM[tmpLado][tmp12][2] = ''		//> Set Prod
