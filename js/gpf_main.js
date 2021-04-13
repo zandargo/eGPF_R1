@@ -546,6 +546,7 @@ var cpPnMoveStart = function () {
 var cpPnMoveStop = function () {
 	//_ console.log('cpPnMoveStop()')
 	sCPtype = 'Pn'
+	nLin0 = parseInt(this.attr('id').charAt(5),10)+1
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -579,6 +580,7 @@ var cpPnMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
+	recalcProd()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -639,6 +641,7 @@ var cpRxMoveStart = function () {
 var cpRxMoveStop = function () {
 	//_ console.log('cpRxMoveStop()')
 	sCPtype = 'Rx'
+	nLin0 = 1
 	var bb = this.getBBox()
 	xf = bb.cx
 	yf = bb.cy
@@ -672,6 +675,7 @@ var cpRxMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
+	recalcProd()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -775,6 +779,7 @@ var cpPrMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
+	recalcProd()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')

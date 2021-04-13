@@ -365,7 +365,7 @@ function LoadSQMA() {
 
 
 //* -------------------------------------------------------------------------- */
-//*                         FUNÇÕES DA MATRIZ DE CORTE                         */
+//*                      FUNÇÕES DA MATRIZ DE CORTE/FUNDO                      */
 //* -------------------------------------------------------------------------- */
 
 function recalcUsed() {
@@ -374,11 +374,25 @@ function recalcUsed() {
 	}
 	for (let g = 1; g <= nGavs; g++) {
 		for (let i = 1; i <= 3; i++) {
-			if (mESQ[g][i][2] == 1 && mESQ[g][i][1] > g) {		//> Externo e com seta ()
+			//* CP externo e com seta ()
+			if (mESQ[g][i][2] == 1 && mESQ[g][i][1] > g) {		//> CP externo e com seta ()
 				for (let tmpG = g; tmpG <= nGavs; tmpG++) {
 					mCOD1[tmpG][1][mESQ[g][i][0]] += 1
 				}
 			}
+			//* Correspondência com a matriz de fundo
+			if (mESQ[g][i][3] >= 100*mESQ[g][i][0] && mESQ[g][i][3] <= 100*mESQ[g][i][0] + 3) {
+				mActBTM[mESQ[g][i][0]][0][4] != g ?
+					mESQ[g][i][3] -= (100*mESQ[g][i][0]+1) : false
+				mActBTM[mESQ[g][i][0]][1][4] != g ?
+					mESQ[g][i][3] -= (100*mESQ[g][i][0]+2) : false
+			} else { mESQ[g][i][3]=0 }
+		
 		}
 	}
+
+
+
+
+
 }

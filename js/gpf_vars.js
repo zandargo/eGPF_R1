@@ -115,7 +115,8 @@ var nGav      = null
 var nLado     = null
 var nIE       = null
 var nGav0     = null
-var nPn       = null
+var nPn 		  = null
+var nLin0 	  = null
 var sLado     = ''
 var sIE       = ''
 var s         = ''
@@ -533,34 +534,34 @@ function resetMatESQ() {
 	mESQ.push(
 		[
 		[0,'B',0], 		//> Gaveta 00: Altura, Produto, Corte - ALTURA/CORTE: NÃO SE APLICA
-		[0, 0, 1], 		//> Ae: nLado, 'nPara', nIE
-		[0, 0, 1], 		//> Be: nLado, 'nPara', nIE
-		[0, 0, 0], 		//> ?
+		[0, 0, 1, 0], 		//> Ae: nLado, 'nPara', nIE, nFND
+		[0, 0, 1, 0], 		//> Be: nLado, 'nPara', nIE, nFND
+		[0, 0, 0, 0], 		//> ?
 		]
 	)
 	mESQ.push(
 		[
 		[65,'A',0], 	//> Gaveta 01: Altura, Produto, Corte
-		[0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE
-		[0, 0, 0], 		//> Pn1: nLado, 'nPara', nIE
-		[0, 0, 0], 		//> Pn2: nLado, 'nPara', nIE
+		[0, 0, 0, 0], 		//> Pr/Rx: nLado, 'nPara', nIE, nFND
+		[0, 0, 0, 0], 		//> Pn1: nLado, 'nPara', nIE, nFND
+		[0, 0, 0, 0], 		//> Pn2: nLado, 'nPara', nIE, nFND
 	] 
 	)
 	for (let g = 2; g < nGavs; g++) {
 		mGav = [
 				[65,'',0],
-				[0, 0, 0],
-				[0, 0, 0],
-				[0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
+				[0, 0, 0, 0],
 		]
 		mESQ.push(mGav)
 	}
 
 	mGav = [	
 			[32,'',0],
-			[0, 0, 0],
-			[0, 0, 0],
-			[0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
 		]
 	mESQ.push(mGav)
 

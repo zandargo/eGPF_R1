@@ -321,6 +321,21 @@ function drwBTM() {
 			'text-anchor': aTxAnc[f],
 			opacity: 1,
 		})
+		
+		var text = drawSQMA									//> TEXTO DO ESQUEMA (=FUNDO)
+		.text(0, 0, '')
+		.attr({
+			id: 'txtSQMAfnd_'+mSai[f],
+			fill: $('#divCOD').css('color'),
+			'font-size': "14pt",
+			'font-weight': 500,
+			'dominant-baseline': 'middle',
+			'text-anchor': 'middle',
+			opacity: 0.8,
+			visibility: 'hidden'
+		})
+
+
 	}
 
 	for (let f = 10; f <= 17; f++) {					//> DUTOS DO CANAL
@@ -364,6 +379,7 @@ drwBTM()
 //* ---------------------------- RECOLORIR SAÍDAS ---------------------------- */
 recolorBTM()
 function recolorBTM() {
+	recalcProd()
 	let tmpColor = null
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
@@ -373,17 +389,16 @@ function recolorBTM() {
 	}
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		//> Lado Usado: controla a opacidade
-		if (mCOD1[nGavs][1][tmpLado] > 0 || (nGav0==nGavs && mESQ[nGav0][1][0]==tmpLado)) {		//> [1] :  Array de duto usado
+		if (mCOD1[nGavs][1][tmpLado] > 0 || mESQ[nGavs][1][0]==tmpLado) {		//> [1] :  Array de duto usado
 			mActBTM[tmpLado][0][0]=1
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"1").attr({opacity: oFND1})
 			mActBTM[tmpLado][1][0]=1
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND1})
 		
 			//> Selecionado: controla a cor
-			
 			for (let i = 0; i <= 1; i++) {
 				if (mActBTM[tmpLado][i][1] == 1) {		//> Se selecionado
-					console.log(`tmpColor = window['cLin'+${mActBTM[tmpLado][i][2].toUpperCase()}+${mActBTM[tmpLado][i][3].toLowerCase()}]`)
+					//_ console.log(`tmpColor = window['cLin'+${mActBTM[tmpLado][i][2].toUpperCase()}+${mActBTM[tmpLado][i][3].toLowerCase()}]`)
 					tmpColor = window['cLin'+mActBTM[tmpLado][i][2].toUpperCase()+mActBTM[tmpLado][i][3].toLowerCase()]
 				} else {tmpColor = cLinRX0}
 				drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + (i+1)).attr({ fill: tmpColor })
@@ -394,6 +409,10 @@ function recolorBTM() {
 			mActBTM[tmpLado][1]=[0,0,'','',0,'']
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "1").attr({ opacity: oFND0, fill: cLinRX0 })
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "2").attr({ opacity: oFND0, fill: cLinRX0 })
+			for (let i = 0; i <= 1; i++) {
+				try {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' })
+				} catch (error) {}
+			}
 		}
 	}
 }
@@ -404,32 +423,53 @@ function recolorBTM() {
 //> Ao clicar, SE ativo E bEditMode ENTÃO: Se ñ-selecionado, assume A|B, matSelecionado=1
 //>													 Else, assume cor neutra, matSelecionado=0
 function clickBTM(sSaida) {
-	console.log('clickBTM(): ' + sSaida)
+	//_console.log('clickBTM(): ' + sSaida)
 	//_let mSai = ['PORTA', 'F1', 'F2', 'D1', 'D2', 'E1', 'E2', 'T1', 'T2']
 	let tmpLado = nLadoStr2Int(sSaida.charAt(0))
 	let tmp12 = parseInt(sSaida.charAt(1), 10) - 1
 	let sAB = mESQ[nGav0][0][1] + ''
 	//*	SE ativo E bEditMode, etc...
 	if ( mActBTM[tmpLado][tmp12][0] == 1 && bEditMode && nGav0 > 0 && tmpLado == nLado && nGav0 != nGav) {	
-		if (mActBTM[tmpLado][tmp12][1] == 0) {	//>	Se ñ-selecionado,
-			mActBTM[tmpLado][tmp12][1] = 1	//> Set selec
-			mActBTM[tmpLado][tmp12][2] = sCPtype.toUpperCase()		//> Set Prod
-			mActBTM[tmpLado][tmp12][3] = sAB.toUpperCase()			//> Set A|B
-			mActBTM[tmpLado][tmp12][4] = nGav0							//> Set Orig
-			mActBTM[tmpLado][tmp12][5] = sCPtype							//! Set Nome: Calcular o nome do produto
-			recalcProd()
-			//_drawFND.select(`#txtFND_${sSaida}`).attr({text: sSaida})
+		if (mActBTM[tmpLado][tmp12][1] == 0) {		//>	Se ñ-selecionado,
+			mActBTM[tmpLado][tmp12][1] = 1			//> Set selec
+			mActBTM[tmpLado][tmp12][2] = sCPtype	//> Set Prod
+			mActBTM[tmpLado][tmp12][3] = sAB			//> Set A|B
+			mActBTM[tmpLado][tmp12][4] = nGav0		//> Set Orig
+			//_ mActBTM[tmpLado][tmp12][5] = sCPtype							//! Set Nome: Calcular o nome do produto
+			mESQ[nGav0][nLin0][3] = mESQ[nGav0][nLin0][3] % (tmpLado * 100) + tmpLado * 100 + parseInt(sSaida.charAt(1), 10)
+			console.log(`mESQ[${nGav0}][${nLin0}][3] = ${mESQ[nGav0][nLin0][3]}`)
+		
+			//* Se FND (Orig+Rx/Pn) já tiver sido escolhido, zera o outro e define o atual
+			let nOther = Math.abs(tmp12-1)
+			if (mActBTM[tmpLado][nOther][1] == 1 &&
+				mActBTM[tmpLado][nOther][4] == mActBTM[tmpLado][tmp12][4] &&
+				mActBTM[tmpLado][tmp12][2] == mActBTM[tmpLado][nOther][2]) {
+					mActBTM[tmpLado][nOther][1] = 0		//> Set unsel
+					mActBTM[tmpLado][nOther][2] = ''		//> Set Prod
+					mActBTM[tmpLado][nOther][3] = ''		//> Set A|B
+					mActBTM[tmpLado][nOther][4] = null	//> Set Orig
+					mActBTM[tmpLado][nOther][5] = ''
+			}
 		} else {
 			mActBTM[tmpLado][tmp12][1] = 0		//> Set unsel
 			mActBTM[tmpLado][tmp12][2] = ''		//> Set Prod
 			mActBTM[tmpLado][tmp12][3] = ''		//> Set A|B
 			mActBTM[tmpLado][tmp12][4] = null	//> Set Orig
-			mActBTM[tmpLado][tmp12][5] = ''							//! Set Nome: Calcular o nome do produto
-			//_drawFND.select(`#txtFND_${sSaida}`).attr({text: ''})
+			mActBTM[tmpLado][tmp12][5] = ''
+			mESQ[nGav0][nLin0][3] == (tmpLado * 100 + 3) ?
+				mESQ[nGav0][nLin0][3] -= parseInt(sSaida.charAt(1), 10) :
+				mESQ[nGav0][nLin0][3] -= (parseInt(sSaida.charAt(1), 10) + tmpLado * 100)
+			console.log(`mESQ[${nGav0}][${nLin0}][3] = ${mESQ[nGav0][nLin0][3]}`)
 		}
-		//_ drawFND.select("#FND_"+sSaida).attr({fill: tmpColor})
+	
+	
+	
+	
 	}
 
+
+
+	recalcProd()
 	recolorBTM()
 }
 
@@ -443,44 +483,91 @@ function clickDV(tmpLado) {
 
 
 function recalcProd() {
-	// let aPnA = []
-	// let aRxA = []
-	// let aPnB = []
-	// let aRxB = []
+	aPnA = []
+	aRxA = []
+	aPnB = []
+	aRxB = []
 
-
-	//TODO 	Definir condição para evitar pushes repetidos
+	let b2prod = false
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
+			mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false
 			
-			switch (mActBTM[tmpLado][i][2]) {
-				case 'RX':
-					mActBTM[tmpLado][i][3] == 'A' ?
-						aRxA.push(mActBTM[tmpLado][i][4]) : aRxB.push(mActBTM[tmpLado][i][4])
-					break;
-				case 'PN':
-					mActBTM[tmpLado][i][3] == 'A' ?
-						aPnA.push(mActBTM[tmpLado][i][4]) : aPnB.push(mActBTM[tmpLado][i][4])
-					break;
-				default:
-					break;
+			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'A') {
+				aRxA.indexOf(mActBTM[tmpLado][i][4])<0 ? aRxA.push(mActBTM[tmpLado][i][4]) : false
+			}
+			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'A') {
+				aPnA.indexOf(mActBTM[tmpLado][i][4])<0 ? aPnA.push(mActBTM[tmpLado][i][4]) : false
+			}
+			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'B') {
+				aRxB.indexOf(mActBTM[tmpLado][i][4])<0 ? aRxB.push(mActBTM[tmpLado][i][4]) : false
+			}
+			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'B') {
+				aPnB.indexOf(mActBTM[tmpLado][i][4])<0 ? aPnB.push(mActBTM[tmpLado][i][4]) : false
+			}
+
+		}
+	}
+
+	aPnA.sort(function(a, b) {return a - b})
+	aRxA.sort(function(a, b) {return a - b})
+	aPnB.sort(function(a, b) {return a - b})
+	aRxB.sort(function(a, b) {return a - b})
+
+	//*	 Pn A
+	let cont = 0
+	for (let s = 0; s < aPnA.length; s++) {
+		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+			for (let i = 0; i <= 1; i++) {
+				if (mActBTM[tmpLado][i][4] == aPnA[s] && mActBTM[tmpLado][i][2] == 'Pn') {
+					cont++
+					mActBTM[tmpLado][i][5] = romanize(cont)
+					b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
+				}
+			}
+		}
+	}
+	//*	 Pn B
+	cont = 0
+	for (let s = 0; s < aPnB.length; s++) {
+		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+			for (let i = 0; i <= 1; i++) {
+				if (mActBTM[tmpLado][i][4] == aPnB[s] && mActBTM[tmpLado][i][2] == 'Pn') {
+					cont++
+					mActBTM[tmpLado][i][5] = romanize(cont)
+					b2prod ? mActBTM[tmpLado][i][5] += 'B' : false
+				}
+			}
+		}
+	}
+	//*	 Rx A
+	cont = 0
+	for (let s = 0; s < aRxA.length; s++) {
+		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+			for (let i = 0; i <= 1; i++) {
+				if (mActBTM[tmpLado][i][4] == aRxA[s] && mActBTM[tmpLado][i][2] == 'Rx') {
+					cont++
+					mActBTM[tmpLado][i][5] = cont
+					b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
+				}
+			}
+		}
+	}
+	//*	 Rx B
+	cont = 0
+	for (let s = 0; s < aRxB.length; s++) {
+		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+			for (let i = 0; i <= 1; i++) {
+				if (mActBTM[tmpLado][i][4] == aRxB[s] && mActBTM[tmpLado][i][2] == 'Rx') {
+					cont++
+					mActBTM[tmpLado][i][5] = cont
+					b2prod ? mActBTM[tmpLado][i][5] += 'B' : false
+				}
 			}
 		}
 	}
 
-	aPnA.sort(function(a, b) {
-		return a - b
-	})
-	aRxA.sort(function(a, b) {
-		return a - b
-	})
-	aPnB.sort(function(a, b) {
-		return a - b
-	})
-	aRxB.sort(function(a, b) {
-		return a - b
-	})
 
-	
+
 }
 
