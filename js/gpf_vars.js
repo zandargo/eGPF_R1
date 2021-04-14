@@ -520,6 +520,15 @@ var aPnA = []
 var aRxA = []
 var aPnB = []
 var aRxB = []
+var aProdAB = []
+
+var aDESV = [
+	[0, 0],		//> 	[nLado] [Usado|Altura]
+	[0, 0],		//>	F
+	[0, 0],		//>	D
+	[0, 0],		//>	E
+	[0, 0],		//>	T
+]
 
 //* -------------------------------------------------------------------------- */
 //*                              MATRIZES ESQUEMA                              */

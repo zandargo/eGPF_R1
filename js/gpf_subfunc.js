@@ -381,7 +381,7 @@ function recalcUsed() {
 				}
 			}
 			//* Correspondência com a matriz de fundo
-			if (mESQ[g][i][0]>0 && mESQ[g][i][3] >= 100*mESQ[g][i][0] && mESQ[g][i][3] <= 100*mESQ[g][i][0] + 3) {
+			if (mESQ[g][i][0]>0 && mESQ[g][i][3] > 100*mESQ[g][i][0] && mESQ[g][i][3] <= 100*mESQ[g][i][0] + 3) {
 				mActBTM[mESQ[g][i][0]][0][4] != g ?
 					mESQ[g][i][3] -= (100*mESQ[g][i][0]+1) : false
 				mActBTM[mESQ[g][i][0]][1][4] != g ?

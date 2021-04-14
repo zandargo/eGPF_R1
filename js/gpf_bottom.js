@@ -333,6 +333,7 @@ function drwBTM() {
 			'text-anchor': 'middle',
 			// opacity: 0.8,
 			// visibility: 'hidden'
+			visibility: 'visible'
 		})
 
 
@@ -364,11 +365,11 @@ function drwBTM() {
 			'stroke-width': 2*lwid,
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
-			opacity: 0,
-			visibility: 'visible',
-			// visibility: 'hidden',
+			// opacity: 0.9,
+			// visibility: 'visible',
+			visibility: 'hidden',
 		})
-		.click(function (e) { clickDV('dvFND_' + nLadoInt2Str(d - 17)) })
+		.click(function (e) { clickDV(d - 17) })
 		
 	}
 
@@ -383,15 +384,32 @@ function recolorBTM() {
 	let tmpColor = null
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
-			try {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
-			} catch (error) {}
+			//_ try {
+			mActBTM[tmpLado][i][5] == '' ? 
+				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: `${nLadoInt2Str(tmpLado)}${i + 1}` }) :
+				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
+			drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
+			//_ } catch (error) {}
 			//* Reposicionar texto de fundo no esquema
-			try {
-				drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`)
-					.attr({ text: mActBTM[tmpLado][i][5] })
-					.transform(`t${mG[mActBTM[tmpLado][i][4]][tmpLado][1][0]-20},${mG[mActBTM[tmpLado][i][4]][tmpLado][1][1]}`)
-					.appendTo(drawSQMA)
-			} catch (error) { }
+			for (let tmpLin = 1; tmpLin <= 3; tmpLin++) {
+				try {
+					if (mActBTM[tmpLado][i][1] == 1 &&
+						(mESQ[mActBTM[tmpLado][i][4]][tmpLin][3] == 100 * tmpLado + (i + 1) ||
+						mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]  == 100 * tmpLado + 3)) {
+						console.log(`mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][3] = ${mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]}`)
+						//_console.log(`mG[mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][1]][${tmpLado}][1][0] = ${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][1][0]}`)
+						let tmpXoff = 20
+						tmpXoff = (tmpLado%2)*2*(-tmpXoff)+tmpXoff
+						//_console.log(`tmpXoff = ${tmpXoff}`)
+						//_console.log(' ')
+						drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`)
+							//_ .attr({ text: mActBTM[tmpLado][i][5] })
+							.transform(`t${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][1][0] +tmpXoff},${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][1][1]}`)
+							.appendTo(drawSQMA)
+					}
+				} catch (error) {}
+				
+			}
 			
 		}
 	}
@@ -403,6 +421,25 @@ function recolorBTM() {
 			mActBTM[tmpLado][1][0]=1
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND1})
 		
+			//> Se L1 E L2 forem selecionados E orig1 != orig2, ativa desvio
+			if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+				mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4]) {
+				
+				drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
+					.attr({
+						fill: cLinPN0,
+						visibility: 'visible',
+					})
+			} else {
+				//> Ocultar DV
+				aDESV[tmpLado][0] = 0
+				drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
+					.attr({
+						fill: cLinPN0,
+						visibility: 'hidden',
+					})
+			}
+
 			//> Selecionado: controla a cor
 			for (let i = 0; i <= 1; i++) {
 				if (mActBTM[tmpLado][i][1] == 1) {		//> Se selecionado
@@ -421,7 +458,14 @@ function recolorBTM() {
 				try {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' })
 				} catch (error) {}
 			}
+			//> Ocultar DV
+			drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
+					.attr({
+						fill: cLinPN0,
+						visibility: 'hidden',
+					})
 		}
+
 	}
 }
 
@@ -468,9 +512,18 @@ function clickBTM(sSaida) {
 			mActBTM[tmpLado][tmp12][3] = ''		//> Set A|B
 			mActBTM[tmpLado][tmp12][4] = null	//> Set Orig
 			mActBTM[tmpLado][tmp12][5] = ''
-			mESQ[nGav0][nLin0][3] == (tmpLado * 100 + 3) ?
-				mESQ[nGav0][nLin0][3] -= parseInt(sSaida.charAt(1), 10) :
-				mESQ[nGav0][nLin0][3] -= (parseInt(sSaida.charAt(1), 10) + tmpLado * 100)
+			switch (mESQ[nGav0][nLin0][3]) {
+				case tmpLado * 100 + 1:
+				case tmpLado * 100 + 2:
+					mESQ[nGav0][nLin0][3] -= parseInt(sSaida.charAt(1), 10)
+					break;
+				case tmpLado * 100 + 3:
+					mESQ[nGav0][nLin0][3] -= (parseInt(sSaida.charAt(1), 10) + tmpLado * 100)
+					break;
+				default:
+					mESQ[nGav0][nLin0][3] = 0
+					break;
+			}
 			console.log(`mESQ[${nGav0}][${nLin0}][3] = ${mESQ[nGav0][nLin0][3]}`)
 		}
 	
@@ -489,34 +542,132 @@ function clickBTM(sSaida) {
 
 //* ------------------------ CLICAR NO DESVIO VERTICAL ----------------------- */
 function clickDV(tmpLado) {
-	console.log(tmpLado)
-	
+	//_console.log(tmpLado)
+	if (aDESV[tmpLado][0]==0) {
+		aDESV[tmpLado][0] = 1
+		drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
+			.attr({
+				fill: 'black',
+			})
+	} else {
+		aDESV[tmpLado][0] = 0
+		drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
+			.attr({
+				fill: cLinPN0,
+			})
+	}
 }
 
 
+//* ---------------- RECALCULAR NOMES DOS PRODUTOS NAS SAÍDAS ---------------- */
 function recalcProd() {
+
+	aProdAB = [
+		[],
+		[],
+		[],
+		[],
+		[],
+	]
+	let aCPType = [
+		['', ''],
+		['Rx', 'A'],
+		['Rx', 'B'],
+		['Pn', 'A'],
+		['Pn', 'B'],
+	]
+
+	let b2prod = false
+	let bEqual = false
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		for (let i = 0; i <= 1; i++) {
+			//_mActBTM[tmpLado][i][5] = `${nLadoInt2Str(tmpLado)}${i+1}`
+			mActBTM[tmpLado][i][5] = ''
+			mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false
+			i == 0 &&
+				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
+				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2] ?
+				bEqual = true : bEqual = false
+			//let nOther = Math.abs(i-1)
+			
+			for (let linProd = 1; linProd <= 4; linProd++) {
+				if (mActBTM[tmpLado][i][2] == aCPType[linProd][0] &&
+					mActBTM[tmpLado][i][3] == aCPType[linProd][1] && !bEqual) {
+					aCPType[linProd].indexOf(mActBTM[tmpLado][i][4]) < 0 ?
+						aCPType[linProd].push(mActBTM[tmpLado][i][4]) : false
+				}
+			}
+
+			if (i == 0 &&
+				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
+				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2]) { i=2 }
+
+		}
+	}
+
+	for (let linProd = 1; linProd <= 4; linProd++) {
+		aCPType[linProd].sort(function (a, b) { return a - b })
+		
+		cont = 1
+		for (let s = 0; s < aRxA.length; s++) {
+			for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+				bEqual = false
+				for (let i = 0; i <= 1; i++) {
+					i == 0 &&
+						mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+						mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2] ?
+						bEqual = true : bEqual = false
+					if (mActBTM[tmpLado][i][4] == aRxA[s] && mActBTM[tmpLado][i][2] == 'Rx') {
+						mActBTM[tmpLado][i][5] = cont
+						b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
+						!bEqual ? cont++ : i = 1; mActBTM[tmpLado][1][5]=mActBTM[tmpLado][0][5]
+					}
+				}
+			}
+		}
+
+	}
+
+
+}
+
+
+
+function recalcProdBACKUP() {
 	aPnA = []
 	aRxA = []
 	aPnB = []
 	aRxB = []
 
 	let b2prod = false
+	let bEqual = false
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
+			//_mActBTM[tmpLado][i][5] = `${nLadoInt2Str(tmpLado)}${i+1}`
+			mActBTM[tmpLado][i][5] = ''
 			mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false
+			i == 0 &&
+				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
+				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2] ?
+				bEqual = true : bEqual = false
+			//let nOther = Math.abs(i-1)
 			
-			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'A') {
+			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'A' && !bEqual) {
 				aRxA.indexOf(mActBTM[tmpLado][i][4])<0 ? aRxA.push(mActBTM[tmpLado][i][4]) : false
 			}
-			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'A') {
+			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'A' && !bEqual) {
 				aPnA.indexOf(mActBTM[tmpLado][i][4])<0 ? aPnA.push(mActBTM[tmpLado][i][4]) : false
 			}
-			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'B') {
+			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'B' && !bEqual) {
 				aRxB.indexOf(mActBTM[tmpLado][i][4])<0 ? aRxB.push(mActBTM[tmpLado][i][4]) : false
 			}
-			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'B') {
+			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'B' && !bEqual) {
 				aPnB.indexOf(mActBTM[tmpLado][i][4])<0 ? aPnB.push(mActBTM[tmpLado][i][4]) : false
 			}
+
+			if (i == 0 &&
+				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
+				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2]) { break }
 
 		}
 	}
@@ -553,14 +704,19 @@ function recalcProd() {
 		}
 	}
 	//*	 Rx A
-	cont = 0
+	cont = 1
 	for (let s = 0; s < aRxA.length; s++) {
 		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+			bEqual = false
 			for (let i = 0; i <= 1; i++) {
+				i == 0 &&
+					mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+					mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2] ?
+					bEqual = true : bEqual = false
 				if (mActBTM[tmpLado][i][4] == aRxA[s] && mActBTM[tmpLado][i][2] == 'Rx') {
-					cont++
 					mActBTM[tmpLado][i][5] = cont
 					b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
+					!bEqual ? cont++ : i = 1; mActBTM[tmpLado][1][5]=mActBTM[tmpLado][0][5]
 				}
 			}
 		}
@@ -582,4 +738,3 @@ function recalcProd() {
 
 
 }
-
