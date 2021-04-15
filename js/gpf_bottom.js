@@ -85,7 +85,6 @@ function calcmFND() {
 	mFND[8][3][1] = ycFND - wFNDs/2
 	
 	//*	PORTA
-	
 	mFND[9][0][0] = xcPorta - wFND/2 - 2*offCH
 	mFND[9][0][1] = ycPorta + hPorta/2
 	mFND[9][1][0] = xcPorta - wFND/2 - 2*offCH
@@ -335,6 +334,7 @@ function drwBTM() {
 			// visibility: 'hidden'
 			visibility: 'visible'
 		})
+		.transform('t-100,-100')
 
 
 	}
@@ -343,7 +343,7 @@ function drwBTM() {
 		var polygon = drawFND
 		.polygon(mFND[f])
 		.attr({
-			id: 'FND_'+mDut[f],
+			id: 'FND_'+mDut[f-9],
 			fill: $('#divCOD').css('color'),
 			// stroke: bgcolor,
 			// stroke: Snap.hsl(200, 15, 90),
@@ -370,8 +370,64 @@ function drwBTM() {
 			visibility: 'hidden',
 		})
 		.click(function (e) { clickDV(d - 17) })
-		
 	}
+
+
+	//* SETAS DO FUNDO
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> Para cada lado
+		for (let i = 0; i <= 1; i++) {							//> Para 1 e 2
+			for (let ie = 0; ie <= 1; ie++) {					//> Para int e ext
+				var gARW = drawFND.group()
+				gARW.attr({ id: `arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}` })
+				
+				let xcARW = 0											//> Centro Li|Le
+				let ycARW = 0
+				for (let p = 0; p <=3; p++) {
+					xcARW += mFND[10+tmpLado-1+i+ie][p][0]
+					ycARW += mFND[10+tmpLado-1+i+ie][p][1]
+				}
+				xcARW /= 4
+				ycARW /= 4
+
+				let aLin = []
+				aLin.push(- wFND / 2 + wFND / 2 * (1-arwSizeL) / 2)
+				aLin.push(0)
+				aLin.push(- wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
+				aLin.push(0)
+
+				var polyline = drawFND
+				.polyline(aLin)
+					.attr({
+					id: `plFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`,
+					fill: 'none',
+					stroke: cFNDon,
+					strokeWidth: 2 * lwid,
+					'stroke-linecap': 'miter',
+					'stroke-linejoin': 'miter',
+					})
+				.appendTo(drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`))
+				
+				// polyline.transform(`t${xcARW},${ycARW}`)
+				// gARW.transform(`r-90,0,0`)
+				let sTransform = ''
+					
+				switch (tmpLado) {
+					case 2:
+					case 3:
+						// sTransform += `r-90,${xcARW},${ycARW}`
+						// sTransform += `r-90,0,0`
+						break;
+					default:
+						break;
+				}
+				sTransform += `t${xcARW},${ycARW}`
+				gARW.transform(sTransform)
+
+			}
+		}
+	}
+
+
 
 }
 drwBTM()
@@ -382,14 +438,22 @@ recolorBTM()
 function recolorBTM() {
 	recalcProd()
 	let tmpColor = null
+	
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
 			//_ try {
-			mActBTM[tmpLado][i][5] == '' ? 
-				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: `${nLadoInt2Str(tmpLado)}${i + 1}` }) :
-				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
-			drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })
+			//> Se fundo sem nome, usa a nomenclatura
+			if (mActBTM[tmpLado][i][5] == '') {
+				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: `${nLadoInt2Str(tmpLado)}${i + 1}` }) }
+			else {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })}
+			
+			//> Se L1=L2, não define nome no esquema
+			if (i == 1 && mActBTM[tmpLado][i][4] == mActBTM[tmpLado][0][4]
+				&& mActBTM[tmpLado][i][5] == mActBTM[tmpLado][0][5]) {
+				drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' })}
+			else {drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })}
 			//_ } catch (error) {}
+			
 			//* Reposicionar texto de fundo no esquema
 			for (let tmpLin = 1; tmpLin <= 3; tmpLin++) {
 				try {
@@ -397,20 +461,21 @@ function recolorBTM() {
 						(mESQ[mActBTM[tmpLado][i][4]][tmpLin][3] == 100 * tmpLado + (i + 1) ||
 						mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]  == 100 * tmpLado + 3)) {
 						console.log(`mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][3] = ${mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]}`)
-						//_console.log(`mG[mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][1]][${tmpLado}][1][0] = ${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][1][0]}`)
+
 						let tmpXoff = 20
 						tmpXoff = (tmpLado%2)*2*(-tmpXoff)+tmpXoff
-						//_console.log(`tmpXoff = ${tmpXoff}`)
-						//_console.log(' ')
+						let tmpYoff = 10
+						tmpYoff = (tmpLado%2)*2*(+tmpYoff)-tmpYoff
+
+						let tmpIE = 0
+						mESQ[mActBTM[tmpLado][i][4]][tmpLin][2] == 1 ? tmpIE = 1 : tmpIE = 0
+						tmpIE == 0 ? tmpYoff += yOff : false
 						drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`)
-							//_ .attr({ text: mActBTM[tmpLado][i][5] })
-							.transform(`t${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][1][0] +tmpXoff},${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][1][1]}`)
+							.transform(`t${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][tmpIE][0] +tmpXoff},${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][tmpIE][1]+tmpYoff}`)
 							.appendTo(drawSQMA)
 					}
 				} catch (error) {}
-				
 			}
-			
 		}
 	}
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
@@ -422,22 +487,25 @@ function recolorBTM() {
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND1})
 		
 			//> Se L1 E L2 forem selecionados E orig1 != orig2, ativa desvio
-			if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
-				mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4]) {
+			//_ if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+			//_ 	mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4]) {
+			//_
+			//_ 	aDESV[tmpLado][0] = 1
+			if (aDESV[tmpLado][0] == 1) {
+				
+				let tmpDVcolor = null
+				aDESV[tmpLado][1] == 1 ? tmpDVcolor = cFNDon : tmpDVcolor = cLinPN0
 				
 				drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
 					.attr({
-						fill: cLinPN0,
+						fill: tmpDVcolor,
 						visibility: 'visible',
 					})
 			} else {
 				//> Ocultar DV
-				aDESV[tmpLado][0] = 0
+				//_aDESV[tmpLado][0] = 0
 				drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
-					.attr({
-						fill: cLinPN0,
-						visibility: 'hidden',
-					})
+					.attr({ visibility: 'hidden'})
 			}
 
 			//> Selecionado: controla a cor
@@ -542,20 +610,12 @@ function clickBTM(sSaida) {
 
 //* ------------------------ CLICAR NO DESVIO VERTICAL ----------------------- */
 function clickDV(tmpLado) {
-	//_console.log(tmpLado)
-	if (aDESV[tmpLado][0]==0) {
-		aDESV[tmpLado][0] = 1
-		drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
-			.attr({
-				fill: 'black',
-			})
-	} else {
-		aDESV[tmpLado][0] = 0
-		drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
-			.attr({
-				fill: cLinPN0,
-			})
+	if (aDESV[tmpLado][1]==0) {		//> Se não usado
+		aDESV[tmpLado][1] = 1			//> Def usado
+	} else {									//> Se usado
+		aDESV[tmpLado][1] = 0			//> Def não usado
 	}
+	recolorBTM()
 }
 
 
@@ -572,169 +632,119 @@ function recalcProd() {
 	let aCPType = [
 		['', ''],
 		['Rx', 'A'],
-		['Rx', 'B'],
 		['Pn', 'A'],
+		['Rx', 'B'],
 		['Pn', 'B'],
 	]
 
 	let b2prod = false
 	let bEqual = false
+	//*	Alimentar a matriz de produtos de saída
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
 			//_mActBTM[tmpLado][i][5] = `${nLadoInt2Str(tmpLado)}${i+1}`
-			mActBTM[tmpLado][i][5] = ''
-			mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false
-			i == 0 &&
-				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
-				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2] ?
-				bEqual = true : bEqual = false
-			//let nOther = Math.abs(i-1)
+			mActBTM[tmpLado][i][5] = ''	//> Zerar nome
 			
-			for (let linProd = 1; linProd <= 4; linProd++) {
-				if (mActBTM[tmpLado][i][2] == aCPType[linProd][0] &&
-					mActBTM[tmpLado][i][3] == aCPType[linProd][1] && !bEqual) {
-					aCPType[linProd].indexOf(mActBTM[tmpLado][i][4]) < 0 ?
-						aCPType[linProd].push(mActBTM[tmpLado][i][4]) : false
-				}
-			}
-
-			if (i == 0 &&
-				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
-				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2]) { i=2 }
-
-		}
-	}
-
-	for (let linProd = 1; linProd <= 4; linProd++) {
-		aCPType[linProd].sort(function (a, b) { return a - b })
-		
-		cont = 1
-		for (let s = 0; s < aRxA.length; s++) {
-			for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
-				bEqual = false
-				for (let i = 0; i <= 1; i++) {
-					i == 0 &&
-						mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
-						mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2] ?
-						bEqual = true : bEqual = false
-					if (mActBTM[tmpLado][i][4] == aRxA[s] && mActBTM[tmpLado][i][2] == 'Rx') {
-						mActBTM[tmpLado][i][5] = cont
-						b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
-						!bEqual ? cont++ : i = 1; mActBTM[tmpLado][1][5]=mActBTM[tmpLado][0][5]
+			if (mActBTM[tmpLado][i][1]==1) {		//>	Apenas se saída selecionada
+				
+				mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false	//> Verificar se AB ou só A
+				//_ i == 0 &&																		//> Verificar se L1=L2
+				//_ 	mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
+				//_ 	mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2] ?
+				//_ 	bEqual = true : bEqual = false
+				if (i == 0 &&																		//> Verificar se L1=L2
+					mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
+					mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2]) { bEqual = true }
+				else { bEqual = false }
+				
+					//_let nOther = Math.abs(i-1)
+				
+				//> Procura se a gaveta origem já foi adicionada na matriz temporária	
+				for (let linProd = 1; linProd <= 4; linProd++) {
+					if (mActBTM[tmpLado][i][2] == aCPType[linProd][0] &&					//> Se CP tipo Rx|Pn
+						mActBTM[tmpLado][i][3] == aCPType[linProd][1] && !bEqual) {		//> Se prod A|B, E L1!=L2 
+						aProdAB[linProd].indexOf(mActBTM[tmpLado][i][4]) < 0 ?
+							aProdAB[linProd].push(mActBTM[tmpLado][i][4]) : false
 					}
 				}
+
+				//>	Se bEqual (selec 2x), pula L2
+				// if (bEqual) { i=2 }
+					
 			}
 		}
-
 	}
 
+	//*	Ordenar a seq de gav origem por Rx|Pn e A|B
+	for (let linProd = 1; linProd <= 4; linProd++) {				//> De Rx_A até Pn_B
+		aProdAB[linProd].sort(function (a, b) { return a - b })	//> Ordena origens
+		
+		cont = 1
+		for (let s = 0; s < aProdAB[linProd].length; s++) {
+			for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
+				bEqual = false
+				//> L1 até L2
+				for (let i = 0; i <= 1; i++) {
+					//> Verif, quando i=0, se L1&L2 estão selecionados e são iguais
+					if (i == 0 && mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+						mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+						mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) { bEqual = true }
+					else {  bEqual = false }
 
+					//> Se localizar aProdAB na mActBTM, 
+					if (mActBTM[tmpLado][i][4] == aProdAB[linProd][s] && mActBTM[tmpLado][i][2] == aCPType[linProd][0]) {
+						linProd%2==1 ? mActBTM[tmpLado][i][5] = cont : mActBTM[tmpLado][i][5] = romanize(cont)
+						b2prod ? mActBTM[tmpLado][i][5] += aCPType[linProd][1] : false
+						if (bEqual) {
+							mActBTM[tmpLado][1][5] = mActBTM[tmpLado][0][5]
+							i = 2
+						} else {cont++}
+					}
+				}
+				
+				//*	DESVIOS VERTICAIS------------------------
+				//> Ativar desvio se L1 e L2 selec
+				if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 && !bEqual) {
+					aDESV[tmpLado][0] = 1
+				} else { aDESV[tmpLado] = [0, 1, 0] }
+				//> Zerar desvio se bEqual
+				if (bEqual) {
+					aDESV[tmpLado][1] = 0
+					aDESV[tmpLado][2] = 0
+				}
+				//> Mesclar saídas se desvio ativo deselc
+				if (aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 0 &&
+					mActBTM[tmpLado][0][1]==1 && mActBTM[tmpLado][1][1]==1) {
+					if (mActBTM[tmpLado][0][4]<mActBTM[tmpLado][1][4]) {
+						mActBTM[tmpLado][1][5]=mActBTM[tmpLado][0][5]
+					} else {
+						mActBTM[tmpLado][0][5]=mActBTM[tmpLado][1][5]
+					}
+				}
+
+			}
+		}
+	}
 }
 
 
-
-function recalcProdBACKUP() {
-	aPnA = []
-	aRxA = []
-	aPnB = []
-	aRxB = []
-
-	let b2prod = false
-	let bEqual = false
-	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
-		for (let i = 0; i <= 1; i++) {
-			//_mActBTM[tmpLado][i][5] = `${nLadoInt2Str(tmpLado)}${i+1}`
-			mActBTM[tmpLado][i][5] = ''
-			mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false
-			i == 0 &&
-				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
-				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2] ?
-				bEqual = true : bEqual = false
-			//let nOther = Math.abs(i-1)
+//* ---------- RECALCULAR ALTURAS DOS DV E MODIFICAR CÓD DAS GAVETAS --------- */
+function recalcDV() {
+	let hAdic = 0
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {					//> Para cada lado
+		switch (tmpLado) {
+			case 1:
+				hAdic = 54
+				break;
+			default:
+				hAdic = 80
+				break;
+		}
+		if (aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 1) {		//> Se DV ativo e selec
 			
-			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'A' && !bEqual) {
-				aRxA.indexOf(mActBTM[tmpLado][i][4])<0 ? aRxA.push(mActBTM[tmpLado][i][4]) : false
-			}
-			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'A' && !bEqual) {
-				aPnA.indexOf(mActBTM[tmpLado][i][4])<0 ? aPnA.push(mActBTM[tmpLado][i][4]) : false
-			}
-			if (mActBTM[tmpLado][i][2] == 'Rx' && mActBTM[tmpLado][i][3] == 'B' && !bEqual) {
-				aRxB.indexOf(mActBTM[tmpLado][i][4])<0 ? aRxB.push(mActBTM[tmpLado][i][4]) : false
-			}
-			if (mActBTM[tmpLado][i][2] == 'Pn' && mActBTM[tmpLado][i][3] == 'B' && !bEqual) {
-				aPnB.indexOf(mActBTM[tmpLado][i][4])<0 ? aPnB.push(mActBTM[tmpLado][i][4]) : false
-			}
+			
 
-			if (i == 0 &&
-				mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
-				mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2]) { break }
 
 		}
 	}
-
-	aPnA.sort(function(a, b) {return a - b})
-	aRxA.sort(function(a, b) {return a - b})
-	aPnB.sort(function(a, b) {return a - b})
-	aRxB.sort(function(a, b) {return a - b})
-
-	//*	 Pn A
-	let cont = 0
-	for (let s = 0; s < aPnA.length; s++) {
-		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
-			for (let i = 0; i <= 1; i++) {
-				if (mActBTM[tmpLado][i][4] == aPnA[s] && mActBTM[tmpLado][i][2] == 'Pn') {
-					cont++
-					mActBTM[tmpLado][i][5] = romanize(cont)
-					b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
-				}
-			}
-		}
-	}
-	//*	 Pn B
-	cont = 0
-	for (let s = 0; s < aPnB.length; s++) {
-		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
-			for (let i = 0; i <= 1; i++) {
-				if (mActBTM[tmpLado][i][4] == aPnB[s] && mActBTM[tmpLado][i][2] == 'Pn') {
-					cont++
-					mActBTM[tmpLado][i][5] = romanize(cont)
-					b2prod ? mActBTM[tmpLado][i][5] += 'B' : false
-				}
-			}
-		}
-	}
-	//*	 Rx A
-	cont = 1
-	for (let s = 0; s < aRxA.length; s++) {
-		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
-			bEqual = false
-			for (let i = 0; i <= 1; i++) {
-				i == 0 &&
-					mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
-					mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2] ?
-					bEqual = true : bEqual = false
-				if (mActBTM[tmpLado][i][4] == aRxA[s] && mActBTM[tmpLado][i][2] == 'Rx') {
-					mActBTM[tmpLado][i][5] = cont
-					b2prod ? mActBTM[tmpLado][i][5] += 'A' : false
-					!bEqual ? cont++ : i = 1; mActBTM[tmpLado][1][5]=mActBTM[tmpLado][0][5]
-				}
-			}
-		}
-	}
-	//*	 Rx B
-	cont = 0
-	for (let s = 0; s < aRxB.length; s++) {
-		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
-			for (let i = 0; i <= 1; i++) {
-				if (mActBTM[tmpLado][i][4] == aRxB[s] && mActBTM[tmpLado][i][2] == 'Rx') {
-					cont++
-					mActBTM[tmpLado][i][5] = cont
-					b2prod ? mActBTM[tmpLado][i][5] += 'B' : false
-				}
-			}
-		}
-	}
-
-
-
 }

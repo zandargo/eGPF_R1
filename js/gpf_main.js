@@ -580,7 +580,8 @@ var cpPnMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	recalcProd()
+	//_recalcProd()
+	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -675,7 +676,8 @@ var cpRxMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	recalcProd()
+	//_recalcProd()
+	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -779,7 +781,8 @@ var cpPrMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	recalcProd()
+	//_recalcProd()
+	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')

@@ -12,7 +12,6 @@ Set objFSO = CreateObject("Scripting.FileSystemObject")
 
 sFileName = "SB_FTP_PLANSICHTER.db"
 sPathFrom = "\\ce-srv-ads-fs\dados$\Detec\Biblioteca SP\"
-' sPathDest = "\\ce-srv-ads-fs\dados$\Detec\DTN\Fichas Técnicas Padrões - Matriz\Concluídas\FORTRESS PROTHEUS\Backup SQLite\"
 sPathDest = "\\ce-srv-ads-fs\dados$\Usuarios\Madson\Backup\DB_Fortress\"
 
 sDate = Year(Now())

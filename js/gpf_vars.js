@@ -70,6 +70,9 @@ var cCtrlPntRxe = cLinPR0	//> Cor do Ponto de controle Rx externo
 var cCtrlPntPni = cLinPN0	//> Cor do Ponto de controle Pn interno 
 var cCtrlPntPne = cLinPN0	//> Cor do Ponto de controle Pn externo
 
+var cFNDon	=	$('#menu-tabs').css('background-color')
+
+
 var fndBlur01 = drawFND.filter(Snap.filter.blur(1))
 var fndBlur02 = drawFND.filter(Snap.filter.blur(2))
 var fndBlur05 = drawFND.filter(Snap.filter.blur(5))
@@ -482,6 +485,10 @@ var xcPorta = xcFND
 var ycPorta = ycFND + wFND / 2 + 3*offCH
 var hPorta = 25
 
+var arwSizeL = 0.50		//> L% (wFND)
+var arwSizeW = 0.85		//> W% (wFND)
+var arwHEADL = 0.15		//> M% (wFND)
+
 
 var mActBTM = [		
 	[[0,0,'','',0,''],				//> 00 - Ativo, Selecionado, Origem
@@ -516,19 +523,23 @@ function resetFND() {
 }
 
 
-var aPnA = []
-var aRxA = []
-var aPnB = []
-var aRxB = []
+var aPnA    = []
+var aRxA    = []
+var aPnB    = []
+var aRxB    = []
 var aProdAB = []
 
-var aDESV = [
-	[0, 0],		//> 	[nLado] [Usado|Altura]
-	[0, 0],		//>	F
-	[0, 0],		//>	D
-	[0, 0],		//>	E
-	[0, 0],		//>	T
-]
+var aDESV = []
+resetDESV()
+function resetDESV() {
+	aDESV = [
+	[0, 1, 0],		//> 	[nLado] [Ativo|Selecionado|Altura]
+	[0, 1, 0],		//>	F
+	[0, 1, 0],		//>	D
+	[0, 1, 0],		//>	E
+	[0, 1, 0],		//>	T
+	]
+}
 
 //* -------------------------------------------------------------------------- */
 //*                              MATRIZES ESQUEMA                              */

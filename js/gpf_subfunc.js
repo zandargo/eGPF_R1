@@ -264,6 +264,7 @@ function calcMat(xC, yC, L) {
 function ResetSQMA() {
 	
 	resetMatESQ()
+	resetDESV()
 	resetFND()
 	recalcUsed()
 
