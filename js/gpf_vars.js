@@ -485,9 +485,9 @@ var xcPorta = xcFND
 var ycPorta = ycFND + wFND / 2 + 3*offCH
 var hPorta = 25
 
-var arwSizeL = 0.50		//> L% (wFND)
-var arwSizeW = 0.85		//> W% (wFND)
-var arwHEADL = 0.15		//> M% (wFND)
+var arwSizeL = 0.6		//> L% (wFND)
+var arwSizeW = 0.6		//> W% (wFND)
+var arwHEADL = 0.5		//> M% (wFND)
 
 
 var mActBTM = [		
@@ -533,11 +533,27 @@ var aDESV = []
 resetDESV()
 function resetDESV() {
 	aDESV = [
-	[0, 1, 0],		//> 	[nLado] [Ativo|Selecionado|Altura]
-	[0, 1, 0],		//>	F
-	[0, 1, 0],		//>	D
-	[0, 1, 0],		//>	E
-	[0, 1, 0],		//>	T
+		[0, 1, 0],		//> 	[nLado] [Ativo|Selecionado|Altura]
+		[0, 1, 0],		//>	F
+		[0, 1, 0],		//>	D
+		[0, 1, 0],		//>	E
+		[0, 1, 0],		//>	T
+	]
+}
+
+var aDINF = []
+function resetDINF() {
+	aDINF = [
+		[[],		
+		 []],
+		[[0,0],	//> F1i F1e
+		 [0,0]],	//> F2i F2e
+		[[0,0],	//> D1i D1e
+		 [0,0]],	//> D2i D2e
+		[[0,0],	//> E1i E1e
+		 [0,0]],	//> E2i E2e
+		[[0,0],	//> T1i T1e
+		 [0,0]],	//> T2i T2e
 	]
 }
 

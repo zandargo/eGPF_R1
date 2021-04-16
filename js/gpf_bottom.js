@@ -374,25 +374,28 @@ function drwBTM() {
 
 
 	//* SETAS DO FUNDO
+	let contARW = -1
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> Para cada lado
-		for (let i = 0; i <= 1; i++) {							//> Para 1 e 2
-			for (let ie = 0; ie <= 1; ie++) {					//> Para int e ext
+		for (let ie = 0; ie <= 1; ie++) {					//> Para int e ext
+			for (let i = 0; i <= 1; i++) {							//> Para 1 e 2
+				i==0 ? contARW++ : false
+				console.log(`10+contARW = ${10+contARW}`)
 				var gARW = drawFND.group()
 				gARW.attr({ id: `arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}` })
 				
 				let xcARW = 0											//> Centro Li|Le
 				let ycARW = 0
 				for (let p = 0; p <=3; p++) {
-					xcARW += mFND[10+tmpLado-1+i+ie][p][0]
-					ycARW += mFND[10+tmpLado-1+i+ie][p][1]
+					xcARW += mFND[10+contARW][p][0]
+					ycARW += mFND[10+contARW][p][1]
 				}
 				xcARW /= 4
 				ycARW /= 4
 
 				let aLin = []
-				aLin.push(- wFND / 2 + wFND / 2 * (1-arwSizeL) / 2)
+				aLin.push(wFND / 2 - wFND / 2 * (1-arwSizeL) / 2)
 				aLin.push(0)
-				aLin.push(- wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
+				aLin.push(wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
 				aLin.push(0)
 
 				var polyline = drawFND
@@ -401,28 +404,56 @@ function drwBTM() {
 					id: `plFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`,
 					fill: 'none',
 					stroke: cFNDon,
+					strokeWidth: 2.5 * lwid,
+					'stroke-linecap': 'square',
+					'stroke-linejoin': 'round',
+					})
+				.appendTo(drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`))
+				
+				aLin = []
+				aLin.push(wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
+				aLin.push(0)
+				aLin.push(wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
+				aLin.push(offCH*arwSizeW/2)
+				aLin.push(wFND / 2 * (1-arwSizeL) / 2)
+				aLin.push(0)
+				aLin.push(wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
+				aLin.push(-offCH*arwSizeW/2)
+				aLin.push(wFND / 2 * (1-arwSizeL+arwHEADL) / 2)
+				aLin.push(0)
+				var polygon = drawFND
+				.polygon(aLin)
+					.attr({
+					id: `pgFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`,
+					fill: cFNDon,
+					stroke: 'none',
 					strokeWidth: 2 * lwid,
 					'stroke-linecap': 'miter',
 					'stroke-linejoin': 'miter',
 					})
 				.appendTo(drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`))
-				
-				// polyline.transform(`t${xcARW},${ycARW}`)
-				// gARW.transform(`r-90,0,0`)
+
 				let sTransform = ''
 					
 				switch (tmpLado) {
 					case 2:
 					case 3:
-						// sTransform += `r-90,${xcARW},${ycARW}`
-						// sTransform += `r-90,0,0`
+						sTransform += `r90,0,0`
 						break;
 					default:
 						break;
 				}
-				sTransform += `t${xcARW},${ycARW}`
-				gARW.transform(sTransform)
+				i==1 ? sTransform += `r180,0,0` : false
+				try {
+					polyline.transform(sTransform)
+					polygon.transform(sTransform)
+				} catch (error) { }
 
+				
+
+				sTransform = `t${xcARW},${ycARW}`
+				gARW.transform(sTransform)
+				gARW.attr({visibility: 'hidden'})
 			}
 		}
 	}
@@ -487,10 +518,6 @@ function recolorBTM() {
 			drawFND.select("#FND_"+nLadoInt2Str(tmpLado)+"2").attr({opacity: oFND1})
 		
 			//> Se L1 E L2 forem selecionados E orig1 != orig2, ativa desvio
-			//_ if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
-			//_ 	mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4]) {
-			//_
-			//_ 	aDESV[tmpLado][0] = 1
 			if (aDESV[tmpLado][0] == 1) {
 				
 				let tmpDVcolor = null
@@ -501,9 +528,16 @@ function recolorBTM() {
 						fill: tmpDVcolor,
 						visibility: 'visible',
 					})
+				//> Ao ativar dv, oculta setas desv inf
+				for (let i = 0; i <= 1; i++) {
+					for (let ie = 0; ie <= 1; ie++) {
+						drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
+						.attr({visibility: 'hidden'})
+					}
+				}
+			
 			} else {
 				//> Ocultar DV
-				//_aDESV[tmpLado][0] = 0
 				drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
 					.attr({ visibility: 'hidden'})
 			}
@@ -511,9 +545,8 @@ function recolorBTM() {
 			//> Selecionado: controla a cor
 			for (let i = 0; i <= 1; i++) {
 				if (mActBTM[tmpLado][i][1] == 1) {		//> Se selecionado
-					//_ console.log(`tmpColor = window['cLin'+${mActBTM[tmpLado][i][2].toUpperCase()}+${mActBTM[tmpLado][i][3].toLowerCase()}]`)
 					tmpColor = window['cLin'+mActBTM[tmpLado][i][2].toUpperCase()+mActBTM[tmpLado][i][3].toLowerCase()]
-				} else {tmpColor = cLinRX0}
+				} else { tmpColor = cLinRX0 }
 				drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + (i+1)).attr({ fill: tmpColor })
 			}
 		} else {
@@ -532,6 +565,19 @@ function recolorBTM() {
 						fill: cLinPN0,
 						visibility: 'hidden',
 					})
+		}
+
+		//*	Desvios inferiores
+		for (let i = 0; i <= 1; i++) {			//> 1 ou 2
+			for (let ie = 0; ie <= 1; ie++) {	//> int ou ext
+				if (aDINF[tmpLado][i][ie]==1) {
+					drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
+					.attr({visibility: 'visible'})
+				} else {
+					drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
+					.attr({visibility: 'hidden'})
+				}
+			}
 		}
 
 	}
@@ -721,7 +767,33 @@ function recalcProd() {
 						mActBTM[tmpLado][0][5]=mActBTM[tmpLado][1][5]
 					}
 				}
+			}
+		}
+	}
 
+	recalcDINF()
+}
+
+
+//* ---------------------- RECALCULAR DESVIOS INFERIORES --------------------- */
+function recalcDINF() {
+	resetDINF()
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
+		if (aDESV[tmpLado][0] == 0) {								//> Se não tem desvio
+			//> Verif, quando i=0, se L1&L2 estão selecionados e são iguais
+			if (i == 0 && mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+				mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+				mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) { bEqual = true }
+			else {  bEqual = false }
+			for (let i = 0; i <= 1; i++) {							//> Checa int e ext
+				if (!bEqual && mActBTM[tmpLado][i][1] == 1) {	//> Se L1!=L2 e Ln selec
+					let tmpIE = 0
+					if (mActBTM[tmpLado][0][4] == nGavs &&			//> Se orig==última gaveta e Rx
+						mActBTM[tmpLado][0][2] == 'Rx') {			
+							tmpIE = mESQ[nGavs][1][2]					//> Rx int ou ext?
+					} else {tmpIE = 1}
+					aDINF[tmpLado][i][tmpIE]=1
+				}
 			}
 		}
 	}

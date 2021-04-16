@@ -265,6 +265,7 @@ function ResetSQMA() {
 	
 	resetMatESQ()
 	resetDESV()
+	resetDINF()
 	resetFND()
 	recalcUsed()
 
