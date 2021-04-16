@@ -233,8 +233,6 @@ function calcHtotal() {
 	$('#hTotal').html('&nbsp' + hTotal + 'mm');
 
 	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
-	// $('#z-flow-clog').html('calcHtotal()=' + hTotal)
-	// console.log(mESQ)
 }
 
 function parseH(H) {
@@ -268,20 +266,34 @@ function calcCOD(nGav) {
 	u += mESQ[nGav][1][0] * 10000
 	mCOD1[nGav][0][0] = mESQ[nGav][1][0]
 
-	let parc = 3 	// TODO ---------------------------------Criar código para calcular o corte partial
-	
-	
+	let parc = 3 
 	//*	1 - Quando o Rx da de baixo sai pelo canal
 				//> LEMBRETE: Pode haver corte parcial
+				//> LEMBRETE: Corte parc SEMPRE indica DV
 	try {
-		if (mESQ[nGav + 1][1][2] == 1 && nGav < nGavs) {
+		//> Rx ext e nGav < nGavs
+		if (mESQ[nGav][1][0] > 0 && mESQ[nGav + 1][1][2] == 1 && nGav < nGavs) {	
+			if (aDESV[mESQ[nGav + 1][1][0]][1]==1) {			//> Se DesV selec (L1 e L2 selec)
+				
+				for (let i = 0; i <= 1; i++) {
+
+					if (mActBTM[mESQ[nGav + 1][1][0]][i][4] == nGav + 1 &&
+						mActBTM[mESQ[nGav + 1][1][0]][i][4] > mActBTM[mESQ[nGav + 1][1][0]][Math.abs(i-1)][4]) {
+						parc = i+1
+					} 
+					
+				}
+
+			}	
 			u += parc * 10 ** (4 - mESQ[nGav + 1][1][0])
 			mCOD1[nGav][0][(mESQ[nGav + 1][1][0])] = parc
 		}
+		
 	} catch (error) {console.log('ERRO EM calcCOD(nGav); nGav=' + nGav)}
 	
-	//*	2 - Quando algum Rx||Pn chega na de baixo
+	//*	2 - Quando algum Rx||Pn de cima chega na de baixo
 				//> LEMBRETE: Nesse caso nunca há corte parcial
+	parc = 3 
 	for (let i = 1; i <= nGav; i++) {
 		for (let j = 1; j <= 3; j++) {
 			if (mESQ[i][j][1]==(nGav+1) && mESQ[i][j][2]==0) {	//> nPara=GPFabaixo e nIE=interno 
@@ -290,9 +302,16 @@ function calcCOD(nGav) {
 			}
 		}
 	}
-
+	
 	//*	3 - Quando algum Pr chega na de baixo (Ae || Be)
-				//> LEMBRETE: Nesse caso nunca há corte parcial
+	//> LEMBRETE: Nesse caso nunca há corte parcial
+	parc = 3 
+	for (let j = 1; j <= 2; j++) {
+		if (mESQ[0][j][1]==(nGav+1)) {	//> nPara=GPFabaixo 
+			u += parc * 10 ** (4 - mESQ[0][j][0])
+			mCOD1[nGav][0][(mESQ[0][j][0])] = parc
+		}
+	}
 
 
 	//*	Procura na tabela de corte

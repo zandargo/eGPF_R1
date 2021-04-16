@@ -379,7 +379,6 @@ function drwBTM() {
 		for (let ie = 0; ie <= 1; ie++) {					//> Para int e ext
 			for (let i = 0; i <= 1; i++) {							//> Para 1 e 2
 				i==0 ? contARW++ : false
-				console.log(`10+contARW = ${10+contARW}`)
 				var gARW = drawFND.group()
 				gARW.attr({ id: `arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}` })
 				
@@ -688,22 +687,16 @@ function recalcProd() {
 	//*	Alimentar a matriz de produtos de saída
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
-			//_mActBTM[tmpLado][i][5] = `${nLadoInt2Str(tmpLado)}${i+1}`
+
 			mActBTM[tmpLado][i][5] = ''	//> Zerar nome
 			
 			if (mActBTM[tmpLado][i][1]==1) {		//>	Apenas se saída selecionada
 				
 				mActBTM[tmpLado][i][3] == 'B' ? b2prod = true : false	//> Verificar se AB ou só A
-				//_ i == 0 &&																		//> Verificar se L1=L2
-				//_ 	mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
-				//_ 	mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2] ?
-				//_ 	bEqual = true : bEqual = false
 				if (i == 0 &&																		//> Verificar se L1=L2
 					mActBTM[tmpLado][i][4] == mActBTM[tmpLado][i + 1][4] &&
 					mActBTM[tmpLado][i][2] == mActBTM[tmpLado][i + 1][2]) { bEqual = true }
 				else { bEqual = false }
-				
-					//_let nOther = Math.abs(i-1)
 				
 				//> Procura se a gaveta origem já foi adicionada na matriz temporária	
 				for (let linProd = 1; linProd <= 4; linProd++) {
@@ -713,66 +706,199 @@ function recalcProd() {
 							aProdAB[linProd].push(mActBTM[tmpLado][i][4]) : false
 					}
 				}
-
-				//>	Se bEqual (selec 2x), pula L2
-				// if (bEqual) { i=2 }
-					
 			}
 		}
 	}
+
+
+	aFnd = [
+		[],
+		[	//> RxA
+			[],
+			[0,0],	//> F12
+			[0,0],	//> E12
+			[0,0],	//> D12
+			[0,0],	//> T12
+		],
+		[	//> PnA
+			[],
+			[0,0],	//> F12
+			[0,0],	//> E12
+			[0,0],	//> D12
+			[0,0],	//> T12
+		],
+		[	//> RxB
+			[],
+			[0,0],	//> F12
+			[0,0],	//> E12
+			[0,0],	//> D12
+			[0,0],	//> T12
+		],
+		[	//> PnB
+			[],
+			[0,0],	//> F12
+			[0,0],	//> E12
+			[0,0],	//> D12
+			[0,0],	//> T12
+		],
+		
+
+	]
 
 	//*	Ordenar a seq de gav origem por Rx|Pn e A|B
 	for (let linProd = 1; linProd <= 4; linProd++) {				//> De Rx_A até Pn_B
 		aProdAB[linProd].sort(function (a, b) { return a - b })	//> Ordena origens
 		
-		cont = 1
 		for (let s = 0; s < aProdAB[linProd].length; s++) {
 			for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
+				
 				bEqual = false
 				//> L1 até L2
 				for (let i = 0; i <= 1; i++) {
 					//> Verif, quando i=0, se L1&L2 estão selecionados e são iguais
+					//> (Mesma origem+tipo OU orgem!= e com desvio deselec)
 					if (i == 0 && mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
-						mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
-						mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) { bEqual = true }
-					else {  bEqual = false }
+						(mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+							mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) ||
+						(aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 0)
+					) {
+						bEqual = true
+						bCont = false
+					}
 
 					//> Se localizar aProdAB na mActBTM, 
-					if (mActBTM[tmpLado][i][4] == aProdAB[linProd][s] && mActBTM[tmpLado][i][2] == aCPType[linProd][0]) {
-						linProd%2==1 ? mActBTM[tmpLado][i][5] = cont : mActBTM[tmpLado][i][5] = romanize(cont)
-						b2prod ? mActBTM[tmpLado][i][5] += aCPType[linProd][1] : false
-						if (bEqual) {
-							mActBTM[tmpLado][1][5] = mActBTM[tmpLado][0][5]
-							i = 2
-						} else {cont++}
-					}
-				}
-				
-				//*	DESVIOS VERTICAIS------------------------
-				//> Ativar desvio se L1 e L2 selec
-				if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 && !bEqual) {
-					aDESV[tmpLado][0] = 1
-				} else { aDESV[tmpLado] = [0, 1, 0] }
-				//> Zerar desvio se bEqual
-				if (bEqual) {
-					aDESV[tmpLado][1] = 0
-					aDESV[tmpLado][2] = 0
-				}
-				//> Mesclar saídas se desvio ativo deselc
-				if (aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 0 &&
-					mActBTM[tmpLado][0][1]==1 && mActBTM[tmpLado][1][1]==1) {
-					if (mActBTM[tmpLado][0][4]<mActBTM[tmpLado][1][4]) {
-						mActBTM[tmpLado][1][5]=mActBTM[tmpLado][0][5]
-					} else {
-						mActBTM[tmpLado][0][5]=mActBTM[tmpLado][1][5]
+					if (mActBTM[tmpLado][i][4] == aProdAB[linProd][s] &&
+						mActBTM[tmpLado][i][2] == aCPType[linProd][0]) {
+							// linProd%2==1 ? mActBTM[tmpLado][i][5] = cont : mActBTM[tmpLado][i][5] = romanize(cont)
+							// b2prod ? mActBTM[tmpLado][i][5] += aCPType[linProd][1] : false
+							aFnd[linProd][tmpLado][i] = mActBTM[tmpLado][i][4]
+							
+							if (bEqual) {
+								aFnd[linProd][tmpLado][1] = aFnd[linProd][tmpLado][0]
+
+								i = 2
+								//> Zerar desvios
+								aDESV[tmpLado][1] = 0
+								aDESV[tmpLado][2] = 0
+								
+							} else {
+
+								//*	DESVIOS VERTICAIS------------------------
+								//> Ativar desvio se L1 e L2 selec E ambos externos
+								let bIE11 = true
+								try {
+									if (mActBTM[tmpLado][0][4]>0 && mActBTM[tmpLado][0][2] == 'Rx') {
+										if (mESQ[mActBTM[tmpLado][0][4]][1][2]==0) {bIE11 = false}
+									}
+								} catch (error) { }
+								try {
+									if (mActBTM[tmpLado][1][4]>0 && mActBTM[tmpLado][1][2] == 'Rx') {
+										if (mESQ[mActBTM[tmpLado][0][4]][1][2]==0) {bIE11 = false}
+									}
+								} catch (error) {}
+								if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+									!bEqual && bIE11) {
+									aDESV[tmpLado][0] = 1
+								} else { aDESV[tmpLado] = [0, 1, 0] }
+							}
+						i = 2
+						tmpLado = 5
 					}
 				}
 			}
 		}
 	}
 
+	//*	Processar e criar nomes
+	for (let linProd = 1; linProd <= 4; linProd++) {
+		let cont = 0
+		// let bCont = true
+		for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+			//_ if (bCont) { cont++ } else { bCont = true }
+			for (let i = 0; i <= 1; i++) {
+				if (aFnd[linProd][tmpLado][i]>0) {
+					if (i == 0) { cont++ }
+					else if (aFnd[linProd][tmpLado][1] != aFnd[linProd][tmpLado][0]) { cont++ }
+
+					linProd%2==1 ? mActBTM[tmpLado][i][5] = cont : mActBTM[tmpLado][i][5] = romanize(cont)
+					b2prod ? mActBTM[tmpLado][i][5] += aCPType[linProd][1] : false
+				}
+			}
+		}
+	}
+
+
+	recalcDV()
 	recalcDINF()
+	try {calcHtotal()} catch (error) {}
+
 }
+
+
+function tmp() {
+	//*	Ordenar a seq de gav origem por Rx|Pn e A|B
+	for (let linProd = 1; linProd <= 4; linProd++) {				//> De Rx_A até Pn_B
+		aProdAB[linProd].sort(function (a, b) { return a - b })	//> Ordena origens
+		
+		let cont = 0
+		let bCont = true
+		for (let s = 0; s < aProdAB[linProd].length; s++) {
+			console.log(`s = ${s}, bCont=${bCont}`) //>======================
+			if (bCont) { cont++ } else { bCont = true }
+			for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
+				
+				console.log(`  tmpLado = ${tmpLado}`) //>======================
+				
+				bEqual = false
+				//> L1 até L2
+				for (let i = 0; i <= 1; i++) {
+					console.log(`    i = ${i}`)
+					//> Verif, quando i=0, se L1&L2 estão selecionados e são iguais
+					//> (Mesma origem+tipo OU orgem!= e com desvio deselec)
+					if (i == 0 && mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+						(mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+							mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) ||
+						(aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 0)
+					) {
+						bEqual = true
+						bCont = false
+					}
+					
+					console.log(`      Linha 742: bEqual = ${bEqual}`)  //>============================
+					console.log(`      Linha 743: bCont = ${bCont}`)  //>============================
+
+					//> Se localizar aProdAB na mActBTM, 
+					if (mActBTM[tmpLado][i][4] == aProdAB[linProd][s] &&
+						mActBTM[tmpLado][i][2] == aCPType[linProd][0]) {
+							linProd%2==1 ? mActBTM[tmpLado][i][5] = cont : mActBTM[tmpLado][i][5] = romanize(cont)
+							b2prod ? mActBTM[tmpLado][i][5] += aCPType[linProd][1] : false
+							if (bEqual) {
+								bCont = false
+								console.log(`      Linha 752: bCont = ${bCont}`)   //>============================
+								mActBTM[tmpLado][1][5] = mActBTM[tmpLado][0][5]
+								i = 2
+								//> Zerar desvios
+								aDESV[tmpLado][1] = 0
+								aDESV[tmpLado][2] = 0
+								
+							} else {
+								bCont = true
+								//*	DESVIOS VERTICAIS------------------------
+								//> Ativar desvio se L1 e L2 selec
+								if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 && !bEqual) {
+									aDESV[tmpLado][0] = 1
+								} else { aDESV[tmpLado] = [0, 1, 0] }
+							}
+						i = 2
+						tmpLado = 5
+					}
+				}
+				// bCont = true
+			}
+		}
+	}
+}
+
 
 
 //* ---------------------- RECALCULAR DESVIOS INFERIORES --------------------- */
@@ -781,11 +907,11 @@ function recalcDINF() {
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
 		if (aDESV[tmpLado][0] == 0) {								//> Se não tem desvio
 			//> Verif, quando i=0, se L1&L2 estão selecionados e são iguais
-			if (i == 0 && mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
-				mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
-				mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) { bEqual = true }
-			else {  bEqual = false }
 			for (let i = 0; i <= 1; i++) {							//> Checa int e ext
+				if (i == 0 && mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
+					mActBTM[tmpLado][0][4] == mActBTM[tmpLado][1][4] &&
+					mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) { bEqual = true; i=2}
+				else {  bEqual = false }
 				if (!bEqual && mActBTM[tmpLado][i][1] == 1) {	//> Se L1!=L2 e Ln selec
 					let tmpIE = 0
 					if (mActBTM[tmpLado][0][4] == nGavs &&			//> Se orig==última gaveta e Rx
@@ -793,7 +919,7 @@ function recalcDINF() {
 							tmpIE = mESQ[nGavs][1][2]					//> Rx int ou ext?
 					} else {tmpIE = 1}
 					aDINF[tmpLado][i][tmpIE]=1
-				}
+				} else { }
 			}
 		}
 	}
@@ -804,7 +930,7 @@ function recalcDINF() {
 function recalcDV() {
 	let hAdic = 0
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {					//> Para cada lado
-		switch (tmpLado) {
+		switch (tmpLado) {		//> Calcular hAdic do desvio
 			case 1:
 				hAdic = 54
 				break;
@@ -813,8 +939,17 @@ function recalcDV() {
 				break;
 		}
 		if (aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 1) {		//> Se DV ativo e selec
-			
-			
+			let tmpGav =0
+			if (mActBTM[tmpLado][0][4]>mActBTM[tmpLado][1][4]) {		//> Gaveta mais baixa
+				tmpGav = mActBTM[tmpLado][1][4]
+			} else {
+				tmpGav = mActBTM[tmpLado][0][4]
+			}
+			for (let i = 0; i <= 1; i++) {
+				if (mActBTM[tmpLado][1][4]==tmpGav) {
+					
+				}
+			}
 
 
 		}

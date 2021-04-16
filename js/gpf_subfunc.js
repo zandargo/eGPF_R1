@@ -66,6 +66,13 @@ function romanize(num) {
   return roman;
 }
 
+//*	REPLACE AT
+//_ String.prototype.replaceAt = function(index, replacement) {
+//_     return this.substr(0, index) + replacement + this.substr(index + replacement.length);
+//_ }
+function replaceAt(string, index, replacement) {
+	return string.substr(0, index) + replacement + string.substr(index + replacement.length)
+}
 
 //* 	POSIÇÃO DO MOUSE
 var xM = null
