@@ -31,13 +31,13 @@ if (env === 'development') {
 //_ process.env.NODE_ENV = 'development'
 const isDev = process.env.NODE_ENV !== 'production'
 var nWid = 0
-isDev ? nWid = 1600 : nWid = 1400
+isDev ? nWid = 1800 : nWid = 1600
 
 //* Main Window 
 function createMainWindow() {
 	const mainWindow = new BrowserWindow({
 		width : nWid,
-		height: 800,
+		height: 1200,
 		minWidth: 600,
 		minHeight: 400,
 		frame: false,
@@ -76,6 +76,7 @@ function createMainWindow() {
 
 	mainWindow.loadFile('index.html')
 	mainWindow.webContents.send('log', [__dirname])
+	// mainWindow.maximize()
 }
 
 //* -------------------------------------------------------------------------- */

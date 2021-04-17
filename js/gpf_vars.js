@@ -523,10 +523,10 @@ function resetFND() {
 }
 
 
-var aPnA    = []
-var aRxA    = []
-var aPnB    = []
-var aRxB    = []
+//_var aPnA    = []
+//_var aRxA    = []
+//_var aPnB    = []
+//_var aRxB    = []
 var aProdAB = []
 
 var aDESV = []

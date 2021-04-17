@@ -378,30 +378,40 @@ function LoadSQMA() {
 //* -------------------------------------------------------------------------- */
 
 function recalcUsed() {
+	//* Tem usinagem
 	for (let g = 1; g <= nGavs; g++) {
 		mCOD1[g][1] = [0, 0, 0, 0, 0]
 	}
 	for (let g = 1; g <= nGavs; g++) {
-		for (let i = 1; i <= 3; i++) {
+		for (let tmpLin = 1; tmpLin <= 3; tmpLin++) {
 			//* CP externo e com seta ()
-			if (mESQ[g][i][2] == 1 && mESQ[g][i][1] > g) {		//> CP externo e com seta ()
+			if (mESQ[g][tmpLin][2] == 1 && mESQ[g][tmpLin][1] > g) {		//> CP externo e com seta ()
 				for (let tmpG = g; tmpG <= nGavs; tmpG++) {
-					mCOD1[tmpG][1][mESQ[g][i][0]] += 1
+					mCOD1[tmpG][1][mESQ[g][tmpLin][0]] += 1
 				}
 			}
-			//* Correspondência com a matriz de fundo
-			if (mESQ[g][i][0]>0 && mESQ[g][i][3] > 100*mESQ[g][i][0] && mESQ[g][i][3] <= 100*mESQ[g][i][0] + 3) {
-				mActBTM[mESQ[g][i][0]][0][4] != g ?
-					mESQ[g][i][3] -= (100*mESQ[g][i][0]+1) : false
-				mActBTM[mESQ[g][i][0]][1][4] != g ?
-					mESQ[g][i][3] -= (100*mESQ[g][i][0]+2) : false
-			} else { mESQ[g][i][3]=0 }
-		
 		}
 	}
-
-
-
-
-
+	//* Correspondência com a matriz de fundo
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		for (let i = 0; i <= 1; i++) {
+			
+			let cont = 0  //* Procura quantas gavetas mandam produto para aquele fundo
+			for (let g = 1; g <= nGavs; g++) {
+				for (let tmpLin = 1; tmpLin <= 3; tmpLin++) {
+					if (parseInt(mESQ[g][tmpLin][3] / tmpLado, 10) == 1 &&
+						(mESQ[g][tmpLin][3] % 100 == i+1 || mESQ[g][tmpLin][3] % 100 == 3)) {
+						cont++
+					}
+				}
+			}
+			if (cont == 0) {
+				mActBTM[tmpLado][i][1] == 0
+				mActBTM[tmpLado][i][2] == ''
+				mActBTM[tmpLado][i][3] == ''
+				mActBTM[tmpLado][i][4] == 0
+				mActBTM[tmpLado][i][5] == ''
+			}
+		}
+	}
 }

@@ -11,10 +11,9 @@
 //_ TODO	Linha'Be' precisa ser adaptável para ficar à direita ou à esquerda da queda de A
 //_			LINHA Be: Se Be=F||E, Esquerda	;	Se Be=T||D, Direita
 //_ TODO	Criar contorno no último ponto selecionado
+//_ TODO	CPs ficam inativos onclick "Novo" (Limpar)
+//_ TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
-//TODO	CPs ficam inativos onclick "Novo" (Limpar)
-
-//TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
 
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
@@ -271,24 +270,21 @@ function calcCOD(nGav) {
 				//> LEMBRETE: Pode haver corte parcial
 				//> LEMBRETE: Corte parc SEMPRE indica DV
 	try {
-		//> Rx ext e nGav < nGavs
+		//> Rx FND e nGav < nGavs
+		//> (Rx externo retornando não gera parcial)
 		if (mESQ[nGav][1][0] > 0 && mESQ[nGav + 1][1][2] == 1 && nGav < nGavs) {	
-			if (aDESV[mESQ[nGav + 1][1][0]][1]==1) {			//> Se DesV selec (L1 e L2 selec)
-				
+			if (aDESV[mESQ[nGav + 1][1][0]][0] == 1 &&
+				aDESV[mESQ[nGav + 1][1][0]][1] == 1) {			//> Se DesV act E selec (L1 e L2 selec)
 				for (let i = 0; i <= 1; i++) {
-
 					if (mActBTM[mESQ[nGav + 1][1][0]][i][4] == nGav + 1 &&
 						mActBTM[mESQ[nGav + 1][1][0]][i][4] > mActBTM[mESQ[nGav + 1][1][0]][Math.abs(i-1)][4]) {
 						parc = i+1
 					} 
-					
 				}
-
 			}	
 			u += parc * 10 ** (4 - mESQ[nGav + 1][1][0])
 			mCOD1[nGav][0][(mESQ[nGav + 1][1][0])] = parc
 		}
-		
 	} catch (error) {console.log('ERRO EM calcCOD(nGav); nGav=' + nGav)}
 	
 	//*	2 - Quando algum Rx||Pn de cima chega na de baixo
@@ -1584,13 +1580,8 @@ function drwPN() {
 		vLinPn.push(mG[nGav0][0][0][1] + Alt)
 		vLinPn.push(mG[nGav0][nLado][tmpIE][0])
 		vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt)
-		//_ vLinPn.push(mG[nGav0][nLado][tmpIE][0])
-		//_ vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt*2.5)
 		
-		// vLinB.push(vLinPn[0])
-		// vLinB.push(vLinPn[1])
-		// vLinB.push(vLinPn[2])
-		// vLinB.push(vLinPn[3])
+		
 		vLinB.push(mG[nGav0][0][0][0])
 		vLinB.push(mG[nGav0][0][0][1] + Alt)
 		vLinB.push(mG[nGav0][nLado][tmpIE][0])
