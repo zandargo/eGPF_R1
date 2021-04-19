@@ -399,18 +399,19 @@ function recalcUsed() {
 			let cont = 0  //* Procura quantas gavetas mandam produto para aquele fundo
 			for (let g = 1; g <= nGavs; g++) {
 				for (let tmpLin = 1; tmpLin <= 3; tmpLin++) {
-					if (parseInt(mESQ[g][tmpLin][3] / tmpLado, 10) == 1 &&
+					if (mESQ[g][tmpLin][0] == tmpLado == 1 &&
 						(mESQ[g][tmpLin][3] % 100 == i+1 || mESQ[g][tmpLin][3] % 100 == 3)) {
 						cont++
 					}
 				}
 			}
 			if (cont == 0) {
-				mActBTM[tmpLado][i][1] == 0
-				mActBTM[tmpLado][i][2] == ''
-				mActBTM[tmpLado][i][3] == ''
-				mActBTM[tmpLado][i][4] == 0
-				mActBTM[tmpLado][i][5] == ''
+				mActBTM[tmpLado][i][1] = 0
+				mActBTM[tmpLado][i][2] = ''
+				mActBTM[tmpLado][i][3] = ''
+				mActBTM[tmpLado][i][4] = 0
+				mActBTM[tmpLado][i][5] = 0
+				mActBTM[tmpLado][i][6] = ''
 			}
 		}
 	}

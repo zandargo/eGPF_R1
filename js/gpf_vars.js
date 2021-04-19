@@ -128,6 +128,7 @@ var nAB       = 0
 //_var sAB       = ''
 var objCP = null
 var sCPtype = ''
+var b2prod = false
 
 //Move
 var xi = 0
@@ -490,32 +491,20 @@ var arwSizeW = 0.6		//> W% (wFND)
 var arwHEADL = 0.5		//> M% (wFND)
 
 
-var mActBTM = [		
-	[[0,0,'','',0,''],				//> 00 - Ativo, Selecionado, Origem
-	 [0,0,'','',0,'']],				//> ([nLado] [1|2] [Ativo|Selecionado|Tipo|Prod|Origem|Nome])
-	[[0,0,'','',0,''],				//> F1
-	 [0,0,'','',0,'']],				//> F2
-	[[0,0,'','',0,''],				//> D1
-	 [0,0,'','',0,'']],				//> D2
-	[[0,0,'','',0,''],				//> E1
-	 [0,0,'','',0,'']],				//> E2
-	[[0,0,'','',0,''],				//> T1
-	 [0,0,'','',0,'']],				//> T2
-]		
-
-
+var mActBTM = []
+resetFND()		
 function resetFND() {
 	mActBTM = [		
-	[[0,0,'','',0,''],				//> 00 - Ativo, Selecionado, Origem
-	 [0,0,'','',0,'']],				//> ([nLado] [1|2] [Ativo|Selecionado|Tipo|Prod|Origem|Nome])
-	[[0,0,'','',0,''],				//> F1
-	 [0,0,'','',0,'']],				//> F2
-	[[0,0,'','',0,''],				//> D1
-	 [0,0,'','',0,'']],				//> D2
-	[[0,0,'','',0,''],				//> E1
-	 [0,0,'','',0,'']],				//> E2
-	[[0,0,'','',0,''],				//> T1
-	 [0,0,'','',0,'']],				//> T2
+	[[0,0,'','',0,0,''],				//> 00 - Ativo, Selecionado, Origem
+	 [0,0,'','',0,0,'']],			//> ([nLado] [1|2] [Ativo|Selecionado|Tipo|Prod|Origem|IE|Nome])
+	[[0,0,'','',0,0,''],				//> F1
+	 [0,0,'','',0,0,'']],			//> F2
+	[[0,0,'','',0,0,''],				//> D1
+	 [0,0,'','',0,0,'']],			//> D2
+	[[0,0,'','',0,0,''],				//> E1
+	 [0,0,'','',0,0,'']],			//> E2
+	[[0,0,'','',0,0,''],				//> T1
+	 [0,0,'','',0,0,'']],			//> T2
 	]	
 	nGav0 = 0
 	nGav = 0
@@ -528,6 +517,14 @@ function resetFND() {
 //_var aPnB    = []
 //_var aRxB    = []
 var aProdAB = []
+
+var aCont = [
+		['', 0, 0, 0, 0],	//> RxA, PnA, RxB, PnB
+		[],					//> Origens RxA	[nGav,nLado,nIE]
+		[],					//> Origens PnA	[nGav,nLado,nIE]
+		[],					//> Origens RxB	[nGav,nLado,nIE]
+		[],					//> Origens PnB	[nGav,nLado,nIE]
+	]	
 
 var aDESV = []
 resetDESV()

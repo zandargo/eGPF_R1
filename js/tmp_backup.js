@@ -147,17 +147,23 @@ function recalcProd_backup() {
 								//> Ativar desvio se L1 e L2 selec E ambos externos
 								let bIE11 = true
 								try {
+									//> L1 é Rx?
 									if (mActBTM[tmpLado][0][4]>0 && mActBTM[tmpLado][0][2] == 'Rx') {
-										if (mESQ[mActBTM[tmpLado][0][4]][1][2]==0) {bIE11 = false}
+										//> Externo?
+										if (mESQ[mActBTM[tmpLado][0][4]][1][2] == 0) { bIE11 = false }
 									}
 								} catch (error) { }
 								try {
+									//> L2 é Rx?
 									if (mActBTM[tmpLado][1][4]>0 && mActBTM[tmpLado][1][2] == 'Rx') {
-										if (mESQ[mActBTM[tmpLado][0][4]][1][2]==0) {bIE11 = false}
+										//> Externo?
+										if (mESQ[mActBTM[tmpLado][0][4]][1][2] == 0) { bIE11 = false }
 									}
-								} catch (error) {}
+								} catch (error) { }
+								//> Se: Ambos selec, !=, externos
 								if (mActBTM[tmpLado][0][1] == 1 && mActBTM[tmpLado][1][1] == 1 &&
 									!bEqual && bIE11) {
+									//> Ativa DV
 									aDESV[tmpLado][0] = 1
 								} else { aDESV[tmpLado] = [0, 1, 0] }
 							}

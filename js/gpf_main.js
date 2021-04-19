@@ -595,7 +595,7 @@ var cpPnMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	//_recalcProd()
+	recalcProd()
 	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
@@ -691,7 +691,7 @@ var cpRxMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	//_recalcProd()
+	recalcProd()
 	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
@@ -796,7 +796,7 @@ var cpPrMoveStop = function () {
 
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	//_recalcProd()
+	recalcProd()
 	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
@@ -940,7 +940,7 @@ function showCtrlPts() {
 
 	//*	LINHAS DE FLUXO
 	for (let i = 4; i >= 1; i--){
-		for (let j = nGavs; j >= 0; j--) {
+		for (let j = nGavs; j > 0; j--) {
 			iGav = j
 			var gIDtmp = 'G' + pad(iGav)
 			//*	Linhas de Peneirado
@@ -2435,8 +2435,10 @@ function rebuildGPF() {
 //*                                    INIT                                    */
 //* -------------------------------------------------------------------------- */
 
-isDev ? $('#divMAT').show() : $('#divMAT').hide()
-isDev ? $('#divCUT').show() : $('#divCUT').hide()
+try {
+	isDev ? $('#divMAT').show() : $('#divMAT').hide()
+	isDev ? $('#divCUT').show() : $('#divCUT').hide()
+} catch (error) {}
 
 //*	ITERAÇÕES
 

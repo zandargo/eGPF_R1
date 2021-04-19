@@ -320,6 +320,7 @@ function drwBTM() {
 			'text-anchor': aTxAnc[f],
 			opacity: 1,
 		})
+		.click(function(e) {clickBTM(mSai[f])})
 		
 		var text = drawSQMA									//> TEXTO DO ESQUEMA (=FUNDO)
 		.text(0, 0, '')
@@ -473,15 +474,15 @@ function recolorBTM() {
 		for (let i = 0; i <= 1; i++) {
 			//_ try {
 			//> Se fundo sem nome, usa a nomenclatura
-			if (mActBTM[tmpLado][i][5] == '') {
+			if (mActBTM[tmpLado][i][6] == '') {
 				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: `${nLadoInt2Str(tmpLado)}${i + 1}` }) }
-			else {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })}
+			else {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][6] })}
 			
 			//> Se L1=L2, não define nome no esquema
 			if (i == 1 && mActBTM[tmpLado][i][4] == mActBTM[tmpLado][0][4]
-				&& mActBTM[tmpLado][i][5] == mActBTM[tmpLado][0][5]) {
+				&& mActBTM[tmpLado][i][6] == mActBTM[tmpLado][0][6]) {
 				drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' })}
-			else {drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][5] })}
+			else {drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][6] })}
 			//_ } catch (error) {}
 			
 			//* Reposicionar texto de fundo no esquema
@@ -490,7 +491,7 @@ function recolorBTM() {
 					if (mActBTM[tmpLado][i][1] == 1 &&
 						(mESQ[mActBTM[tmpLado][i][4]][tmpLin][3] == 100 * tmpLado + (i + 1) ||
 						mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]  == 100 * tmpLado + 3)) {
-						console.log(`mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][3] = ${mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]}`)
+						//_ console.log(`mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][3] = ${mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]}`)
 
 						let tmpXoff = 20
 						tmpXoff = (tmpLado%2)*2*(-tmpXoff)+tmpXoff
@@ -550,8 +551,8 @@ function recolorBTM() {
 			}
 		} else {
 			//> Zerar se lado não estiver sendo usado
-			mActBTM[tmpLado][0]=[0,0,'','',0,'']
-			mActBTM[tmpLado][1]=[0,0,'','',0,'']
+			mActBTM[tmpLado][0]=[0,0,'','',0,0,'']
+			mActBTM[tmpLado][1]=[0,0,'','',0,0,'']
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "1").attr({ opacity: oFND0, fill: cLinRX0 })
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "2").attr({ opacity: oFND0, fill: cLinRX0 })
 			for (let i = 0; i <= 1; i++) {
@@ -589,8 +590,6 @@ function recolorBTM() {
 //> Ao clicar, SE ativo E bEditMode ENTÃO: Se ñ-selecionado, assume A|B, matSelecionado=1
 //>													 Else, assume cor neutra, matSelecionado=0
 function clickBTM(sSaida) {
-	//_console.log('clickBTM(): ' + sSaida)
-	//_let mSai = ['PORTA', 'F1', 'F2', 'D1', 'D2', 'E1', 'E2', 'T1', 'T2']
 	let tmpLado = nLadoStr2Int(sSaida.charAt(0))
 	let tmp12 = parseInt(sSaida.charAt(1), 10) - 1
 	let sAB = mESQ[nGav0][0][1] + ''
@@ -601,31 +600,19 @@ function clickBTM(sSaida) {
 			mActBTM[tmpLado][tmp12][2] = sCPtype	//> Set Prod
 			mActBTM[tmpLado][tmp12][3] = sAB			//> Set A|B
 			mActBTM[tmpLado][tmp12][4] = nGav0		//> Set Orig
-			//_ mActBTM[tmpLado][tmp12][5] = sCPtype							//! Set Nome: Calcular o nome do produto
+			mActBTM[tmpLado][tmp12][5] = nIE			//> Set IE
+			// console.log(`mESQ[${nGav0}][${nLin0}][3] % (${tmpLado} * 100) + ${tmpLado} * 100 + parseInt(${sSaida}.charAt(1), 10) = ${mESQ[nGav0][nLin0][3] % (tmpLado * 100) + tmpLado * 100 + parseInt(sSaida.charAt(1), 10)}`)
+
+			// todo  -  Resolver problema do produto B
 			mESQ[nGav0][nLin0][3] = mESQ[nGav0][nLin0][3] % (tmpLado * 100) + tmpLado * 100 + parseInt(sSaida.charAt(1), 10)
-			console.log(`mESQ[${nGav0}][${nLin0}][3] = ${mESQ[nGav0][nLin0][3]}`)
 		
-			//* Se FND (Orig+Rx/Pn) já tiver sido escolhido, zera o outro e define o atual
-			//* (É possível um produto volumoso sair por duas saídas)
-			let nOther = Math.abs(tmp12-1)
-			if (mActBTM[tmpLado][nOther][1] == 1 &&
-				mActBTM[tmpLado][nOther][4] == mActBTM[tmpLado][tmp12][4] &&
-				mActBTM[tmpLado][tmp12][2] == mActBTM[tmpLado][nOther][2]) {
-			// 		mActBTM[tmpLado][nOther][1] = 0		//> Set unsel
-			// 		mActBTM[tmpLado][nOther][2] = ''		//> Set Prod
-			// 		mActBTM[tmpLado][nOther][3] = ''		//> Set A|B
-			// 		mActBTM[tmpLado][nOther][4] = null	//> Set Orig
-			// 		mActBTM[tmpLado][nOther][5] = ''
-					mActBTM[tmpLado][tmp12][5] = mActBTM[tmpLado][nOther][5]
-			}
-
-
-		} else {
+		} else if (mActBTM[tmpLado][tmp12][4] == nGav0) {		//> Se selec, reagir apenas se = sel cp
 			mActBTM[tmpLado][tmp12][1] = 0		//> Set unsel
 			mActBTM[tmpLado][tmp12][2] = ''		//> Set Prod
 			mActBTM[tmpLado][tmp12][3] = ''		//> Set A|B
-			mActBTM[tmpLado][tmp12][4] = null	//> Set Orig
-			mActBTM[tmpLado][tmp12][5] = ''
+			mActBTM[tmpLado][tmp12][4] = 0		//> Set Orig
+			mActBTM[tmpLado][tmp12][5] = 0		//> Set IE
+			mActBTM[tmpLado][tmp12][6] = ''
 			switch (mESQ[nGav0][nLin0][3]) {
 				case tmpLado * 100 + 1:
 				case tmpLado * 100 + 2:
@@ -638,7 +625,6 @@ function clickBTM(sSaida) {
 					mESQ[nGav0][nLin0][3] = 0
 					break;
 			}
-			console.log(`mESQ[${nGav0}][${nLin0}][3] = ${mESQ[nGav0][nLin0][3]}`)
 		}
 	}
 
@@ -666,15 +652,89 @@ function clickDV(tmpLado) {
 //* ---------------- RECALCULAR NOMES DOS PRODUTOS NAS SAÍDAS ---------------- */
 function recalcProd() {
 	
-	let b2prod = false
-	mESQ[0][2][1] > 0 ? b2prod = true : false								//> B foi usado?
+	mESQ[0][2][1] > 0 ? b2prod = true : b2prod = false								//> B foi usado?
 	
-	let aCont = ['',0,0,0,0]	//> RxA, PnA, RxB, PnB
+	//*	Limpar nomes
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		for (let i = 0; i <= 1; i++) {
+			mActBTM[tmpLado][i][6]=''
+		}		
+	}
 
+
+	//*	Desvios Verticais
+	//> Para cada lado do fundo, 
+	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
+		//> Dois lados ativos e selec: ativar DV
+		if (mActBTM[tmpLado][0][0] == 1 && mActBTM[tmpLado][0][1] == 1 &&
+			 mActBTM[tmpLado][1][0] == 1 && mActBTM[tmpLado][1][1] == 1 ) {
+			//> Origens !=, E ambos externos
+			if (mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4] &&
+				mActBTM[tmpLado][0][5] == 1 & mActBTM[tmpLado][1][5] == 1) {
+					aDESV[tmpLado][0] = 1
+			}
+		}
+		else { aDESV[tmpLado][0] = 0 }
+	}
+
+
+
+	aCont = [
+		['', 0, 0, 0, 0],	//> RxA, PnA, RxB, PnB
+		[],					//> Origens RxA	[nGav,nLado,nIE]
+		[],					//> Origens PnA	[nGav,nLado,nIE]
+		[],					//> Origens RxB	[nGav,nLado,nIE]
+		[],					//> Origens PnB	[nGav,nLado,nIE]
+	]
+	
+	let nAouB = 0
+	let nRxPn = 0
+	let sAouB = ''
+
+	//* Alimentar a matriz de gavetas q mandam produto para fundo (+click fnd)
 	for (let g = 0; g <= nGavs; g++) {										//> Cada gaveta
 		for (let tmpLin = 1; tmpLin <=3; tmpLin++) {						//> Rx, Pn1, Pn2
-			if (mESQ[g][tmpLin][3] > 100 * mESQ[g][tmpLin][0]) {		//> Se manda para o fundo
+			if (mESQ[g][tmpLin][3] > 100 * mESQ[g][tmpLin][0] &&
+				mESQ[g][tmpLin][3] <= 100 * mESQ[g][tmpLin][0]+3) {		//> Se manda para o fundo
 				
+				let aTmp = []
+				aTmp.push(g)
+				aTmp.push(mESQ[g][tmpLin][0])
+				aTmp.push(mESQ[g][tmpLin][2])
+				
+				tmpLin == 1 ? nRxPn = 1 : nRxPn = 2
+				mESQ[g][0][1]=='A' ? nAouB = 0 : nAouB = 2
+				mESQ[g][0][1]=='A' ? sAouB = 'A' : sAouB = 'B'
+				aCont[nRxPn + nAouB].push(aTmp)
+				aCont[0][nRxPn + nAouB]++
+				
+				let tmpName = ''
+				nRxPn == 1 ? tmpName = aCont[0][nRxPn + nAouB] : tmpName = romanize(aCont[0][nRxPn + nAouB])
+				b2prod ? tmpName += sAouB : false
+
+				//> 1 gav enviando p/ 2 saídas
+				if (mESQ[g][tmpLin][3] % 100 == 3) {
+
+					mActBTM[mESQ[g][tmpLin][0]][0][6] |= tmpName
+					mActBTM[mESQ[g][tmpLin][0]][1][6] |= tmpName
+
+				//> 2 gavetas !=
+				} else {
+					//> DV 1+0 ==> L1 e L2 selec
+					if (aDESV[mESQ[g][tmpLin][0]][0]==1 && aDESV[mESQ[g][tmpLin][0]][1]==0) {
+						if (g == Math.min(mActBTM[mESQ[g][tmpLin][0]][0][4],mActBTM[mESQ[g][tmpLin][0]][1][4])) {
+							mActBTM[mESQ[g][tmpLin][0]][0][6] |= tmpName
+							mActBTM[mESQ[g][tmpLin][0]][1][6] |= tmpName
+						} else {aCont[0][nRxPn + nAouB]--}
+						
+					//> Sem DV ou DV selec
+					} else {
+						mActBTM[mESQ[g][tmpLin][0]][mESQ[g][tmpLin][3] % 100 - 1][6]=tmpName
+					}
+				}
+
+
+
 				//* IMPORTANTE:
 				//* Pn da mesma gaveta recebem mesmo nome
 				//* Verificar, no fundo, o estado da outra saída
@@ -684,6 +744,13 @@ function recalcProd() {
 			}
 		}
 	}
+
+	
+
+
+
+
+	//* Fim
 	recalcDV()
 	recalcDINF()
 	try {calcHtotal()} catch (error) {}
@@ -704,12 +771,7 @@ function recalcDINF() {
 					mActBTM[tmpLado][0][2] == mActBTM[tmpLado][1][2]) { bEqual = true; i=2}
 				else {  bEqual = false }
 				if (!bEqual && mActBTM[tmpLado][i][1] == 1) {	//> Se L1!=L2 e Ln selec
-					let tmpIE = 0
-					if (mActBTM[tmpLado][0][4] == nGavs &&			//> Se orig==última gaveta e Rx
-						mActBTM[tmpLado][0][2] == 'Rx') {			
-							tmpIE = mESQ[nGavs][1][2]					//> Rx int ou ext?
-					} else {tmpIE = 1}
-					aDINF[tmpLado][i][tmpIE]=1
+					aDINF[tmpLado][i][mActBTM[tmpLado][i][5]]=1
 				} else { }
 			}
 		}
