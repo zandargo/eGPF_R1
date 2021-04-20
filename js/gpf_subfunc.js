@@ -495,9 +495,13 @@ function LoadSQMA() {
 function SaveSQMA() {
 	console.log('SaveSQMA()')
 	//_ resetMatESQ()
-	
-
 }
+
+function SaveAsSQMA() {
+	console.log('SaveAsSQMA()')
+	//_ resetMatESQ()
+}
+
 
 
 
