@@ -639,13 +639,15 @@ function clickBTM(sSaida) {
 //* ------------------------ CLICAR NO DESVIO VERTICAL ----------------------- */
 function clickDV(tmpLado) {
 	//_ console.log(`clickDV(${tmpLado}): aDESV[${tmpLado}][1]==${aDESV[tmpLado][1]}`)
-	if (aDESV[tmpLado][1]==0) {		//> Se não usado
-		aDESV[tmpLado][1] = 1			//> Def usado
-	} else {									//> Se usado
-		aDESV[tmpLado][1] = 0			//> Def não usado
+	if (bEditMode) {
+		if (aDESV[tmpLado][1] == 0) {		//> Se não usado
+			aDESV[tmpLado][1] = 1			//> Def usado
+		} else {									//> Se usado
+			aDESV[tmpLado][1] = 0			//> Def não usado
+		}
+		try { recolorBTM() }
+		catch (error) { console.log(`clickDV(${tmpLado}): ERROR recolorBTM()`) }
 	}
-	try { recolorBTM() }
-	catch (error) { console.log(`clickDV(${tmpLado}): ERROR recolorBTM()`) }
 }
 
 
@@ -672,7 +674,7 @@ function recalcProd() {
 			if (mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4] &&
 				mActBTM[tmpLado][0][5] == 1 & mActBTM[tmpLado][1][5] == 1) {
 					aDESV[tmpLado][0] = 1
-			}
+			} else { aDESV[tmpLado][0] = 0 }
 		}
 		else { aDESV[tmpLado][0] = 0 }
 	}
@@ -715,17 +717,19 @@ function recalcProd() {
 				//> 1 gav enviando p/ 2 saídas
 				if (mESQ[g][tmpLin][3] % 100 == 3) {
 
-					mActBTM[mESQ[g][tmpLin][0]][0][6] |= tmpName
-					mActBTM[mESQ[g][tmpLin][0]][1][6] |= tmpName
+					mActBTM[mESQ[g][tmpLin][0]][0][6] = tmpName
+					mActBTM[mESQ[g][tmpLin][0]][1][6] = tmpName
 
 				//> 2 gavetas !=
 				} else {
 					//> DV 1+0 ==> L1 e L2 selec
 					if (aDESV[mESQ[g][tmpLin][0]][0]==1 && aDESV[mESQ[g][tmpLin][0]][1]==0) {
 						if (g == Math.min(mActBTM[mESQ[g][tmpLin][0]][0][4],mActBTM[mESQ[g][tmpLin][0]][1][4])) {
-							mActBTM[mESQ[g][tmpLin][0]][0][6] |= tmpName
-							mActBTM[mESQ[g][tmpLin][0]][1][6] |= tmpName
-						} else {aCont[0][nRxPn + nAouB]--}
+							mActBTM[mESQ[g][tmpLin][0]][0][6] = tmpName
+							mActBTM[mESQ[g][tmpLin][0]][1][6] = tmpName
+						} else if (g == Math.max(mActBTM[mESQ[g][tmpLin][0]][0][4], mActBTM[mESQ[g][tmpLin][0]][1][4])) {
+							aCont[0][nRxPn + nAouB]--
+						}
 						
 					//> Sem DV ou DV selec
 					} else {

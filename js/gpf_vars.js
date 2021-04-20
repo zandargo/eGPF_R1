@@ -129,6 +129,8 @@ var nAB       = 0
 var objCP = null
 var sCPtype = ''
 var b2prod = false
+var nGav_0    = null
+var nLado_0   = null
 
 //Move
 var xi = 0

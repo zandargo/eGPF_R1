@@ -13,8 +13,10 @@
 //_ TODO	Criar contorno no último ponto selecionado
 //_ TODO	CPs ficam inativos onclick "Novo" (Limpar)
 //_ TODO	Criar div (sidenav) para selecionar destino de saída do produto (ativo apenas quando selecionado um Pn ou Rx)
-
-
+//_ TODO	Distanciar setas quando ie=externo
+//_ TODO	Aproximar setas quando ie=interno
+//_ TODO 	Desativar click no DV se !bEditMode
+//_ TODO 	Criar "alerta" se faltar algo na gaveta (Rx ou 2Pn sem destino)
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
 function propagate() {
@@ -211,7 +213,16 @@ function calcHtotal() {
 			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
 			$('#matCUT' + pad(index))
 			.html(mCOD1[index][0]+'<br>'+mCOD1[index][1]+'<br>'+mCOD1[index][2]+'<br>'+mCOD1[index][3])
-		} catch (error) {}
+			
+			//> Código incompleto
+			if (mESQ[index][1][0] == 0 || (mESQ[index][2][0] == 0 && mESQ[index][3][0] == 0)
+				|| ((mESQ[index][2][1] == index && mESQ[index][2][2] == 0) &&
+					(mESQ[index][3][1] == index && mESQ[index][3][2] == 0))) {
+				$('#codGPF' + pad(index)).css('opacity', 0.1)
+			} else {
+				$('#codGPF' + pad(index)).css('opacity', 1)
+			}
+		} catch (error) { }
 	}
 	//* ÚLTIMA GAVETA
 		//_ console.log('nGavs='+nGavs)
@@ -220,7 +231,13 @@ function calcHtotal() {
 		$('#matGPF' + pad(nGavs))
 		.html(mESQ[nGavs][0] + '<br>' + mESQ[nGavs][1] + '<br>' + mESQ[nGavs][2] + '<br>' + mESQ[nGavs][3])
 		$('#matCUT' + pad(nGavs))
-		.html(mCOD1[nGavs][0]+'<br>'+mCOD1[nGavs][1]+'<br>'+mCOD1[nGavs][2]+'<br>'+mCOD1[nGavs][3])
+		.html(mCOD1[nGavs][0] + '<br>' + mCOD1[nGavs][1] + '<br>' + mCOD1[nGavs][2] + '<br>' + mCOD1[nGavs][3])
+		//> Código incompleto
+		if (mESQ[nGavs][1][0]==0 || (mESQ[nGavs][2][0]==0 && mESQ[nGavs][3][0]==0)) {
+			$('#codGPF' + pad(nGavs)).css('opacity', 0.1)
+		} else {
+			$('#codGPF' + pad(nGavs)).css('opacity', 1)
+		}
 
 	hTotal = 0
 	for (let index = 1; index <= nGavs; index++) {
@@ -244,84 +261,7 @@ function parseH(H) {
 }
 
 
-function calcCOD(nGav) {
-	//* Código principal da Gaveta
 
-	let n = 0
-	n += mESQ[nGav][1][0] * 100
-	if (mESQ[nGav][2][2] == 1 || mESQ[nGav][2][1] != nGav) { n += mESQ[nGav][2][0] * 10 	} 
-	if (mESQ[nGav][3][2] == 1 || mESQ[nGav][3][1] != nGav) { n += mESQ[nGav][3][0]			} 
-
-	let sCod = 'GPF' + parseH(mESQ[nGav][0][0])
-	for (let index = 0; index < mCOD0.length; index++) {
-		if (n == mCOD0[index][0]) {
-			sCod += mCOD0[index][1]
-			break
-		}
-	}
-	//* Código de usinagem
-	let u = 0
-	mCOD1[nGav][0]=[0, 0, 0, 0, 0]
-	u += mESQ[nGav][1][0] * 10000
-	mCOD1[nGav][0][0] = mESQ[nGav][1][0]
-
-	let parc = 3 
-	//*	1 - Quando o Rx da de baixo sai pelo canal
-				//> LEMBRETE: Pode haver corte parcial
-				//> LEMBRETE: Corte parc SEMPRE indica DV
-	try {
-		//> Rx FND e nGav < nGavs
-		//> (Rx externo retornando não gera parcial)
-		if (mESQ[nGav][1][0] > 0 && mESQ[nGav + 1][1][2] == 1 && nGav < nGavs) {	
-			if (aDESV[mESQ[nGav + 1][1][0]][0] == 1 &&
-				aDESV[mESQ[nGav + 1][1][0]][1] == 1) {			//> Se DesV act E selec (L1 e L2 selec)
-				for (let i = 0; i <= 1; i++) {
-					if (mActBTM[mESQ[nGav + 1][1][0]][i][4] == nGav + 1 &&
-						mActBTM[mESQ[nGav + 1][1][0]][i][4] > mActBTM[mESQ[nGav + 1][1][0]][Math.abs(i-1)][4]) {
-						parc = i+1
-					} 
-				}
-			}	
-			u += parc * 10 ** (4 - mESQ[nGav + 1][1][0])
-			mCOD1[nGav][0][(mESQ[nGav + 1][1][0])] = parc
-		}
-	} catch (error) {console.log('ERRO EM calcCOD(nGav); nGav=' + nGav)}
-	
-	//*	2 - Quando algum Rx||Pn de cima chega na de baixo
-				//> LEMBRETE: Nesse caso nunca há corte parcial
-	parc = 3 
-	for (let i = 1; i <= nGav; i++) {
-		for (let j = 1; j <= 3; j++) {
-			if (mESQ[i][j][1]==(nGav+1) && mESQ[i][j][2]==0) {	//> nPara=GPFabaixo e nIE=interno 
-				u += parc * 10 ** (4 - mESQ[i][j][0])
-				mCOD1[nGav][0][(mESQ[i][j][0])] = parc
-			}
-		}
-	}
-	
-	//*	3 - Quando algum Pr chega na de baixo (Ae || Be)
-	//> LEMBRETE: Nesse caso nunca há corte parcial
-	parc = 3 
-	for (let j = 1; j <= 2; j++) {
-		if (mESQ[0][j][1]==(nGav+1)) {	//> nPara=GPFabaixo 
-			u += parc * 10 ** (4 - mESQ[0][j][0])
-			mCOD1[nGav][0][(mESQ[0][j][0])] = parc
-		}
-	}
-
-
-	//*	Procura na tabela de corte
-	for (let index = 0; index < mCorte.length; index++) {
-		if (u == mCorte[index][0]) {
-			sCod += mCorte[index][1]
-			break
-		}
-	}
-
-	//* FIM
-	//_ mESQ[nGav][0][2] = u
-	return sCod
-}
 
 //* -------------------------------------------------------------------------- */
 //*                             CÓDIGO DAS GAVETAS                             */
@@ -400,40 +340,6 @@ function drwCOD() {
 
 	}
 }
-
-
-
-
-//*	HOVER ZONES
-function FiHoverIN() {
-	sLado = 'Fi'
-}
-function DiHoverIN() {
-	sLado = 'Di'
-}
-function EiHoverIN() {
-	sLado = 'Ei'
-}
-function TiHoverIN() {
-	sLado = 'Ti'
-}
-function FeHoverIN() {
-	sLado = 'Fe'
-}
-function DeHoverIN() {
-	sLado = 'De'
-}
-function EeHoverIN() {
-	sLado = 'Ee'
-}
-function TeHoverIN() {
-	sLado = 'Te'
-}
-
-function ladoHoverOUT() {
-	sLado = ''
-}
-
 
 
 
@@ -555,6 +461,10 @@ var cpPnMoveStart = function () {
 	nPn = parseInt(L.substr(s.length - 5, 1), 10)
 	if (nGav != 0 && nGav != nGav0) { mESQ[(1 * mESQ[nGav0][1 + nPn][1])][0][1] = '' }
 	//_removUsed(this.attr('id'))
+	mESQ[nGav0][1 + nPn][0]>0 ? nLado_0 = mESQ[nGav0][1 + nPn][0] : false
+	mESQ[nGav0][1 + nPn][1]>0 ? nGav_0 = mESQ[nGav0][1 + nPn][1] : false
+
+
 }
 
 
@@ -593,9 +503,14 @@ var cpPnMoveStop = function () {
 	mESQ[nGav0][1+nPn][1] = nGav		//> nPara
 	mESQ[nGav0][1+nPn][2] = nIE		//> nIE
 
+	//> Se mudou de local, limpa o destino fnd
+	if (nLado != nLado_0 || nGav != nGav_0) {
+		mESQ[nGav0][1+nPn][3] = 0
+	}
+
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	recalcProd()
+	//_ recalcProd()
 	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
@@ -651,6 +566,8 @@ var cpRxMoveStart = function () {
 	nGav = mESQ[nGav0][1][1]								//> Gaveta de destino
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1][1])][0][1] = '' }
 	//_removUsed(this.attr('id'))
+	mESQ[nGav0][1][0]>0 ? nLado_0 = mESQ[nGav0][1][0] : false
+	mESQ[nGav0][1][1]>0 ? nGav_0 = mESQ[nGav0][1][1] : false
 }
 
 
@@ -689,9 +606,13 @@ var cpRxMoveStop = function () {
 	mESQ[nGav0][1][1] = nGav	//> nPara
 	mESQ[nGav0][1][2] = nIE		//> nIE
 
+	//> Se mudou de local, limpa o destino fnd
+	if (nLado != nLado_0 || nGav != nGav_0) {
+		mESQ[nGav0][1][3] = 0
+	}
 	//_setUsed(this.attr('id'))
 	recalcUsed()
-	recalcProd()
+	//_ recalcProd()
 	recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
@@ -1350,7 +1271,7 @@ function drwRX() {
 		if (nGav0!=nGavs) {		//>	Caso não seja a última gaveta:
 			vLin.push(mG[nGav][0][0][0])
 			vLin.push(mG[nGav][0][0][1])
-		}
+		} else { vLin[vLin.length-1] -= yOff / 4 }
 	}
 	
 	//*	CASO CP EXTERNO
@@ -1363,7 +1284,7 @@ function drwRX() {
 		vLin.push(mG[nGav0][nLado][tmpIE][0])
 		vLin.push(mG[nGav0][nLado][tmpIE][1])
 		vLin.push(mG[nGav][nLado][tmpIE][0])
-		vLin.push(mG[nGav][nLado][tmpIE][1])
+		vLin.push(mG[nGav][nLado][tmpIE][1]+yOff/4)	//> Distanciar seta
 
 		cLinBG = bgcolor
 		//* Linha branca horizontal
@@ -1387,7 +1308,7 @@ function drwRX() {
 		vLinB.push(mG[nGav0][nLado][tmpIE][0])
 		vLinB.push(mG[nGav0][nLado][tmpIE][1])
 		vLinB.push(mG[nGav][nLado][tmpIE][0])
-		vLinB.push(mG[nGav][nLado][tmpIE][1])
+		vLinB.push(mG[nGav][nLado][tmpIE][1]+yOff/4)	//> Distanciar seta
 	}
 	
 	try {vSelLin = vLin} catch (error) {console.log(error)}
@@ -1592,7 +1513,7 @@ function drwPN() {
 				vLinPr.push(mG[nGav0][nLado][tmpIE][0])
 				vLinPr.push(mG[nGav0][nLado][tmpIE][1] + Alt)
 				vLinPr.push(mG[nGav][nLado][tmpIE][0])
-				vLinPr.push(mG[nGav][nLado][tmpIE][1] + Alt)
+				vLinPr.push(mG[nGav][nLado][tmpIE][1] + Alt+yOff/4)	//> Distanciar seta
 				
 				vLinB.push(vLinPr[0])
 				vLinB.push(vLinPr[1])

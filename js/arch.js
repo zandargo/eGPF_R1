@@ -10,9 +10,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 
 const sqlite3 = require('sqlite3').verbose()
 var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
-  if (err) {
-    console.error(err.message)
-  }
+  if (err) { console.error(err.message) }
   console.log('Connected to the Plansichter database.')
 })
 
