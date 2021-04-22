@@ -387,6 +387,11 @@ function ResetSQMA() {
 	resetDINF()
 	resetFND()
 	recalcUsed()
+	
+	// todo	Verificar pq precisa de 2 cliques
+	nGavs = 28
+	calcHtotal()
+	rebuildGPF()
 
 	//> Ponto do produto A
 	try {
@@ -460,7 +465,7 @@ function ResetSQMA() {
 
 	propagate()
 	reColor()
-	nGavs = 28
+	
 	$(".slider").val(65)	
 	$(".spanH").html("65")	
 	$("#nGav-slider").val(nGavs)
@@ -481,10 +486,54 @@ function ResetSQMA() {
 //* -------------------------------------------------------------------------- */
 function LoadSQMA() {
 	console.log('LoadSQMA()')
-	//_ resetMatESQ()
 	ResetSQMA()
 	
+	//* Teste
+	nSQMA = 2013
+	nRev = 1
 
+	// nGavs = 5
+	// rebuildGPF()
+	// calcHtotal()
+
+	// //*	Número de Gavetas
+	sSQL = `SELECT * FROM Reg_SQMA WHERE Key LIKE '%${nSQMA}${nRev}%'`
+	db.get(sSQL, [], (err, row) => {
+		if (err) { throw err }
+		else {
+			nGavs = parseInt(row.nGav, 10)
+			rebuildGPF()
+			calcHtotal()
+			$('#nGavs').html(`${pad(nGavs)}`)
+			$('#nGav-slider').val(nGavs)
+		}
+	})
+	
+	// //*	Altura das gavetas
+	sSQL = `SELECT * FROM Reg_SQMA_GPF WHERE Key LIKE '${nSQMA}${nRev}%'`
+	db.each(sSQL, [], (err, row) => {
+		if (err) { throw err }
+		else {
+
+			let hGav = parseInt(row.HGav, 10)
+			let g = parseInt(row.NoGAV, 10)
+			//_ console.log(`G${pad(g)}: hGav = ${hGav}`)
+			mESQ[g][0][0] = hGav
+			$(`#rngG${pad(g)}`).val(hGav)
+			for (let index = 0; index < mH.length; index++) {
+				if (hGav == mH[index][0]) {
+					let value = mH[index][1]
+					if (mH[index][2] > 0) {
+						value = ' <h5>+' + mH[index][2] + '</h5> ' + mH[index][1]
+					}
+					$(`#valH${pad(g)}`).html(value)
+					break
+				}
+			}
+			rebuildGPF()
+			calcHtotal()
+		}
+	})
 }
 
 

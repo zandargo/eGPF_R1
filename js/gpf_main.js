@@ -18,6 +18,29 @@
 //_ TODO 	Desativar click no DV se !bEditMode
 //_ TODO 	Criar "alerta" se faltar algo na gaveta (Rx ou 2Pn sem destino)
 
+
+
+
+function drwGrps() {
+	for (var i = 1; i <= 32; i++) {
+		var gID = 'G' + pad(i)
+		var gRx = drawSQMA.group() 			//>	Cria Grupo
+		gRx.attr({ id: 'Rx_' + gID }) 		//>	Atribui nome
+		var gRxM = drawSQMA.group() 			//>	Cria Grupo
+		gRxM.attr({ id: 'maskRx_' + gID }) 	//>	Atribui nome
+
+		var gPn1 = drawSQMA.group() 			//>	Cria Grupo
+		gPn1.attr({ id: 'Pn1_' + gID }) 		//>	Atribui nome
+		var gPn2 = drawSQMA.group() 			//>	Cria Grupo
+		gPn2.attr({ id: 'Pn2_' + gID }) 		//>	Atribui nome
+	}
+
+}
+	
+
+
+
+
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
 function propagate() {
 	//_ console.log('propagate()')
@@ -943,7 +966,7 @@ function hideCtrlPts() {
 	try {
 		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' })
 		drawSQMA.select('#SelCir').attr({ visibility: 'hidden' })
-	} catch (error) {console.log(error)}
+	} catch (error) {console.log('Erro: select #SelLin | #SelCir')}
 
 	//* 	Pontos AB
 	try {drawSQMA.select('#CP_A').attr({ visibility: 'hidden' })
@@ -1087,7 +1110,7 @@ function hideGPF() {
 	//* Ocultar Lin Selec
 	try {
 		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' })
-	} catch (error) {console.log(error)}
+	} catch (error) {console.log('Erro: .select(#SelLin)')}
 
 	//* Ocultar polígonos da gaveta
 	for (let j = 32; j >= 0; j--) {
@@ -1131,7 +1154,7 @@ function showGPF() {
 	//* Ocultar Lin Selec
 	try {
 		drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) {console.log(error)}
+	} catch (error) {console.log('Erro: select #SelLin')}
 
 
 	//* Exibir polígonos da gaveta
@@ -2380,8 +2403,9 @@ try {
 		
 		//* --------- POSITION ---------- */
 		drwAreas()
+
 	}
-	
+	// drwGrps()
 	drwGuias()
 	drwCtrlPts()
 	
@@ -2408,7 +2432,7 @@ try {
 	
 	
 	
-	
+
 	
 	
 	

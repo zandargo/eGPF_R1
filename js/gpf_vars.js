@@ -147,18 +147,11 @@ var vSelLin = []
 //Esquema
 var hTotal = 0
 
-var wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
+var sSQL = ''
+var nSQMA = 0
+var nRev = 0
 
-
-
-//* ----------------------------- TEXTO GPF HOVER ---------------------------- */
-//_ var sGavHover = draw.text(x0 + (Larg * wf) / 2 - 40, 250, gIDhover)
-//_ sGavHover.attr({
-//_ 	'font-size': 12,
-//_ 	fill: 'lightgray',
-//_ 	'font-family': 'Roboto, Consolas, Calibri, Arial Narrow',
-//_ 	// 'font-weight': 'bold',
-//_ })
+//_var wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
 
 
 //* -------------------------------------------------------------------------- */
