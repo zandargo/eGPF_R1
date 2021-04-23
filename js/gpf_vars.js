@@ -117,6 +117,7 @@ var iGavSel   = null
 var nGav      = null
 var nLado     = null
 var nIE       = null
+var nFND      = null
 var nGav0     = null
 var nPn 		  = null
 var nLin0 	  = null

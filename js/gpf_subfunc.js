@@ -10,6 +10,14 @@ function dist(u1, v1, u2, v2) {
 	return Math.sqrt((u2 - u1) ** 2 + (v2 - v1) ** 2)
 }
 
+//*	CONVERTER H TOTAL EM H GAVETA
+function parseH(H) {
+	for (let index = 0; index < mH.length; index++) {
+		if (H == mH[index][0]) {
+			return mH[index][1]
+		}
+	}
+}
 
 //*	LADO: STR TO INT
 function nLadoStr2Int(sLado) {
@@ -382,16 +390,17 @@ function calcCOD(nGav) {
 
 function ResetSQMA() {
 	
-	resetMatESQ()
-	resetDESV()
-	resetDINF()
-	resetFND()
-	recalcUsed()
-	
 	// todo	Verificar pq precisa de 2 cliques
 	nGavs = 28
+	resetFND()
+	resetDESV()
+	resetDINF()
+	resetMatESQ()
+
+	recalcUsed()
 	calcHtotal()
 	rebuildGPF()
+	
 
 	//> Ponto do produto A
 	try {
@@ -470,14 +479,14 @@ function ResetSQMA() {
 	$(".spanH").html("65")	
 	$("#nGav-slider").val(nGavs)
 	$("#nGavs").html(nGavs)
-	calcHtotal()
+	//_calcHtotal()
 	$('#z-flow-prod span').html('')
 	$('#z-flow-type span').html('')
 	$('#z-flow-from span').html('')
 	$('#z-flow-to span').html('')
 
-	rebuildGPF()
-	calcHtotal()
+	// calcHtotal()
+	// rebuildGPF()
 }
 
 
@@ -486,41 +495,326 @@ function ResetSQMA() {
 //* -------------------------------------------------------------------------- */
 function LoadSQMA() {
 	console.log('LoadSQMA()')
-	ResetSQMA()
-	
 	//* Teste
-	nSQMA = 2013
-	nRev = 1
+	nSQMA = 2188
+	nRev = 0
 
-	// nGavs = 5
-	// rebuildGPF()
-	// calcHtotal()
+	LoadSQMAdata().then(() => {
+		calcHtotal()
+		recalcProd()
+		recalcUsed()
+		recalcDV()
+		recalcDINF()
+	}).then(() => {
+		rebuildGPF()
+		recolorBTM()
+	})
 
-	// //*	Número de Gavetas
+}
+	
+async function LoadSQMAdata() {
+	ResetSQMA()
+
+	//*	Reg_SQMA
 	sSQL = `SELECT * FROM Reg_SQMA WHERE Key LIKE '%${nSQMA}${nRev}%'`
+	var resReg_SQMA = await
 	db.get(sSQL, [], (err, row) => {
 		if (err) { throw err }
 		else {
 			nGavs = parseInt(row.nGav, 10)
-			rebuildGPF()
+			
+			//*	Ai
+			if (row.Abert1 != '') {
+				//_console.log(`nLado Ai: ${row.Abert1} (${nLadoStr2Int(row.Abert1)})`)
+				nGav0 = 1
+				nGav = 1
+				nLado = nLadoStr2Int(row.Abert1)
+				nPara = 1
+				nIE = 0
+				mESQ[1][1][0] = nLado	//> nLado
+				mESQ[1][1][1] = nPara									//> nPara
+				mESQ[1][1][2] = nIE									//> nIE
+				objCP = drawSQMA
+					.select('#CP_Rx_G01')
+					.transform('t' + mG[1][nLado][nIE][0] + ',' + mG[1][nLado][nIE][1])
+				drwCham()
+				propagate()
+				reColor()
+				drwRX()
+			}
+			//*	Ae
+			if (row.Abert2 != '') {
+				//_console.log(`nLado Ai: ${row.Abert1} (${nLadoStr2Int(row.Abert1)})`)
+				nGav0 = 0
+				nLado = nLadoStr2Int(row.Abert2)
+				nPara = row.Para2
+				nPara = parseInt(nPara.substr(1), 10)
+				nIE = 1
+				nGav = nPara
+				sCPtype = 'Pr'
+				//_ console.log(`Ae: nLado ${row.Abert2} (${nLadoStr2Int(row.Abert2)})`)
+				//_ console.log(`Ae: nPara ${nPara}`)
+				mESQ[0][1][0] = nLado	//> nLado
+				mESQ[0][1][1] = nPara	//> nPara
+				mESQ[0][1][2] = nIE		//> nIE
+				objCP = drawSQMA
+					.select('#CP_A')
+					.transform('t' + mG[nPara][nLado][0][0] + ',' + mG[nPara][nLado][0][1])
+				propagate()
+				reColor()
+				//_ recalcUsed()
+				//_ recalcProd()
+				drwAe()
+			}
+			//*	Be
+			if (row.Abert3 != '') {
+				//_console.log(`nLado Ai: ${row.Abert1} (${nLadoStr2Int(row.Abert1)})`)
+				nGav0 = 0
+				nLado = nLadoStr2Int(row.Abert3)
+				nPara = row.Para3
+				nPara = parseInt(nPara.substr(1), 10)
+				nIE = 1
+				nGav = nPara
+				sCPtype = 'Pr'
+				//_ console.log(`Ae: nLado ${row.Abert2} (${nLadoStr2Int(row.Abert2)})`)
+				//_ console.log(`Ae: nPara ${nPara}`)
+				mESQ[0][2][0] = nLado	//> nLado
+				mESQ[0][2][1] = nPara	//> nPara
+				mESQ[0][2][2] = nIE		//> nIE
+				objCP = drawSQMA
+					.select('#CP_B')
+					.transform('t' + mG[nPara][nLado][0][0] + ',' + mG[nPara][nLado][0][1])
+				propagate()
+				reColor()
+				//_ recalcUsed()
+				//_ recalcProd()
+				drwBe()
+			}
+
+			//*	Desvios
+			if (row.F1 == row.F2 && row.F1!='' && row.F2!='') { aDESV[1] = [1, 0, 0] }
+			if (row.D1 == row.D2 && row.D1!='' && row.D2!='') { aDESV[2] = [1, 0, 0] }
+			if (row.E1 == row.E2 && row.E1!='' && row.E2!='') { aDESV[3] = [1, 0, 0] }
+			if (row.T1 == row.T2 && row.T1!='' && row.T2!='') { aDESV[4] = [1, 0, 0] }
+
 			calcHtotal()
+			rebuildGPF()
 			$('#nGavs').html(`${pad(nGavs)}`)
 			$('#nGav-slider').val(nGavs)
 		}
 	})
 	
-	// //*	Altura das gavetas
+
+	//*	Reg_SQMA_GPF
+	var data = [{},]
 	sSQL = `SELECT * FROM Reg_SQMA_GPF WHERE Key LIKE '${nSQMA}${nRev}%'`
+	var resReg_SQMA_GPFall = await
+	db.all(sSQL, [], (err, rows) => {
+		if (err) { throw err }
+		else {
+			rows.forEach((row)=>{
+				data.push(row)
+    		})
+			//  console.log(data)
+			//  console.log(data[2].Key)
+		 }
+	})
+
+
+	var resReg_SQMA_GPF = await
 	db.each(sSQL, [], (err, row) => {
 		if (err) { throw err }
 		else {
-
 			let hGav = parseInt(row.HGav, 10)
 			let g = parseInt(row.NoGAV, 10)
-			//_ console.log(`G${pad(g)}: hGav = ${hGav}`)
+			//_console.log(`Carregando G${pad(g)}`)
 			mESQ[g][0][0] = hGav
-			$(`#rngG${pad(g)}`).val(hGav)
-			for (let index = 0; index < mH.length; index++) {
+			let sCod = row.CodGav
+			nGav0 = g
+			//* Rx
+			if (g >= 2 && g<=nGavs) {	//> A partir da G02
+				nLado = row.RxPos
+				nLado = nLadoStr2Int(nLado.charAt(0))
+				nPara = row.RxPara
+				nIE = 0
+				nFND = 0
+				//> Traduzir metodologia Excel --> Electron
+				if (row.RxPos.charAt(1) == 'E') {
+					if (nPara.charAt(0) != 'G') {		//> Se manda para o fundo
+						nIE = 1
+						nGav = g + 1 //! Verificar 
+						if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {
+							nFND = 100*nLado+3
+						} else {
+							nFND = 100*nLado + parseInt(nPara.charAt(1),10)
+						}
+						nPara = nGav
+						sAB = ''
+						console.log(`data[${g}][${row.RxPos.charAt(0)+'1'}] = ${data[g][row.RxPos.charAt(0)+'1']}`)
+						
+						mActBTM[nLado][tmp12][1] = 1		//> Set selec
+						mActBTM[nLado][tmp12][2] = 'Rx'	//> Set Prod
+						mActBTM[nLado][tmp12][3] = sAB		//> Set A|B
+						mActBTM[nLado][tmp12][4] = g		//> Set Orig
+						mActBTM[nLado][tmp12][5] = nIE	//> Set IE
+					} else {									//> Se manda para G##
+						nGav = parseInt(nPara.substr(1), 10)
+						if (data[nGav].Pr1Pos != `${row.RxPos.charAt(0)}E` &&	//>Se dest não recebe RxExt
+						data[nGav].Pr2Pos != `${row.RxPos.charAt(0)}E`) {
+							nIE = 1
+							if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
+								nFND = 100*nLado+3
+							} else {
+								nFND = 100*nLado + parseInt(data[nGav].RxPara.substr(1),10)
+							}
+							nGav++
+							nPara = nGav
+						} else {
+							nPara = nGav
+						}
+					}
+
+				} else { nPara = g; nGav = nPara }
+				mESQ[g][1][0] = nLado
+				mESQ[g][1][1] = nPara
+				mESQ[g][1][2] = nIE
+				mESQ[g][1][3] = nFND
+
+				objCP = drawSQMA
+					.select(`#CP_Rx_G${pad(g)}`)
+					.transform('t' + mG[nPara][nLado][nIE][0] + ',' + mG[nPara][nLado][nIE][1])
+				drwCham()
+				propagate()
+				reColor()
+				drwRX()
+			}
+			
+			
+			//*	Pn1
+			if (row.Pn1Pos != '') {
+				nPn = 1
+				nLado = row.Pn1Pos
+				nLado = nLadoStr2Int(nLado.charAt(0))
+				nPara = row.Pn1Para
+				
+				if(nPara!='') {
+					nFND = 0
+					//> Traduzir metodologia Excel --> Electron
+					//_ if (row.Pn1Pos.charAt(1) == 'E') {
+						if (nPara.charAt(0) != 'G') {		//> Se manda para o fundo
+							nIE = 1
+							nGav = g //_ + 1
+							//_ if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {
+							//_ 	nFND = 100*nLado+3
+							//_ } else {
+							//_ 	nFND = 100*nLado + parseInt(nPara.charAt(1),10)
+							//_ }
+							nPara = nGav
+						} else {									//> Se manda para G##
+							nGav = parseInt(nPara.substr(1), 10)
+							if (data[nGav].Pr1Pos != `${row.Pn1Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
+							data[nGav].Pr2Pos != `${row.Pn1Pos.charAt(0)}E`) {
+								//_console.log(`   nGav = ${nGav}`)
+								nIE = 1
+								if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
+									nFND = 100*nLado+3
+								} else {
+									nFND = 100*nLado + parseInt(data[nGav].Pn1Para.substr(1),10)
+								}
+								// nGav++
+								nPara = nGav
+							} else {
+								nIE = 0
+								nPara = nGav
+							}
+						}
+	
+					//_ } else { nPara = g; nGav = nPara }
+				} else {
+					nIE = 1
+					nPara = g
+					nGav = nPara
+					
+				}
+					mESQ[g][2][0] = nLado
+					mESQ[g][2][1] = nPara
+					mESQ[g][2][2] = nIE
+					mESQ[g][2][3] = nFND
+					
+				objCP = drawSQMA
+					.select(`#CP_Pn1_G${pad(g)}`)
+					.transform('t' + mG[nPara][nLado][nIE][0] + ',' + mG[nPara][nLado][nIE][1])
+				propagate()
+				reColor()
+				drwPN()
+			}
+			
+			
+			//*	Pn2
+			if (row.Pn2Pos != '') {
+				nPn = 2
+				nLado = row.Pn2Pos
+				nLado = nLadoStr2Int(nLado.charAt(0))
+				nPara = row.Pn2Para
+				
+				if(nPara!='') {
+					nFND = 0
+					//> Traduzir metodologia Excel --> Electron
+					//_ if (row.Pn1Pos.charAt(1) == 'E') {
+						if (nPara.charAt(0) != 'G') {		//> Se manda para o fundo
+							nIE = 1
+							nGav = g + 1
+							if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {
+								nFND = 100*nLado+3
+							} else {
+								nFND = 100*nLado + parseInt(nPara.charAt(1),10)
+							}
+							nPara = nGav
+						} else {									//> Se manda para G##
+							nGav = parseInt(nPara.substr(1), 10)
+							if (data[nGav].Pr1Pos != `${row.Pn2Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
+							data[nGav].Pr2Pos != `${row.Pn2Pos.charAt(0)}E`) {
+								//_console.log(`   nGav = ${nGav}`)
+								nIE = 1
+								if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
+									nFND = 100*nLado+3
+								} else {
+									nFND = 100*nLado + parseInt(data[nGav].Pn2Para.substr(1),10)
+								}
+								nGav++
+								nPara = nGav
+							} else {
+								nIE = 0
+								nPara = nGav
+							}
+						}
+	
+					//_ } else { nPara = g; nGav = nPara }
+				} else {
+					nIE = 1
+					nPara = g
+					nGav = nPara
+					
+				}
+					mESQ[g][3][0] = nLado
+					mESQ[g][3][1] = nPara
+					mESQ[g][3][2] = nIE
+					mESQ[g][3][3] = nFND
+					
+				objCP = drawSQMA
+					.select(`#CP_Pn2_G${pad(g)}`)
+					.transform('t' + mG[nPara][nLado][nIE][0] + ',' + mG[nPara][nLado][nIE][1])
+				propagate()
+				reColor()
+				drwPN()
+			}
+			
+
+
+			$(`#codGPF${pad(g)}`).html(sCod)								//> Código da gaveta
+			$(`#codGPF${pad(g)}`).css('opacity', 1)
+			$(`#rngG${pad(g)}`).val(hGav)									//> Slider
+			for (let index = 0; index < mH.length; index++) {		//> Txt Altura
 				if (hGav == mH[index][0]) {
 					let value = mH[index][1]
 					if (mH[index][2] > 0) {
@@ -530,10 +824,10 @@ function LoadSQMA() {
 					break
 				}
 			}
-			rebuildGPF()
-			calcHtotal()
+
 		}
 	})
+
 }
 
 

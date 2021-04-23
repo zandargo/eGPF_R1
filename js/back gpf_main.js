@@ -70,13 +70,13 @@ function propagate() {
 	let destBe = 1 * mESQ[0][2][1]					//> nPara Be
 	if (destBe>0 && mESQ[destBe][0][1]!='A') {mESQ[destBe][0][1]='B'} 
 	
-	for (let index = 1; index < nGavs; index++) {
+	for (let index = 1; index <= nGavs; index++) {
 		let prod = mESQ[index][0][1].toString()
 		
 		//> RODUTO/RECHAÇO
 		let dest = 1 * mESQ[index][1][1]				//> nPara
-		if (mESQ[index][1][2] == 0) {					//> nIE
-			if (index == dest) {
+		if (mESQ[index][1][2] == 0) {
+			if (index==dest ) {
 				mESQ[index+1][0][1]=prod
 			} else {
 				mESQ[dest][0][1]=prod
@@ -194,14 +194,18 @@ function drwSliders() {
 						j = parseInt(n, 10)
 						if (j<nGavs) {
 							mESQ[j][0][0] = parseInt(this.value, 10)
+							//$('#codGPF' + n).html('GPF' + mH[index][1])
 						} else {
 							mESQ[j][0][0] = 32
+							//$('#codGPF' + n).html('GPF' + 32)
 						}
 						break
 					}
 				}
+				// j = 1 * index
 				calcHtotal()
 				rebuildGPF()
+				// $('#codGPF' + n).html('GPF' + parseH(mESQ[j][0][0]))
 			},
 			true
 		)
@@ -214,16 +218,70 @@ function drwSliders() {
 //*                      CALCULAR ALTURA TOTAL DAS GAVETAS                     */
 //* -------------------------------------------------------------------------- */
 function calcHtotal() {
-	//* ÚLTIMA GAVETA
-	mESQ[nGavs][0][0] = 32
-	hTotal = 0
-	for (let g = 1; g <= nGavs; g++) {
-		hTotal += mESQ[g][0][0]
-		//_if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
+	//* G00 (PRODUTO B)
+	$('#matGPF' + pad(0))
+			.html(mESQ[0][0]+'<br>'+mESQ[0][1]+'<br>'+mESQ[0][2]+'<br>'+mESQ[0][3])
+	$('#matCUT' + pad(0))
+			.html(mCOD1[0][0]+'<br>'+mCOD1[0][1]+'<br>'+mCOD1[0][2]+'<br>'+mCOD1[0][3])
+
+	//* PRIMEIRA À PENÚLTIMA
+	for (let index = 1; index < nGavs; index++) {
+		let nGPF = pad(index)
+		let source = document.getElementById('rngG' + nGPF)
+		let j = 1 * index
+		try {
+			mESQ[j][0][0] = parseInt(source.value, 10)
+			$('#codGPF' + pad(index)).html(calcCOD(index))
+			$('#matGPF' + pad(index))
+			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
+			$('#matCUT' + pad(index))
+			.html(mCOD1[index][0]+'<br>'+mCOD1[index][1]+'<br>'+mCOD1[index][2]+'<br>'+mCOD1[index][3])
+			
+			//> Código incompleto
+			if (mESQ[index][1][0] == 0 || (mESQ[index][2][0] == 0 && mESQ[index][3][0] == 0)
+				|| ((mESQ[index][2][1] == index && mESQ[index][2][2] == 0) &&
+					(mESQ[index][3][1] == index && mESQ[index][3][2] == 0))) {
+				$('#codGPF' + pad(index)).css('opacity', 0.1)
+			} else {
+				$('#codGPF' + pad(index)).css('opacity', 1)
+			}
+		} catch (error) { }
 	}
+	//* ÚLTIMA GAVETA
+		//_ console.log('nGavs='+nGavs)
+		mESQ[nGavs][0][0] = 32
+		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
+		$('#matGPF' + pad(nGavs))
+		.html(mESQ[nGavs][0] + '<br>' + mESQ[nGavs][1] + '<br>' + mESQ[nGavs][2] + '<br>' + mESQ[nGavs][3])
+		$('#matCUT' + pad(nGavs))
+		.html(mCOD1[nGavs][0] + '<br>' + mCOD1[nGavs][1] + '<br>' + mCOD1[nGavs][2] + '<br>' + mCOD1[nGavs][3])
+		//> Código incompleto
+		if (mESQ[nGavs][1][0]==0 || (mESQ[nGavs][2][0]==0 && mESQ[nGavs][3][0]==0)) {
+			$('#codGPF' + pad(nGavs)).css('opacity', 0.1)
+		} else {
+			$('#codGPF' + pad(nGavs)).css('opacity', 1)
+		}
+
+	hTotal = 0
+	for (let index = 1; index <= nGavs; index++) {
+		hTotal = hTotal + 1 * parseInt(mESQ[index][0][0])
+		if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
+	}
+	//_ let target = document.getElementById('hTotal')
+	//_ target.innerHTML = '&nbsp' + hTotal + 'mm'
+	$('#hTotal').html('&nbsp' + hTotal + 'mm');
+
+	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
 }
 
-
+function parseH(H) {
+	for (let index = 0; index < mH.length; index++) {
+		if (H == mH[index][0]) {
+			return mH[index][1]
+			//break
+		}
+	}
+}
 
 
 
@@ -828,13 +886,13 @@ function showCtrlPts() {
 	for (let i = 4; i >= 1; i--){
 		for (let j = nGavs; j > 0; j--) {
 			iGav = j
-			var gIDtmp = 'G' + pad(j)
+			var gIDtmp = 'G' + pad(iGav)
 			//*	Linhas de Peneirado
 			for (let L = 1; L <= 2; L++) {
 				if (mESQ[j][1 + L][0] == i) {
 					//_ console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
 					try {drawSQMA.select('#Pn' + L + '_' + gIDtmp).appendTo(drawSQMA)
-						} catch (error) {console.log(`Erro: drawSQMA.select('#Pn${L}_${gIDtmp}).appendTo(drawSQMA)`)}
+						} catch (error) {console.log(`Erro: drawSQMA.select('#Pn' + ${L} + '_' + ${gIDtmp}).appendTo(drawSQMA)`)}
 				}
 			}
 			
@@ -2311,54 +2369,6 @@ function rebuildGPF() {
 			hideGuias()
 			hideCtrlPts()
 	}
-
-
-	//* G00 (PRODUTO B)
-	$('#matGPF' + pad(0))
-			.html(mESQ[0][0]+'<br>'+mESQ[0][1]+'<br>'+mESQ[0][2]+'<br>'+mESQ[0][3])
-	$('#matCUT' + pad(0))
-			.html(mCOD1[0][0]+'<br>'+mCOD1[0][1]+'<br>'+mCOD1[0][2]+'<br>'+mCOD1[0][3])
-
-	//* PRIMEIRA À PENÚLTIMA
-	for (let index = 1; index < nGavs; index++) {
-		let nGPF = pad(index)
-		let source = document.getElementById('rngG' + nGPF)
-		let j = 1 * index
-		try {
-			//_mESQ[j][0][0] = parseInt(source.value, 10)
-			$('#codGPF' + pad(index)).html(calcCOD(index))
-			$('#matGPF' + pad(index))
-			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
-			$('#matCUT' + pad(index))
-			.html(mCOD1[index][0]+'<br>'+mCOD1[index][1]+'<br>'+mCOD1[index][2]+'<br>'+mCOD1[index][3])
-			
-			//> Código incompleto
-			if (mESQ[index][1][0] == 0 || (mESQ[index][2][0] == 0 && mESQ[index][3][0] == 0)
-				|| ((mESQ[index][2][1] == index && mESQ[index][2][2] == 0) &&
-					(mESQ[index][3][1] == index && mESQ[index][3][2] == 0))) {
-				$('#codGPF' + pad(index)).css('opacity', 0.1)
-			} else {
-				$('#codGPF' + pad(index)).css('opacity', 1)
-			}
-		} catch (error) { }
-	}
-		
-		
-		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
-		$('#matGPF' + pad(nGavs))
-		.html(mESQ[nGavs][0] + '<br>' + mESQ[nGavs][1] + '<br>' + mESQ[nGavs][2] + '<br>' + mESQ[nGavs][3])
-		$('#matCUT' + pad(nGavs))
-		.html(mCOD1[nGavs][0] + '<br>' + mCOD1[nGavs][1] + '<br>' + mCOD1[nGavs][2] + '<br>' + mCOD1[nGavs][3])
-		//> Código incompleto
-		if (mESQ[nGavs][1][0]==0 || (mESQ[nGavs][2][0]==0 && mESQ[nGavs][3][0]==0)) {
-			$('#codGPF' + pad(nGavs)).css('opacity', 0.1)
-		} else {
-			$('#codGPF' + pad(nGavs)).css('opacity', 1)
-		}
-	
-	$(`#valH${pad(nGavs)}`).html('32')
-	$('#hTotal').html('&nbsp' + hTotal + 'mm');
-	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
 }
 
 
@@ -2403,8 +2413,8 @@ try {
 	drwSliders()
 	drwCOD()
 	nGavs = 28
-	calcHtotal()
 	rebuildGPF()
+	calcHtotal()
 
 
 	drwAi()
