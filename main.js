@@ -33,6 +33,10 @@ const isDev = process.env.NODE_ENV !== 'production'
 var nWid = 0
 isDev ? nWid = 1800 : nWid = 1600
 
+
+
+let childWindow
+
 //* Main Window 
 function createMainWindow() {
 	const mainWindow = new BrowserWindow({
@@ -77,13 +81,44 @@ function createMainWindow() {
 	mainWindow.loadFile('index.html')
 	mainWindow.webContents.send('log', [__dirname])
 	// mainWindow.maximize()
+
+
+
+	childWindow = new BrowserWindow({
+		width : 300,
+		height: 200,
+		resizable: false,
+		frame: false,
+		parent: mainWindow,
+		modal: true,
+		// show: true,
+		show: false,
+		icon  : `${__dirname}/assets/icons/eGPF1.png`,
+		webPreferences: {
+			preload: path.join(__dirname, 'js', 'preload.js'),  //! Window buttom control
+			nodeIntegration: true,
+			enableRemoteModule: true,
+			worldSafeExecuteJavaScript: true,
+			// webSecurity: isDev ? false : true,
+		},
+
+	})
+
+
 }
+
+
+
+
+
+
+
 
 //* -------------------------------------------------------------------------- */
 //*                               App initialize                               */
 //* -------------------------------------------------------------------------- */
 
-app.whenReady().then(createMainWindow)
+app.whenReady().then(createMainWindow)	//.then(cwOpenSQMA)
 ipcMain.on('qDev', (event, arg) => {
 	isDev ? mainWindow.webContents.send('init', 'isDev') : mainWindow.webContents.send('init', 'notDev')
 })

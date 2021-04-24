@@ -94,7 +94,7 @@ function propagate() {
 
 
 //* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
-function reColor() {
+async function reColor() {
 	//_ console.log('reColor()')
 	for (let index = 1; index <= nGavs; index++) { 
 		switch (mESQ[index][0][1]) {
@@ -137,7 +137,7 @@ function reColor() {
 		try { drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
 	}
 
-	recolorBTM()
+	var res_recolorBTM   = await recolorBTM()
 }
 
 
@@ -179,7 +179,7 @@ function drwSliders() {
 
 		input.addEventListener(
 			'input',
-			function () {
+			async function () {
 				let sID = 'valH' + nGPF
 				let target = document.getElementById(sID)
 				let j = 0
@@ -200,8 +200,8 @@ function drwSliders() {
 						break
 					}
 				}
-				calcHtotal()
-				rebuildGPF()
+				var res_calcHtotal   = await calcHtotal()
+				var res_rebuildGPF   = await rebuildGPF()
 			},
 			true
 		)
@@ -213,7 +213,7 @@ function drwSliders() {
 //* -------------------------------------------------------------------------- */
 //*                      CALCULAR ALTURA TOTAL DAS GAVETAS                     */
 //* -------------------------------------------------------------------------- */
-function calcHtotal() {
+async function calcHtotal() {
 	//* ÚLTIMA GAVETA
 	mESQ[nGavs][0][0] = 32
 	hTotal = 0
@@ -375,15 +375,12 @@ function showGuias() {
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		//_ draw.select('#' + "Guia_" + gIDtmp).remove()
 		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 })
-		// paper.append('#' + 'Guia_' + gIDtmp)
 	}
 }
 
 function hideGuias() {
 	//_ console.log('hideGuias()')
-
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
@@ -399,7 +396,7 @@ function hideGuias() {
 //*         FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO PENEIRADO        */
 //* -------------------------------------------------------------------------- */
 
-var cpPnMove = function (dx, dy) {
+var cpPnMove = async function (dx, dy) {
 	this.attr({
 		transform:
 			this.data('origTransform') +
@@ -416,7 +413,7 @@ var cpPnMove = function (dx, dy) {
 }
 
 
-var cpPnMoveStart = function () {
+var cpPnMoveStart = async function () {
 	//_ console.log('cpPnMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
@@ -433,7 +430,7 @@ var cpPnMoveStart = function () {
 }
 
 
-var cpPnMoveStop = function () {
+var cpPnMoveStop = async function () {
 	//_ console.log('cpPnMoveStop()')
 	sCPtype = 'Pn'
 	nLin0 = parseInt(this.attr('id').charAt(5),10)+1
@@ -474,9 +471,8 @@ var cpPnMoveStop = function () {
 	}
 
 	//_setUsed(this.attr('id'))
-	recalcUsed()
-	//_ recalcProd()
-	recolorBTM()
+	var res_recalcUsed   = await recalcUsed()
+	var res_recolorBTM   = await recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -489,11 +485,11 @@ var cpPnMoveStop = function () {
 
 	drwPN() 	//! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	drwSelLin()
-	showCtrlPts()
-	
 	propagate()
 	reColor()
-	calcHtotal()
+	var res_showCtrlPts  = await showCtrlPts()
+	var res_calcHtotal   = await calcHtotal()
+	var res_rebuildGPF   = await rebuildGPF()
 }
 
 
@@ -501,7 +497,7 @@ var cpPnMoveStop = function () {
 //*          FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO RECHAÇO         */
 //* -------------------------------------------------------------------------- */
 
-var cpRxMove = function (dx, dy) {
+var cpRxMove = async function (dx, dy) {
 	
 	this.attr({
 		transform:
@@ -522,7 +518,7 @@ var cpRxMove = function (dx, dy) {
 }
 
 
-var cpRxMoveStart = function () {
+var cpRxMoveStart = async function () {
 	//_ console.log('cpRxMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
@@ -536,7 +532,7 @@ var cpRxMoveStart = function () {
 }
 
 
-var cpRxMoveStop = function () {
+var cpRxMoveStop = async function () {
 	//_ console.log('cpRxMoveStop()')
 	sCPtype = 'Rx'
 	nLin0 = 1
@@ -576,9 +572,8 @@ var cpRxMoveStop = function () {
 		mESQ[nGav0][1][3] = 0
 	}
 	//_setUsed(this.attr('id'))
-	recalcUsed()
-	//_ recalcProd()
-	recolorBTM()
+	var res_recalcUsed   = await recalcUsed()
+	var res_recolorBTM   = await recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -594,15 +589,16 @@ var cpRxMoveStop = function () {
 
 	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	drwSelLin()
-	showCtrlPts()
-	calcHtotal()
+	var res_showCtrlPts  = await showCtrlPts()
+	var res_calcHtotal   = await calcHtotal()
+	var res_rebuildGPF   = await rebuildGPF()
 }
 
 
 //* -------------------------------------------------------------------------- */
 //*          FUNÇÕES DE MOVIMENTAÇÃO DOS PONTOS DE CONTROLE DO PRODUTO         */
 //* -------------------------------------------------------------------------- */
-var cpPrMove = function (dx, dy) {
+var cpPrMove = async function (dx, dy) {
 	this.attr({
 		transform:
 			this.data('origTransform') +
@@ -620,7 +616,7 @@ var cpPrMove = function (dx, dy) {
 
 
 
-var cpPrMoveStart = function () {
+var cpPrMoveStart = async function () {
 	//_ console.log('cpPrMoveStart()')
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
@@ -646,7 +642,7 @@ var cpPrMoveStart = function () {
 }
 
 
-var cpPrMoveStop = function () {
+var cpPrMoveStop = async function () {
 	//_ console.log('cpPrMoveStop()')
 	sCPtype = 'Pr'
 	var bb = this.getBBox()
@@ -681,9 +677,9 @@ var cpPrMoveStop = function () {
 	mESQ[nGav0][nAB][2] = 1			//> nIE [Sempre externo]
 
 	//_setUsed(this.attr('id'))
-	recalcUsed()
-	recalcProd()
-	recolorBTM()
+	var res_recalcUsed   = await recalcUsed()
+	var res_recalcProd   = await recalcProd()
+	var res_recolorBTM   = await recolorBTM()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')
@@ -709,8 +705,9 @@ var cpPrMoveStop = function () {
 		}
 	drwSelLin()
 
-	showCtrlPts()
-	calcHtotal()
+	var res_showCtrlPts  = await showCtrlPts()
+	var res_calcHtotal   = await calcHtotal()
+	var res_rebuildGPF   = await rebuildGPF()
 }
 
 //* -------------------------------------------------------------------------- */
@@ -800,29 +797,27 @@ function drwCtrlPts() {
 	}
 }
 
-function showCtrlPts() {
+async function showCtrlPts() {
 	//_ console.log('showCtrlPts() ; iGav='+pad(iGav))
 	//*	G00
-	try {drawSQMA.select('#CP_G00').appendTo(drawSQMA)
-	} catch (error) {	}
+		drawSQMA.select('#CP_G00') ? 
+		drawSQMA.select('#CP_G00').appendTo(drawSQMA) : false
 	
 	//*	GAVETAS
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//*	Gaveta
-		try {
-			drawSQMA.select('#' + gIDtmp).appendTo(drawSQMA)
-		} catch (error) {}
+			drawSQMA.select('#' + gIDtmp) ?
+			drawSQMA.select('#' + gIDtmp).appendTo(drawSQMA) : false
 		//*	Chaminé
-		try {
-			drawSQMA.select('#Cham_' + gIDtmp).appendTo(drawSQMA)
-		} catch (error) {}
+			drawSQMA.select('#Cham_' + gIDtmp) ?
+			drawSQMA.select('#Cham_' + gIDtmp).appendTo(drawSQMA) : false
 	}
 
 	//* 	LINHA SELEÇÃO
-	try {drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) {console.log('#SelLin = null')}
+	drawSQMA.select('#SelLin') ? 
+		drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 
 	//*	LINHAS DE FLUXO
 	for (let i = 4; i >= 1; i--){
@@ -832,45 +827,44 @@ function showCtrlPts() {
 			//*	Linhas de Peneirado
 			for (let L = 1; L <= 2; L++) {
 				if (mESQ[j][1 + L][0] == i) {
-					//_ console.log('#Pn' + L + '_' + gIDtmp +'='+mESQ[j][1 + L][0])
-					try {drawSQMA.select('#Pn' + L + '_' + gIDtmp).appendTo(drawSQMA)
-						} catch (error) {console.log(`Erro: drawSQMA.select('#Pn${L}_${gIDtmp}).appendTo(drawSQMA)`)}
+						drawSQMA.select('#Pn' + L + '_' + gIDtmp) ?
+						drawSQMA.select('#Pn' + L + '_' + gIDtmp).appendTo(drawSQMA) : false
 				}
 			}
 			
 			//*	Linhas de Rechaço
 			if (mESQ[j][1][0] == i) {
-				//_ console.log('#Rx_' + gIDtmp+'='+mESQ[j][1][0])
-				try {
-					drawSQMA.select('#Rx_' + gIDtmp).appendTo(drawSQMA)
-				} catch (error) {console.log(`Erro: drawSQMA.select('#Rx_' + ${gIDtmp}).appendTo(drawSQMA)`)}
+					drawSQMA.select('#Rx_' + gIDtmp) ? 
+					drawSQMA.select('#Rx_' + gIDtmp).appendTo(drawSQMA) : false
 			}
 		}
 	
 		//*	Linha Ai
 		
-			try {drawSQMA.select('#Ai').appendTo(drawSQMA)
-			} catch (error) { }
+			drawSQMA.select('#Ai') ? 
+			drawSQMA.select('#Ai').appendTo(drawSQMA) : false
 		
 		//*	Linha Ae
 		if (mESQ[0][1][0] == i) {
-			try {drawSQMA.select('#Ae').appendTo(drawSQMA)
-			} catch (error) { }
+				drawSQMA.select('#Ae') ?
+				drawSQMA.select('#Ae').appendTo(drawSQMA) : false
 		}
 		//*	Linha Be
 		if (mESQ[0][2][0] == i) {
-			try {drawSQMA.select('#Be').appendTo(drawSQMA)
-			} catch (error) { }
+				drawSQMA.select('#Be') ?
+				drawSQMA.select('#Be').appendTo(drawSQMA) : false
 		}
 	}
 
 	//* 	CIRC SELEÇÃO
-	try {drawSQMA.select('#SelCir').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) {console.log('#SelCir = null')}
+		drawSQMA.select('#SelCir') ?
+		drawSQMA.select('#SelCir').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 
 	//*	PONTOS Ae & Be
-	drawSQMA.select('#CP_A').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	drawSQMA.select('#CP_B').attr({ visibility: 'visible' }).appendTo(drawSQMA)
+	drawSQMA.select('#CP_A')?
+	drawSQMA.select('#CP_A').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
+	drawSQMA.select('#CP_B') ?
+	drawSQMA.select('#CP_B').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 
 	//*	PONTOS Rx, Pn1, Pn2
 	for (let j = nGavs; j >= 1; j--) {
@@ -892,53 +886,37 @@ function showCtrlPts() {
 			.appendTo(drawSQMA)
 		}
 		
-	// //*	MÁSCARA SelLin
-	// try {draw
-	// 			.select('#maskSelLin')
-	// 			.attr({ visibility: 'visible' })
-	// 			.appendTo(draw)
-	// } catch (error) {}	
-	
 }
 
 
-function hideCtrlPts() {
+async function hideCtrlPts() {
 	//_ console.log('hideCtrlPts() ; iGav='+pad(iGav))
 	//* 	Lin Selec
-	try {
-		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' })
-		drawSQMA.select('#SelCir').attr({ visibility: 'hidden' })
-	} catch (error) {console.log('Erro: select #SelLin | #SelCir')}
+		drawSQMA.select('#SelLin') ? 
+		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' }) : false
+		drawSQMA.select('#SelCir') ?
+		drawSQMA.select('#SelCir').attr({ visibility: 'hidden' }) : false
 
 	//* 	Pontos AB
-	try {drawSQMA.select('#CP_A').attr({ visibility: 'hidden' })
-		} catch (error) {}
-	try {drawSQMA.select('#CP_B').attr({ visibility: 'hidden' })
-		} catch (error) {}
+		drawSQMA.select('#CP_A').attr({ visibility: 'hidden' })
+		drawSQMA.select('#CP_B').attr({ visibility: 'hidden' })
 	
 	// for (let i = 4; i >= 1; i--) {
 		for (let j = 32; j >= 0; j--) {
 			iGav = j
 			var gIDtmp = 'G' + pad(iGav)
 			//* Ponto de Rechaço
-			try {
-				drawSQMA.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' })
-			} catch (error) { }
+				drawSQMA.select('#' + 'CP_Rx_' + gIDtmp) ?
+				drawSQMA.select('#' + 'CP_Rx_' + gIDtmp).attr({ visibility: 'hidden' }) : false
 			//*  Ponto de Peneirado
-			try {
 				for (let l = 1; l <= 2; l++) {
+					drawSQMA.select('#' + 'CP_Pn' + l + '_' + gIDtmp) ?
 					drawSQMA
 						.select('#' + 'CP_Pn' + l + '_' + gIDtmp)
 						.attr({ visibility: 'hidden' })
-						.appendTo(drawSQMA)
+						.appendTo(drawSQMA) : false
 				}
-			} catch (error) { }
-			// //* Linha de Rechaço
-			// try {
-			// 	draw.select('#' + 'Rx_' + gIDtmp).appendTo(draw)
-			// } catch (error) { }
 		}
-	// }
 }
 
 
@@ -1047,56 +1025,48 @@ function drwGPF(xC, yC, L, H) {
 	polygon.appendTo(drawSQMA.select('#' + gID))
 }
 
-function hideGPF() {
+async function hideGPF() {
 	//_ console.log('hideGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
-	try {
-		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' })
-	} catch (error) {console.log('Erro: .select(#SelLin)')}
+		drawSQMA.select('#SelLin') ?
+		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' }) : false
 
 	//* Ocultar polígonos da gaveta
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//* Ocultar Chaminés
-		try {
-			drawSQMA.select('#' + gIDtmp).attr({ visibility: 'hidden' })
-			drawSQMA.select('#Cham_' + gIDtmp).attr({ visibility: 'hidden' })
-		} catch (error) {}
+			drawSQMA.select('#' + gIDtmp) ?
+			drawSQMA.select('#' + gIDtmp).attr({ visibility: 'hidden' }) : false
+			drawSQMA.select('#Cham_' + gIDtmp) ? 
+			drawSQMA.select('#Cham_' + gIDtmp).attr({ visibility: 'hidden' }) : false
 		//* Ocultar Rx
-		try {
-			drawSQMA.select('#Rx_' + gIDtmp).attr({ visibility: 'hidden' })
-		} catch (error) {}
+			drawSQMA.select('#Rx_' + gIDtmp) ?
+			drawSQMA.select('#Rx_' + gIDtmp).attr({ visibility: 'hidden' }) : false
 		//* Ocultar Pn1
-		try {
-			drawSQMA.select('#Pn1_' + gIDtmp).attr({ visibility: 'hidden' })
-		} catch (error) {}
+			drawSQMA.select('#Pn1_' + gIDtmp) ?
+			drawSQMA.select('#Pn1_' + gIDtmp).attr({ visibility: 'hidden' }) : false
 		//* Ocultar Pn2
-		try {
-			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'hidden' })
-		} catch (error) { }
+			drawSQMA.select('#Pn2_' + gIDtmp) ?
+			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'hidden' }) : false
 	}
 
 	//* Ocultar Ai
-	try {
-		drawSQMA.select('#Ai').attr({ visibility: 'hidden' })
-	} catch (error) { }
+		drawSQMA.select('#Ai') ?
+		drawSQMA.select('#Ai').attr({ visibility: 'hidden' }) : false
 	//* Ocultar Ae
-	try {
-		drawSQMA.select('#Ae').attr({ visibility: 'hidden' })
-	} catch (error) { }
+		drawSQMA.select('#Ae') ?
+		drawSQMA.select('#Ae').attr({ visibility: 'hidden' }) : false
 	//* Ocultar Be
-	try {
-		drawSQMA.select('#Be').attr({ visibility: 'hidden' })
-	} catch (error) { }
+		drawSQMA.select('#Be') ?
+		drawSQMA.select('#Be').attr({ visibility: 'hidden' }) : false
 }
 
-function showGPF() {
+async function showGPF() {
 	//_ console.log('showGPF() ; iGav='+pad(iGav))
 	//* Ocultar Lin Selec
-	try {
-		drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) {console.log('Erro: select #SelLin')}
+		drawSQMA.select('#SelLin') ?
+		drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 
 
 	//* Exibir polígonos da gaveta
@@ -1104,46 +1074,38 @@ function showGPF() {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//* Exibir Chaminés
-		try {
-			// draw.select("#" + gIDtmp).attr({ opacity: 0 })
-			drawSQMA.select('#' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
-			drawSQMA.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
-		} catch (error) {}
+			drawSQMA.select('#' + gIDtmp) ?
+			drawSQMA.select('#' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
+			drawSQMA.select('#Cham_' + gIDtmp) ?
+			drawSQMA.select('#Cham_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 		//* Exibir Rx
-		try {
-			drawSQMA.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
-		} catch (error) {}
+			drawSQMA.select('#Rx_' + gIDtmp) ?
+			drawSQMA.select('#Rx_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 		//* Exibir Pn1
-		try {
-			drawSQMA.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
-		} catch (error) {}
+			drawSQMA.select('#Pn1_' + gIDtmp) ?
+			drawSQMA.select('#Pn1_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 		//* Exibir Pn2
-		try {
-			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA)
-		} catch (error) { }
+			drawSQMA.select('#Pn2_' + gIDtmp) ?
+			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 	}
 
 	//* Exibir Ai
-	try {
-		drawSQMA.select('#Ai').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) { }
+		drawSQMA.select('#Ai') ?
+		drawSQMA.select('#Ai').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 	//* Exibir Ae
-	try {
-		drawSQMA.select('#Ae').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) { }
+		drawSQMA.select('#Ae') ?
+		drawSQMA.select('#Ae').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 	//* Exibir Be
-	try {
-		drawSQMA.select('#Be').attr({ visibility: 'visible' }).appendTo(drawSQMA)
-	} catch (error) { }
+		drawSQMA.select('#Be') ?
+		drawSQMA.select('#Be').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
 }
 
 // Função desenhar chaminé
 function drwCham() {
 	//_ console.log('drwCham() ; iGav='+pad(iGav))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
-	try {
-		drawSQMA.select('#Cham_' + gID).remove() //Apaga grupo existente
-	} catch (error) {}
+		drawSQMA.select('#Cham_' + gID) ? 
+		drawSQMA.select('#Cham_' + gID).remove() : false //Apaga grupo existente
 	calcMat(x0, y0 + nGav0 * yOff, Larg) //Calcula os pontos de desenho
 	var gCham = drawSQMA.group() //Cria Grupo Chaminé
 	gCham.attr({ id: 'Cham_' + gID }) //Atribui nome
@@ -1171,10 +1133,10 @@ function drwCham() {
 function drwRX() {
 	//_ console.log('drwRX() ; iGav='+pad(nGav0))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
-	try {
-		drawSQMA.select('#Rx_' + gID).remove() //Apaga grupo existente
-		drawSQMA.select('#maskRx_' + gID).remove() //Apaga grupo existente
-	} catch (error) {}
+		drawSQMA.select('#Rx_' + gID) ?
+		drawSQMA.select('#Rx_' + gID).remove() : false //Apaga grupo existente
+		drawSQMA.select('#maskRx_' + gID) ? 
+		drawSQMA.select('#maskRx_' + gID).remove() : false //Apaga grupo existente
 
 	var gRx = drawSQMA.group() //Cria Grupo
 	gRx.attr({ id: 'Rx_' + gID }) //Atribui nome
@@ -1258,12 +1220,6 @@ function drwRX() {
 		vLinB.push(mG[nGav0][nLado][tmpIE][0])
 		vLinB.push(mG[nGav0][nLado][tmpIE][1])
 
-		//_ if (nGav0 == nGav) {
-		//_ 	vLin.push(mG[nGav][nLado][tmpIE][0])
-		//_ 	vLin.push(mG[nGav][nLado][tmpIE][1] + Alt*2.5)
-		//_ }
-
-		//_ $('#z-flow-clog').html(vLin.join(", "))
 	}
 	
 	//*	CASO CP EXTERNO E GAVETA ABAIXO
@@ -1279,8 +1235,7 @@ function drwRX() {
 	try {vSelLin = vLin} catch (error) {console.log(error)}
 	//*	DESENHAR LINHAS
 	chkProdColor()
-	//Linha Branca
-	try {
+	//>	Linha Branca
 		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
@@ -1293,7 +1248,6 @@ function drwRX() {
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(drawSQMA.select('#Rx_' + gID))
-	} catch (error) {}
 
 	//Linha de fundo escuro
 	var polyline = drawSQMA
@@ -1444,10 +1398,10 @@ function drwPN() {
 	//_ console.log('drwPN() ; iGav='+pad(nGav0))
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
-	try {													//>	Apaga grupo existente
-		drawSQMA.select('#Pn' + nPn + '_' + gID).remove()
-		drawSQMA.select('#maskPn' + nPn + '_' + gID).remove()
-	} catch (error) {} 								
+		drawSQMA.select('#Pn' + nPn + '_' + gID) ? 
+		drawSQMA.select('#Pn' + nPn + '_' + gID).remove() : false
+		drawSQMA.select('#maskPn' + nPn + '_' + gID) ? 
+		drawSQMA.select('#maskPn' + nPn + '_' + gID).remove() : false
 
 	var gPn = drawSQMA.group() 							//>	Cria Grupo
 	gPn.attr({ id: 'Pn' + nPn + '_' + gID }) //>	Atribui nome
@@ -1488,9 +1442,6 @@ function drwPN() {
 			} catch (error) {console.log(error)}
 		}
 
-		//_ console.log(vLinPn)
-		//_ console.log(vLinPr)
-		//_ console.log(vLinB)
 	}
 
 	//*	CASO CP INTERNO E LADO != CENTRO
@@ -1503,8 +1454,6 @@ function drwPN() {
 			vLinPn.push(mG[nGav0][0][0][1] + Alt)
 			vLinPn.push(mG[nGav0][nLado][tmpIE][0])
 			vLinPn.push(mG[nGav0][nLado][tmpIE][1] + Alt)
-			// vLinPn.push(mG[nGav][nLado][tmpIE][0])
-			// vLinPn.push(mG[nGav][nLado][tmpIE][1]+Alt)
 
 			vLinPr.push(mG[nGav0][nLado][tmpIE][0])
 			vLinPr.push(mG[nGav0][nLado][tmpIE][1] + Alt)
@@ -1563,8 +1512,7 @@ function drwPN() {
 	} catch (error) {}
 	//*	DESENHAR LINHAS
 	chkProdColor()
-	//Linha Branca
-	try {
+	//> Linha Branca
 		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
@@ -1576,7 +1524,6 @@ function drwPN() {
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(drawSQMA.select('#Pn' + nPn + '_' + gID))
-	} catch (error) {console.log(error)}
 
 	//Linha principal (animada)
 	var polyline1 = drawSQMA
@@ -1747,10 +1694,10 @@ function drwAi() {
 
 function drwAe() {
 	//_ console.log('drwAe()')
-	try {
-		drawSQMA.select('#Ae').remove() //Apaga grupo existente
-		drawSQMA.select('#maskAe').remove() //Apaga grupo existente
-	} catch (error) {}
+	drawSQMA.select('#Ae') ? 
+	drawSQMA.select('#Ae').remove() : false //Apaga grupo existente
+	drawSQMA.select('#maskAe') ?
+	drawSQMA.select('#maskAe').remove() : false //Apaga grupo existente
 
 	var gAe = drawSQMA.group() //Cria Grupo
 	gAe.attr({ id: 'Ae' }) //Atribui nome
@@ -1807,20 +1754,18 @@ function drwAe() {
 	cLinPN = cLinPNa
 	patPn	 =	patPna
 	//Linha Branca
-	try {
-		var polyline = drawSQMA
-			.polyline(vLinB)
-			.attr({
-				fill: 'none',
-				stroke: cLinBG,
-				// stroke: 'red',
-				strokeWidth: wLinBG * lwid,
-				opacity: oLinBG,
-				'stroke-linecap': 'round',
-				'stroke-linejoin': 'round',
-			})
-			.appendTo(drawSQMA.select('#Ae'))
-	} catch (error) {}
+	var polyline = drawSQMA
+		.polyline(vLinB)
+		.attr({
+			fill: 'none',
+			stroke: cLinBG,
+			// stroke: 'red',
+			strokeWidth: wLinBG * lwid,
+			opacity: oLinBG,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		.appendTo(drawSQMA.select('#Ae'))
 
 	//Linha de fundo escuro
 	var polyline = drawSQMA
@@ -1864,10 +1809,10 @@ function drwAe() {
 
 function drwBe() {
 	//_ console.log('drwBe()')
-	try {
-		drawSQMA.select('#Be').remove() //Apaga grupo existente
-		drawSQMA.select('#maskBe').remove() //Apaga grupo existente
-	} catch (error) {}
+	drawSQMA.select('#Be')? 
+	drawSQMA.select('#Be').remove() : false //Apaga grupo existente
+	drawSQMA.select('#maskBe')?
+	drawSQMA.select('#maskBe').remove() : false  //Apaga grupo existente
 
 	var gBe = drawSQMA.group() //Cria Grupo
 	gBe.attr({ id: 'Be' }) //Atribui nome
@@ -1940,7 +1885,6 @@ function drwBe() {
 	cLinPN = cLinPNb
 	patPn	 =	patPnb
 	//Linha Branca
-	try {
 		var polyline = drawSQMA
 			.polyline(vLinB)
 			.attr({
@@ -1953,7 +1897,6 @@ function drwBe() {
 				'stroke-linejoin': 'round',
 			})
 			.appendTo(drawSQMA.select('#Be'))
-	} catch (error) {}
 
 	//Linha de fundo escuro
 	var polyline = drawSQMA
@@ -2200,7 +2143,7 @@ function gHoverOUT() {
 	// sGavHover.attr({ text: '' })
 }
 
-var clkSelGav = function () {
+var clkSelGav = async function () {
 	gID = this.attr('id')
 	// Se estiver em EditMode, sai:
 	if (bEditMode) {
@@ -2220,7 +2163,7 @@ var clkSelGav = function () {
 
 
 //Ocultar slidersDiv
-function hideSlider() {
+async function hideSlider() {
 	for (let index = 1; index <= 32; index++) {
 		let nGPF = pad(index)
 		let sName = 'sliderGPF' + nGPF
@@ -2237,7 +2180,7 @@ function hideSlider() {
 	}
 }
 //Mostrar slidersDiv
-function showSlider() {
+async function showSlider() {
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
 		let sName = 'sliderGPF' + nGPF
@@ -2294,22 +2237,22 @@ function drwSeta(x, y, w, h, clr, grp, id) {
 //* -------------------------------------------------------------------------- */
 //*                                 RECONSTRUIR                                */
 //* -------------------------------------------------------------------------- */
-function rebuildGPF() {
+async function rebuildGPF() {
 	//*	Oculta tudo
-	hideGPF()
-	hideGuias()
-	hideCtrlPts()
-	hideSlider()
+	var res_hideGPF = await hideGPF()
+	var res_hideGuias = await hideGuias()
+	var res_hideCtrlPts = await hideCtrlPts()
+	var res_hideSlider = await hideSlider()
 	
 	//*	Exibe o que precisa
-	showSlider()
-	showGPF()
-	showGuias()
-	showCtrlPts()
+	var res_showSlider = showSlider()
+	var res_showGPF = showGPF()
+	var res_showGuias = showGuias()
+	var res_showCtrlPts = showCtrlPts()
 	//!	Colocado nessa ordem, para resolver o prob da linha de Pn acima da gaveta
 	if (bEditMode == false) {		
-			hideGuias()
-			hideCtrlPts()
+		var res_hideGuias = await hideGuias()
+		var res_hideCtrlPts = await hideCtrlPts()
 	}
 
 
@@ -2343,7 +2286,7 @@ function rebuildGPF() {
 		} catch (error) { }
 	}
 		
-		
+	//* ÚLTIMA	
 		$('#codGPF' + pad(nGavs)).html(calcCOD(nGavs))
 		$('#matGPF' + pad(nGavs))
 		.html(mESQ[nGavs][0] + '<br>' + mESQ[nGavs][1] + '<br>' + mESQ[nGavs][2] + '<br>' + mESQ[nGavs][3])
@@ -2412,12 +2355,12 @@ try {
 	reColor()
 
 	var slidernGavs = document.getElementById('nGav-slider')
-	slidernGavs.addEventListener('input', function () {
+	slidernGavs.addEventListener('input', async function () {
 		nGavs = slidernGavs.value
 		let vnGav = document.getElementById('nGavs')
 		vnGav.innerHTML = pad(nGavs)
-		rebuildGPF()
-		calcHtotal()
+		var res_rebuildGPF   = await rebuildGPF()
+		var res_calcHtotal   = await calcHtotal()
 	})
 	
 	

@@ -118,7 +118,7 @@ function ladoHoverOUT() {
 
 
 //* ------------------------- CHECAR LETRA DO PRODUTO ------------------------ */
-function chkProdColor() {
+async function chkProdColor() {
 	switch (mESQ[nGav0][0][1]) {
 		case 'A':
 			cLinPR = cLinPRa 
@@ -388,18 +388,17 @@ function calcCOD(nGav) {
 //*                            LIMPAR ESQUEMA (NOVO)                           */
 //* -------------------------------------------------------------------------- */
 
-function ResetSQMA() {
+async function ResetSQMA() {
 	
 	// todo	Verificar pq precisa de 2 cliques
 	nGavs = 28
-	resetFND()
-	resetDESV()
-	resetDINF()
-	resetMatESQ()
-
-	recalcUsed()
-	calcHtotal()
-	rebuildGPF()
+	var res_resetFND = await resetFND()
+	var res_resetDESV = await resetDESV()
+	var res_resetDINF = await resetDINF()
+	var res_resetMatESQ = await resetMatESQ()
+	var res_recalcUsed   = await recalcUsed()
+	var res_calcHtotal   = await calcHtotal()
+	var res_rebuildGPF   = await rebuildGPF()
 	
 
 	//> Ponto do produto A
@@ -472,55 +471,51 @@ function ResetSQMA() {
 
 	}
 
-	propagate()
-	reColor()
-	
 	$(".slider").val(65)	
 	$(".spanH").html("65")	
 	$("#nGav-slider").val(nGavs)
 	$("#nGavs").html(nGavs)
-	//_calcHtotal()
 	$('#z-flow-prod span').html('')
 	$('#z-flow-type span').html('')
 	$('#z-flow-from span').html('')
 	$('#z-flow-to span').html('')
 
-	// calcHtotal()
-	// rebuildGPF()
 }
 
 
 //* -------------------------------------------------------------------------- */
 //*                                ABRIR ESQUEMA                               */
 //* -------------------------------------------------------------------------- */
-function LoadSQMA() {
+async function LoadSQMA() {
 	console.log('LoadSQMA()')
 	//* Teste
 	nSQMA = 2188
 	nRev = 0
 
-	LoadSQMAdata().then(() => {
-		calcHtotal()
-		recalcProd()
-		recalcUsed()
-		recalcDV()
-		recalcDINF()
-	}).then(() => {
-		rebuildGPF()
-		recolorBTM()
-	})
+	var res_LoadSQMAdata = await LoadSQMAdata()
+	var res_calcHtotal   = await calcHtotal()
+	var res_recalcProd   = await recalcProd()
+	var res_recalcUsed   = await recalcUsed()
+	var res_recalcDV     = await recalcDV()
+	var res_recalcDINF   = await recalcDINF()
+	var res_recolorBTM   = await recolorBTM()
+	var res_rebuildGPF   = await rebuildGPF()
 
 }
+
+
+
 	
 async function LoadSQMAdata() {
 	ResetSQMA()
-
+	var dataSQMA = []
 	//*	Reg_SQMA
 	sSQL = `SELECT * FROM Reg_SQMA WHERE Key LIKE '%${nSQMA}${nRev}%'`
 	var resReg_SQMA = await
 	db.get(sSQL, [], (err, row) => {
 		if (err) { throw err }
 		else {
+			dataSQMA.push(row)
 			nGavs = parseInt(row.nGav, 10)
 			
 			//*	Ai
@@ -562,8 +557,6 @@ async function LoadSQMAdata() {
 					.transform('t' + mG[nPara][nLado][0][0] + ',' + mG[nPara][nLado][0][1])
 				propagate()
 				reColor()
-				//_ recalcUsed()
-				//_ recalcProd()
 				drwAe()
 			}
 			//*	Be
@@ -586,8 +579,6 @@ async function LoadSQMAdata() {
 					.transform('t' + mG[nPara][nLado][0][0] + ',' + mG[nPara][nLado][0][1])
 				propagate()
 				reColor()
-				//_ recalcUsed()
-				//_ recalcProd()
 				drwBe()
 			}
 
@@ -606,17 +597,15 @@ async function LoadSQMAdata() {
 	
 
 	//*	Reg_SQMA_GPF
-	var data = [{},]
+	var dataGPF = [{},]
 	sSQL = `SELECT * FROM Reg_SQMA_GPF WHERE Key LIKE '${nSQMA}${nRev}%'`
 	var resReg_SQMA_GPFall = await
 	db.all(sSQL, [], (err, rows) => {
 		if (err) { throw err }
 		else {
 			rows.forEach((row)=>{
-				data.push(row)
+				dataGPF.push(row)
     		})
-			//  console.log(data)
-			//  console.log(data[2].Key)
 		 }
 	})
 
@@ -627,7 +616,7 @@ async function LoadSQMAdata() {
 		else {
 			let hGav = parseInt(row.HGav, 10)
 			let g = parseInt(row.NoGAV, 10)
-			//_console.log(`Carregando G${pad(g)}`)
+			console.log(`Carregando G${pad(g)}`)
 			mESQ[g][0][0] = hGav
 			let sCod = row.CodGav
 			nGav0 = g
@@ -650,22 +639,25 @@ async function LoadSQMAdata() {
 						}
 						nPara = nGav
 						sAB = ''
-						console.log(`data[${g}][${row.RxPos.charAt(0)+'1'}] = ${data[g][row.RxPos.charAt(0)+'1']}`)
+						//_g == 6 ? console.log(`sAB = ${sAB}`) : false
+						//_console.log(`dataSQMA[${g}][${row.RxPos.charAt(0)+'1'}] = ${dataSQMA[0][row.RxPos.charAt(0)+'1']}`)
+						// dataSQMA[0][row.RxPos.charAt(0) + '1']
 						
-						mActBTM[nLado][tmp12][1] = 1		//> Set selec
-						mActBTM[nLado][tmp12][2] = 'Rx'	//> Set Prod
-						mActBTM[nLado][tmp12][3] = sAB		//> Set A|B
-						mActBTM[nLado][tmp12][4] = g		//> Set Orig
-						mActBTM[nLado][tmp12][5] = nIE	//> Set IE
+
+						// mActBTM[nLado][tmp12][1] = 1		//> Set selec
+						// mActBTM[nLado][tmp12][2] = 'Rx'	//> Set Prod
+						// mActBTM[nLado][tmp12][3] = sAB		//> Set A|B
+						// mActBTM[nLado][tmp12][4] = g		//> Set Orig
+						// mActBTM[nLado][tmp12][5] = nIE	//> Set IE
 					} else {									//> Se manda para G##
 						nGav = parseInt(nPara.substr(1), 10)
-						if (data[nGav].Pr1Pos != `${row.RxPos.charAt(0)}E` &&	//>Se dest não recebe RxExt
-						data[nGav].Pr2Pos != `${row.RxPos.charAt(0)}E`) {
+						if (dataGPF[nGav].Pr1Pos != `${row.RxPos.charAt(0)}E` &&	//>Se dest não recebe RxExt
+						dataGPF[nGav].Pr2Pos != `${row.RxPos.charAt(0)}E`) {
 							nIE = 1
 							if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
 								nFND = 100*nLado+3
 							} else {
-								nFND = 100*nLado + parseInt(data[nGav].RxPara.substr(1),10)
+								nFND = 100*nLado + parseInt(dataGPF[nGav].RxPara.substr(1),10)
 							}
 							nGav++
 							nPara = nGav
@@ -712,14 +704,14 @@ async function LoadSQMAdata() {
 							nPara = nGav
 						} else {									//> Se manda para G##
 							nGav = parseInt(nPara.substr(1), 10)
-							if (data[nGav].Pr1Pos != `${row.Pn1Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
-							data[nGav].Pr2Pos != `${row.Pn1Pos.charAt(0)}E`) {
+							if (dataGPF[nGav].Pr1Pos != `${row.Pn1Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
+							dataGPF[nGav].Pr2Pos != `${row.Pn1Pos.charAt(0)}E`) {
 								//_console.log(`   nGav = ${nGav}`)
 								nIE = 1
 								if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
 									nFND = 100*nLado+3
 								} else {
-									nFND = 100*nLado + parseInt(data[nGav].Pn1Para.substr(1),10)
+									nFND = 100*nLado + parseInt(dataGPF[nGav].Pn1Para.substr(1),10)
 								}
 								// nGav++
 								nPara = nGav
@@ -772,14 +764,14 @@ async function LoadSQMAdata() {
 							nPara = nGav
 						} else {									//> Se manda para G##
 							nGav = parseInt(nPara.substr(1), 10)
-							if (data[nGav].Pr1Pos != `${row.Pn2Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
-							data[nGav].Pr2Pos != `${row.Pn2Pos.charAt(0)}E`) {
+							if (dataGPF[nGav].Pr1Pos != `${row.Pn2Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
+							dataGPF[nGav].Pr2Pos != `${row.Pn2Pos.charAt(0)}E`) {
 								//_console.log(`   nGav = ${nGav}`)
 								nIE = 1
 								if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
 									nFND = 100*nLado+3
 								} else {
-									nFND = 100*nLado + parseInt(data[nGav].Pn2Para.substr(1),10)
+									nFND = 100*nLado + parseInt(dataGPF[nGav].Pn2Para.substr(1),10)
 								}
 								nGav++
 								nPara = nGav
@@ -838,6 +830,9 @@ async function LoadSQMAdata() {
 function SaveSQMA() {
 	console.log('SaveSQMA()')
 	//_ resetMatESQ()
+	try {
+		window.open('', '_blank', 'top=500,left=200,frame=false,nodeIntegration=yes')
+	} catch (error) {}
 }
 
 function SaveAsSQMA() {
@@ -852,7 +847,7 @@ function SaveAsSQMA() {
 //*                      FUNÇÕES DA MATRIZ DE CORTE/FUNDO                      */
 //* -------------------------------------------------------------------------- */
 
-function recalcUsed() {
+async function recalcUsed() {
 	//* Tem usinagem
 	for (let g = 1; g <= nGavs; g++) {
 		mCOD1[g][1] = [0, 0, 0, 0, 0]

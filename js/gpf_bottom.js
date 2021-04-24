@@ -466,8 +466,8 @@ drwBTM()
 
 //* ---------------------------- RECOLORIR SAÍDAS ---------------------------- */
 recolorBTM()
-function recolorBTM() {
-	recalcProd()
+async function recolorBTM() {
+	var res_recalcProd   = await recalcProd()
 	let tmpColor = null
 	
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
@@ -589,7 +589,7 @@ function recolorBTM() {
 
 //> Ao clicar, SE ativo E bEditMode ENTÃO: Se ñ-selecionado, assume A|B, matSelecionado=1
 //>													 Else, assume cor neutra, matSelecionado=0
-function clickBTM(sSaida) {
+async function clickBTM(sSaida) {
 	let tmpLado = nLadoStr2Int(sSaida.charAt(0))
 	let tmp12 = parseInt(sSaida.charAt(1), 10) - 1
 	let sAB = mESQ[nGav0][0][1] + ''
@@ -629,15 +629,15 @@ function clickBTM(sSaida) {
 	}
 
 
-	calcHtotal()
-	recalcProd()
-	recolorBTM()
+	var res_calcHtotal   = await calcHtotal()
+	var res_recalcProd   = await recalcProd()
+	var res_recolorBTM   = await recolorBTM()
 }
 
 
 
 //* ------------------------ CLICAR NO DESVIO VERTICAL ----------------------- */
-function clickDV(tmpLado) {
+async function clickDV(tmpLado) {
 	//_ console.log(`clickDV(${tmpLado}): aDESV[${tmpLado}][1]==${aDESV[tmpLado][1]}`)
 	if (bEditMode) {
 		if (aDESV[tmpLado][1] == 0) {		//> Se não usado
@@ -645,14 +645,14 @@ function clickDV(tmpLado) {
 		} else {									//> Se usado
 			aDESV[tmpLado][1] = 0			//> Def não usado
 		}
-		try { recolorBTM() }
+		try { var res_recolorBTM   = await recolorBTM() }
 		catch (error) { console.log(`clickDV(${tmpLado}): ERROR recolorBTM()`) }
 	}
 }
 
 
 //* ---------------- RECALCULAR NOMES DOS PRODUTOS NAS SAÍDAS ---------------- */
-function recalcProd() {
+async function recalcProd() {
 	
 	mESQ[0][2][1] > 0 ? b2prod = true : b2prod = false								//> B foi usado?
 	
@@ -755,16 +755,18 @@ function recalcProd() {
 
 
 	//* Fim
-	recalcDV()
-	recalcDINF()
-	try {calcHtotal()} catch (error) {}
+	var res_recalcDV     = await recalcDV()
+	var res_recalcDINF   = await recalcDINF()
+	try {
+		var res_calcHtotal   = await calcHtotal()
+	} catch (error) { }
 }
 
 
 
 
 //* ---------------------- RECALCULAR DESVIOS INFERIORES --------------------- */
-function recalcDINF() {
+async function recalcDINF() {
 	resetDINF()
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
 		if (aDESV[tmpLado][0] == 0) {								//> Se não tem DV
@@ -784,7 +786,7 @@ function recalcDINF() {
 
 
 //* ---------- RECALCULAR ALTURAS DOS DV E MODIFICAR CÓD DAS GAVETAS --------- */
-function recalcDV() {
+async function recalcDV() {
 	let hAdic = 0
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {					//> Para cada lado
 		switch (tmpLado) {		//> Calcular hAdic do desvio
