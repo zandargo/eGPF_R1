@@ -2359,12 +2359,14 @@ try {
 		nGavs = slidernGavs.value
 		let vnGav = document.getElementById('nGavs')
 		vnGav.innerHTML = pad(nGavs)
-		var res_rebuildGPF   = await rebuildGPF()
 		var res_calcHtotal   = await calcHtotal()
+		var res_rebuildGPF   = await rebuildGPF()
 	})
 	
 	
-	
+	function fTeste() {
+		console.log('Testando função...')
+	}
 
 	
 	

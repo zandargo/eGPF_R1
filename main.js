@@ -109,7 +109,11 @@ function createMainWindow() {
 
 
 
+//* ---------------------------- WINDOW OPEN SQMA ---------------------------- */
+function crwinOpenSQMA() {
+	
 
+}
 
 
 

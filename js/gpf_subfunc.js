@@ -23,6 +23,9 @@ function parseH(H) {
 function nLadoStr2Int(sLado) {
 	let nL = 0
 	switch (sLado) {
+		case 'B':
+			nL = 0
+			break
 		case 'F':
 			nL = 1
 			break
@@ -44,6 +47,9 @@ function nLadoStr2Int(sLado) {
 function nLadoInt2Str(iLado) {
 	let sL = ''
 	switch (iLado) {
+		case 0:
+			sL = 'B'
+			break
 		case 1:
 			sL = 'F'
 			break
@@ -588,8 +594,8 @@ async function LoadSQMAdata() {
 			if (row.E1 == row.E2 && row.E1!='' && row.E2!='') { aDESV[3] = [1, 0, 0] }
 			if (row.T1 == row.T2 && row.T1!='' && row.T2!='') { aDESV[4] = [1, 0, 0] }
 
-			calcHtotal()
-			rebuildGPF()
+			//_ calcHtotal()
+			//_ rebuildGPF()
 			$('#nGavs').html(`${pad(nGavs)}`)
 			$('#nGav-slider').val(nGavs)
 		}
