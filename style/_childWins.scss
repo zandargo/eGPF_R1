@@ -1,0 +1,20 @@
+.divwin {
+	background-color: 'none';
+	width: 100vw;
+	height: 100vh;
+	border: none;
+	display: grid;
+	padding: 0;
+	margin: 0;
+
+	.divwincontent {
+		// display: flex;
+		justify-content: center;
+		background-color: $bg_main;
+		border-radius: 10px;
+		border: 2px solid $color_l2;
+		height: inherit;
+		width: inherit;
+		place-self: stretch stretch;
+	}
+}

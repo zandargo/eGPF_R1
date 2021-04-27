@@ -172,8 +172,25 @@ main {
 	}
 }
 
+//* ------------------------------ CHILD WINDOWS ----------------------------- */
+.divwin {
+	// display: flex;
+	justify-content: center;
+	//_ background-color: #eee;
+	border-radius: 10px;
+	border: 1px solid $color_l2;
+	margin: 20px 0;
+	padding: 50px 0px;
+	height: auto;
+	width: auto;
+	overflow-y: hidden;
+	overflow-x: hidden;
+}
+
+//* --------------------------------- IMPORTS -------------------------------- */
 // @import 'gpf';
 @import 'titlebar';
 @import 'menu';
 @import 'footer';
 @import 'flow';
+@import 'childWins';

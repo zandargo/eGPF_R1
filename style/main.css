@@ -107,6 +107,20 @@ main {
   padding: 10px;
 }
 
+.divwin {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  border-radius: 10px;
+  border: 1px solid #a7b6be;
+  margin: 20px 0;
+  padding: 50px 0px;
+  height: auto;
+  width: auto;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
 #titlebar {
   display: block;
   height: 36px;
@@ -821,4 +835,27 @@ footer div p {
   width: 300px;
   height: 380px;
   place-self: start center;
+}
+
+.divwin {
+  background-color: 'none';
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  display: -ms-grid;
+  display: grid;
+  padding: 0;
+  margin: 0;
+}
+
+.divwin .divwincontent {
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  background-color: #f0f3f4;
+  border-radius: 10px;
+  border: 2px solid #a7b6be;
+  height: inherit;
+  width: inherit;
+  place-self: stretch stretch;
 }

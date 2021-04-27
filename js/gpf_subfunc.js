@@ -588,11 +588,54 @@ async function LoadSQMAdata() {
 				drwBe()
 			}
 
-			//*	Desvios
+			//*	Desvios Verticais
 			if (row.F1 == row.F2 && row.F1!='' && row.F2!='') { aDESV[1] = [1, 0, 0] }
 			if (row.D1 == row.D2 && row.D1!='' && row.D2!='') { aDESV[2] = [1, 0, 0] }
 			if (row.E1 == row.E2 && row.E1!='' && row.E2!='') { aDESV[3] = [1, 0, 0] }
 			if (row.T1 == row.T2 && row.T1!='' && row.T2!='') { aDESV[4] = [1, 0, 0] }
+			
+			//*	Fundo
+			if (row.F1 != '') {
+				mActBTM[1][0][0] = 1
+				mActBTM[1][0][1] = 1
+				mActBTM[1][0][6] = row.F1
+			}
+			if (row.F2 != '') {
+				mActBTM[1][1][0] = 1
+				mActBTM[1][1][1] = 1
+				mActBTM[1][1][6] = row.F2
+			}
+			if (row.D1 != '') {
+				mActBTM[2][0][0] = 1
+				mActBTM[2][0][1] = 1
+				mActBTM[2][0][6] = row.D1
+			}
+			if (row.D2 != '') {
+				mActBTM[2][1][0] = 1
+				mActBTM[2][1][1] = 1
+				mActBTM[2][1][6] = row.D2
+			}
+			if (row.E1 != '') {
+				mActBTM[3][0][0] = 1
+				mActBTM[3][0][1] = 1
+				mActBTM[3][0][6] = row.E1
+			}
+			if (row.E2 != '') {
+				mActBTM[3][1][0] = 1
+				mActBTM[3][1][1] = 1
+				mActBTM[3][1][6] = row.E2
+			
+			}
+			if (row.T1 != '') {
+				mActBTM[4][0][0] = 1
+				mActBTM[4][0][1] = 1
+				mActBTM[4][0][6] = row.T1
+			}
+			if (row.T2 != '') {
+				mActBTM[4][1][0] = 1
+				mActBTM[4][1][1] = 1
+				mActBTM[4][1][6] = row.T2
+			}
 
 			//_ calcHtotal()
 			//_ rebuildGPF()
@@ -622,7 +665,7 @@ async function LoadSQMAdata() {
 		else {
 			let hGav = parseInt(row.HGav, 10)
 			let g = parseInt(row.NoGAV, 10)
-			console.log(`Carregando G${pad(g)}`)
+			//_console.log(`Carregando G${pad(g)}`)
 			mESQ[g][0][0] = hGav
 			let sCod = row.CodGav
 			nGav0 = g
@@ -825,6 +868,12 @@ async function LoadSQMAdata() {
 
 		}
 	})
+
+	console.log(mESQ)
+	console.log(mActBTM)
+
+
+
 
 }
 

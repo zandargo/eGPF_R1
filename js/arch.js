@@ -14,6 +14,11 @@ var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READW
   console.log('Connected to the Plansichter database.')
 })
 
+const remote = electron.remote
+const BrowserWindow = remote.BrowserWindow
+// const mainWindow = BrowserWindow.mainWindow
+const mainWindow = remote.getCurrentWindow()
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -180,3 +185,39 @@ db.each(sql, [], (err, row) => {
 	if (err) {throw err}
 	$('#wrp-defs1').append(`<p>Esquema Nº ${row.NoSQMA}-${row.Rev} </p>`)
 })
+
+
+
+//* -------------------------------------------------------------------------- */
+//*                              TESTE NEW WINDOW                              */
+//* -------------------------------------------------------------------------- */
+
+function cwinLoadSQMA() {
+  const winLoadSQMA = new BrowserWindow({
+		height: 160,
+		width: 480,
+		frame: false,
+		parent: mainWindow,
+	  	modal: true,
+	  	transparent: true,
+		//_ alwaysOnTop: true,
+		icon  : `${__dirname}/assets/icons/eGPF1.png`,
+	  	webPreferences: {
+			nodeIntegration: true,
+			enableRemoteModule: true,
+			worldSafeExecuteJavaScript: true,
+	  }
+  })
+
+	winLoadSQMA.loadFile(`${__dirname}/pages/win_LoadSQMA.html`)
+	
+	winLoadSQMA.on('closed', () => {
+			  winLoadSQMA = null
+	})
+	
+	setTimeout(() => {
+		winLoadSQMA.hide()
+		winLoadSQMA = null
+	} , 3000)
+
+}

@@ -91,6 +91,7 @@ function createMainWindow() {
 		frame: false,
 		parent: mainWindow,
 		modal: true,
+		
 		// show: true,
 		show: false,
 		icon  : `${__dirname}/assets/icons/eGPF1.png`,
@@ -104,14 +105,6 @@ function createMainWindow() {
 
 	})
 
-
-}
-
-
-
-//* ---------------------------- WINDOW OPEN SQMA ---------------------------- */
-function crwinOpenSQMA() {
-	
 
 }
 
