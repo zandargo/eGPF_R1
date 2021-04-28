@@ -398,13 +398,14 @@ async function ResetSQMA() {
 	
 	// todo	Verificar pq precisa de 2 cliques
 	nGavs = 28
-	var res_resetFND = await resetFND()
-	var res_resetDESV = await resetDESV()
-	var res_resetDINF = await resetDINF()
-	var res_resetMatESQ = await resetMatESQ()
+	var res_resetFND 		= await resetFND()
+	var res_resetDESV 	= await resetDESV()
+	var res_resetDINF 	= await resetDINF()
+	var res_resetMatESQ 	= await resetMatESQ()
 	var res_recalcUsed   = await recalcUsed()
 	var res_calcHtotal   = await calcHtotal()
 	var res_rebuildGPF   = await rebuildGPF()
+	var res_recolorBTM   = await recolorBTM()
 	
 
 	//> Ponto do produto A
@@ -496,8 +497,8 @@ async function ResetSQMA() {
 async function LoadSQMA() {
 	console.log('LoadSQMA()')
 	//* Teste
-	nSQMA = 2188
-	nRev = 0
+	// nSQMA = 2188
+	// nRev = 0
 
 	var res_LoadSQMAdata = await LoadSQMAdata()
 	var res_calcHtotal   = await calcHtotal()
@@ -515,6 +516,12 @@ async function LoadSQMA() {
 	
 async function LoadSQMAdata() {
 	ResetSQMA()
+
+	var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
+	if (err) { console.error(err.message) }
+	else { console.log('Connected to the Plansichter database.') }
+	})
+
 	var dataSQMA = []
 	//*	Reg_SQMA
 	sSQL = `SELECT * FROM Reg_SQMA WHERE Key LIKE '%${nSQMA}${nRev}%'`
@@ -872,10 +879,8 @@ async function LoadSQMAdata() {
 
 	console.log(mESQ)
 	console.log(mActBTM)
-
-
-
-
+	db.close()
+	db = null
 }
 
 

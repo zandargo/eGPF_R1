@@ -489,7 +489,7 @@ var arwHEADL = 0.5		//> M% (wFND)
 
 var mActBTM = []
 resetFND()		
-function resetFND() {
+async function resetFND() {
 	mActBTM = [		
 	[[0,0,'','',0,0,''],				//> 00 - Ativo, Selecionado, Origem
 	 [0,0,'','',0,0,'']],			//> ([nLado] [1|2] [Ativo|Selecionado|Tipo|Prod|Origem|IE|Nome])
@@ -524,7 +524,7 @@ var aCont = [
 
 var aDESV = []
 resetDESV()
-function resetDESV() {
+async function resetDESV() {
 	aDESV = [
 		[0, 1, 0],		//> 	[nLado] [Ativo|Selecionado|Altura]
 		[0, 1, 0],		//>	F
@@ -535,7 +535,7 @@ function resetDESV() {
 }
 
 var aDINF = []
-function resetDINF() {
+async function resetDINF() {
 	aDINF = [
 		[[],		
 		 []],
@@ -591,7 +591,7 @@ var aFnd = [
 
 //* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
 var mESQ = []
-function resetMatESQ() {
+async function resetMatESQ() {
 	mESQ = []
 	let mGav = []
 	//_ console.log(mESQ)

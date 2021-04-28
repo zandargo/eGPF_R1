@@ -36,11 +36,12 @@ isDev ? nWid = 1800 : nWid = 1600
 
 
 
+let mainWindow
 let childWindow
 
 //* Main Window 
 function createMainWindow() {
-	const mainWindow = new BrowserWindow({
+	mainWindow = new BrowserWindow({
 		width : nWid,
 		height: 1200,
 		minWidth: 600,
@@ -61,6 +62,8 @@ function createMainWindow() {
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show()
 		isDev ? mainWindow.webContents.send('init', 'isDev') : mainWindow.webContents.send('init', 'notDev')
+
+		
 	})
 
 	
@@ -135,6 +138,10 @@ app.on('activate', () => {
 	}
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
 
+//* -------------------------------------------------------------------------- */
+//*                                IPC LISTENERS                               */
+//* -------------------------------------------------------------------------- */
+ipc.on('loadSQMA', (event, message) => {
+	mainWindow.webContents.send('loadSQMA', message)
+})

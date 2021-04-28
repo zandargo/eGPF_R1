@@ -405,6 +405,11 @@ main {
   border-radius: 5px;
   border: 1px solid #c4cfd4;
   padding: 4px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 #menu-ribbon #rbn-flow img:hover {
@@ -922,6 +927,9 @@ footer div p {
 .divwin .divwincontent #divBtnsLoadSQMA {
   -ms-grid-row: 3;
       grid-row-start: 3;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
 }
 
 .divBTNS {
@@ -964,7 +972,6 @@ footer div p {
 .divBTNS .buttonOK {
   width: 50%;
   margin: 0 10px;
-  border: 2px solid #2e8a2e;
 }
 
 .divBTNS .buttonOK:hover {
@@ -976,7 +983,6 @@ footer div p {
 .divBTNS .buttonCANCEL {
   width: 50%;
   margin: 0 10px;
-  border: 2px solid #993333;
 }
 
 .divBTNS .buttonCANCEL:hover {

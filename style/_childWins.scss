@@ -71,6 +71,7 @@
 
 		#divBtnsLoadSQMA {
 			grid-row-start: 3;
+			justify-content: center;
 		}
 	}
 }
@@ -107,7 +108,7 @@
 	.buttonOK {
 		width: 50%;
 		margin: 0 10px;
-		border: 2px solid $color_ok;
+		// border: 2px solid $color_ok;
 
 		&:hover {
 			background-color: $color_ok;
@@ -118,7 +119,7 @@
 	.buttonCANCEL {
 		width: 50%;
 		margin: 0 10px;
-		border: 2px solid $color_cancel;
+		// border: 2px solid $color_cancel;
 
 		&:hover {
 			background-color: $color_cancel;

@@ -105,17 +105,23 @@
 			border-radius: 5px;
 			border: 1px solid $bg_ribbon;
 			padding: 4px;
-		}
-		img:hover {
-			filter: none;
-			// height: 46px;
-			-webkit-filter: grayscale(0%);
-			-moz-filter: grayscale(0%);
-			-ms-filter: grayscale(0%);
-			-o-filter: grayscale(0%);
-			box-shadow: $shadow1;
-			border-radius: 5px;
-			border: 1px solid $color_l1;
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-drag: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+
+			&:hover {
+				filter: none;
+				// height: 46px;
+				-webkit-filter: grayscale(0%);
+				-moz-filter: grayscale(0%);
+				-ms-filter: grayscale(0%);
+				-o-filter: grayscale(0%);
+				box-shadow: $shadow1;
+				border-radius: 5px;
+				border: 1px solid $color_l1;
+			}
 		}
 	}
 }

@@ -1,3 +1,7 @@
+//* -------------------------------------------------------------------------- */
+//*                                  MAIN DEFS                                 */
+//* -------------------------------------------------------------------------- */
+
 const electron = require('electron')
 const { ipcRenderer } = require('electron')
 const ipc = require('electron').ipcRenderer
@@ -10,6 +14,19 @@ var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READW
 })
 
 
+//* ----------------------------- CLOSE WITH ESC ----------------------------- */
+document.addEventListener("keydown", event => {
+	switch (event.key) {
+	case "Escape":
+		//var window = BrowserWindow.getFocusedWindow();
+		window.close()
+		break;
+	}
+});
+
+
+
+//* -------------------------------- LOAD LIST ------------------------------- */
 loadList()
 function loadList() {
 	sql = `SELECT NoSQMA, Rev FROM Reg_SQMA`
@@ -25,10 +42,11 @@ function loadList() {
 		}
 	})
 	db.close()
+	db = null
 }
 
 
-
+//* --------------------------------- FILTER --------------------------------- */
 function filterSQMAREV() {
   var input, filter, ul, li, a, i;
   input = document.getElementById("inputLoadSQMA");
@@ -46,7 +64,10 @@ function filterSQMAREV() {
 }
 
 
+
+//* --------------------------- SEND RESULT TO MAIN -------------------------- */
 function sndSQMA2main(nSQMA, nRev) {
 	var s = nSQMA + '-' + nRev
-	console.log(s)
+	ipc.send('loadSQMA', s)
+	window.close()
 }

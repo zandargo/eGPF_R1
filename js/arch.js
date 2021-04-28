@@ -228,17 +228,15 @@ function cwinLoadSQMA() {
 			  winLoadSQMA = null
 	})
 	
-	//* Carregar Lista
-	winLoadSQMA.once('ready-to-show', () => {
-	})
-
-
-
-
-
-
 }
 
 
-
-
+//* -------------------------------------------------------------------------- */
+//*                                IPC LISTENERS                               */
+//* -------------------------------------------------------------------------- */
+ipc.on('loadSQMA', (event, message) => {
+	m = message.split("-")
+	nSQMA = parseInt(m[0],10)
+	nRev = parseInt(m[1], 10)
+	LoadSQMA()
+})
