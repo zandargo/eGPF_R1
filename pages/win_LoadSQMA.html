@@ -18,7 +18,43 @@
 
 	<body style="background-color: transparent" class="divwin">
 		<div class="divwin">
-			<div class="divwincontent"></div>
+			<div class="divwincontent">
+				<input
+					type="text"
+					placeholder="Esquema-Rev..."
+					id="inputLoadSQMA"
+					onkeyup="filterSQMAREV()"
+				/>
+				<div id="dropLoadSQMA" class="dropdown-content">
+					<!-- <a href="#about" onclick="sayhi(2188,01)">About</a>
+					<a href="#base">Base</a>
+					<a href="#blog">Blog</a>
+					<a href="#contact">Contact</a>
+					<a href="#custom">Custom</a>
+					<a href="#support">Support</a>
+					<a href="#tools">Tools</a> -->
+				</div>
+				<div class="divBTNS" id="divBtnsLoadSQMA">
+					<!-- <div class="btnOK">Ok</div>
+					<div class="btnCANCEL">Cancelar</div> -->
+					<button class="button buttonOK">Ok</button>
+					<button class="button buttonCANCEL">Cancelar</button>
+				</div>
+			</div>
 		</div>
+
+		<!-- SCRIPTS -->
+		<script>
+			window.$ = window.jQuery = require('../assets/js/jQuery/jquery-3.5.1.js')
+			var $ = require('../assets/js/jQuery/jquery-3.5.1')
+			const { webFrame } = require('electron')
+			webFrame.setZoomFactor(1.05)
+
+			$('.buttonCANCEL').click(function (e) {
+				e.preventDefault()
+				window.close()
+			})
+		</script>
+		<script type="text/javascript" src="..\js\sqma_loadsqma.js"></script>
 	</body>
 </html>

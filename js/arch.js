@@ -6,13 +6,11 @@
 
 const electron = require('electron')
 const { ipcRenderer } = require('electron')
+const ipc = require('electron').ipcRenderer
 const isDev = process.env.NODE_ENV !== 'production'
 
-const sqlite3 = require('sqlite3').verbose()
-var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
-  if (err) { console.error(err.message) }
-  console.log('Connected to the Plansichter database.')
-})
+
+
 
 const remote = electron.remote
 const BrowserWindow = remote.BrowserWindow
@@ -167,6 +165,12 @@ $.get("./pages/rbn_defs1.html", function(data){
 //* -------------------------------------------------------------------------- */
 //*                                 TESTES SQL                                 */
 //* -------------------------------------------------------------------------- */
+//! O banco não pode ser aberto por dois processos. Abrir apenas antes de executar e depois fechar
+const sqlite3 = require('sqlite3').verbose()
+var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
+	if (err) { console.error(err.message) }
+	else { console.log('Connected to the Plansichter database.') }
+})
 
 $('#wrp-chart').append(`<p>.<br><br><br></p>`)
 let sql = ''
@@ -186,6 +190,8 @@ db.each(sql, [], (err, row) => {
 	$('#wrp-defs1').append(`<p>Esquema Nº ${row.NoSQMA}-${row.Rev} </p>`)
 })
 
+db.close()
+
 
 
 //* -------------------------------------------------------------------------- */
@@ -193,31 +199,46 @@ db.each(sql, [], (err, row) => {
 //* -------------------------------------------------------------------------- */
 
 function cwinLoadSQMA() {
-  const winLoadSQMA = new BrowserWindow({
-		height: 160,
-		width: 480,
+  var winLoadSQMA = new BrowserWindow({
+		height: 400,
+		width: 300,
 		frame: false,
 		parent: mainWindow,
 	  	modal: true,
-	  	transparent: true,
+	  transparent: true,
+	  resizable: false,
 		//_ alwaysOnTop: true,
 		icon  : `${__dirname}/assets/icons/eGPF1.png`,
 	  	webPreferences: {
 			nodeIntegration: true,
 			enableRemoteModule: true,
 			worldSafeExecuteJavaScript: true,
+			devTools: false	//! <==============
 	  }
   })
-
-	winLoadSQMA.loadFile(`${__dirname}/pages/win_LoadSQMA.html`)
 	
+	var mainPos = mainWindow.getPosition()
+	var xPos = mainPos[0]
+	var yPos = mainPos[1]
+	winLoadSQMA.setPosition(xPos + 100, yPos + 160)
+	
+	winLoadSQMA.loadFile(`${__dirname}/pages/win_LoadSQMA.html`)
+
 	winLoadSQMA.on('closed', () => {
 			  winLoadSQMA = null
 	})
 	
-	setTimeout(() => {
-		winLoadSQMA.hide()
-		winLoadSQMA = null
-	} , 3000)
+	//* Carregar Lista
+	winLoadSQMA.once('ready-to-show', () => {
+	})
+
+
+
+
+
 
 }
+
+
+
+

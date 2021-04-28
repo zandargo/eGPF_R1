@@ -8,13 +8,122 @@
 	margin: 0;
 
 	.divwincontent {
-		// display: flex;
+		padding: 10px;
+		display: grid;
+		grid-template-rows: 32px auto 40px;
 		justify-content: center;
-		background-color: $bg_main;
+		background-color: $bg_ribbon;
 		border-radius: 10px;
-		border: 2px solid $color_l2;
+		border: 1px solid $color_l1;
 		height: inherit;
 		width: inherit;
-		place-self: stretch stretch;
+
+		#inputLoadSQMA {
+			grid-row-start: 1;
+			box-sizing: border-box;
+			background-image: url('../assets/icons/searchicon.png');
+			background-color: $bg_main;
+			background-size: 24px;
+			background-position: 8px 4px;
+			background-repeat: no-repeat;
+			font-size: 16px;
+			padding: 14px 20px 12px 45px;
+			border: none;
+			border-radius: 5px;
+			font-size: 12pt;
+
+			&:focus {
+				outline: 1px solid $bg_main;
+				box-shadow: 0 0 0 1px $color_l2;
+			}
+		}
+
+		.dropdown-content {
+			grid-row-start: 2;
+			width: 100%;
+			display: block;
+			background-color: $bg_main;
+			border-radius: 5px;
+			overflow-y: auto;
+			z-index: 1;
+			margin: 10px auto;
+			place-self: stretch stretch;
+
+			a {
+				color: black;
+				text-decoration: none;
+				padding: 4px 20px;
+				display: block;
+				// height: 24px;
+
+				&:hover {
+					background-color: $color_l1;
+					padding: 2px 20px;
+					font-size: 14pt;
+				}
+			}
+			p {
+				color: black;
+				padding: 12px 16px;
+				display: block;
+			}
+		}
+
+		#divBtnsLoadSQMA {
+			grid-row-start: 3;
+		}
+	}
+}
+
+.divBTNS {
+	height: 40px;
+	display: flex;
+	flex-direction: row;
+
+	.button {
+		text-align: center;
+		text-decoration: none;
+		display: inline-block;
+		font-size: 14pt;
+		margin: 4px 2px;
+		transition-duration: 0.1s;
+		//_ cursor: pointer;
+		cursor: default;
+		height: 32px;
+		border-radius: 16px;
+		color: $color_d1;
+		font-weight: 500;
+		font-variant: small-caps;
+		background-color: transparent;
+		opacity: 0.5;
+		&:active {
+			outline: 0px solid $bg_main;
+		}
+		&:focus {
+			outline: 0px solid $bg_main;
+		}
+	}
+
+	.buttonOK {
+		width: 50%;
+		margin: 0 10px;
+		border: 2px solid $color_ok;
+
+		&:hover {
+			background-color: $color_ok;
+			color: $color_l5;
+			opacity: 1;
+		}
+	}
+	.buttonCANCEL {
+		width: 50%;
+		margin: 0 10px;
+		border: 2px solid $color_cancel;
+
+		&:hover {
+			background-color: $color_cancel;
+			color: $color_l5;
+			opacity: 1;
+		}
 	}
 }

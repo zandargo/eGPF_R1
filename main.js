@@ -8,9 +8,10 @@ const fs = require('fs')
 const path = require('path')
 // const url = require('url')
 const { app, BrowserWindow, ipcMain } = require('electron')
+const ipc = require('electron').ipcMain
 const env = process.env.NODE_ENV || 'development'
 
-
+const windows = new Set()
 
 
 //* If development environment
