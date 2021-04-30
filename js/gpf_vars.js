@@ -73,9 +73,9 @@ var cCtrlPntPne = cLinPN0	//> Cor do Ponto de controle Pn externo
 var cFNDon	=	$('#menu-tabs').css('background-color')
 
 
-var fndBlur01 = drawFND.filter(Snap.filter.blur(1))
-var fndBlur02 = drawFND.filter(Snap.filter.blur(2))
-var fndBlur05 = drawFND.filter(Snap.filter.blur(5))
+//_ var fndBlur01 = drawFND.filter(Snap.filter.blur(1))
+//_ var fndBlur02 = drawFND.filter(Snap.filter.blur(2))
+//_ var fndBlur05 = drawFND.filter(Snap.filter.blur(5))
 
 //* --------------------------- Definições Animação -------------------------- */
 
@@ -504,7 +504,7 @@ async function resetFND() {
 	]	
 	nGav0 = 0
 	nGav = 0
-
+	return 1
 }
 
 
@@ -532,6 +532,7 @@ async function resetDESV() {
 		[0, 1, 0],		//>	E
 		[0, 1, 0],		//>	T
 	]
+	return 1
 }
 
 var aDINF = []
@@ -548,6 +549,7 @@ async function resetDINF() {
 		[[0,0],	//> T1i T1e
 		 [0,0]],	//> T2i T2e
 	]
+	return 1
 }
 
 
@@ -629,6 +631,7 @@ async function resetMatESQ() {
 		]
 	mESQ.push(mGav)
 
+	return 1
 }
 resetMatESQ()
 

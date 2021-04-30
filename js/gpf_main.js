@@ -119,25 +119,53 @@ async function reColor() {
 		}
 		var gIDtmp = 'G' + pad(index)
 		//*	COLORIR RECHAÇO
-		try { drawSQMA.select('#' + 'linRx0_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
-		try { drawSQMA.select('#' + 'linRx1_' + gIDtmp).attr({ stroke: cLinRX }) } catch (error) {}
-		try { drawSQMA.select('#' + 'arwRx_'  + gIDtmp).attr({ fill  : cLinRX }) } catch (error) {}
+		drawSQMA.select('#' + 'linRx0_' + gIDtmp) ? 
+		drawSQMA.select('#' + 'linRx0_' + gIDtmp).attr({ stroke: cLinRX }) : false
+	
+		drawSQMA.select('#' + 'linRx1_' + gIDtmp) ?
+		drawSQMA.select('#' + 'linRx1_' + gIDtmp).attr({ stroke: cLinRX }) : false
+	
+		drawSQMA.select('#' + 'arwRx_' + gIDtmp) ?
+		drawSQMA.select('#' + 'arwRx_' + gIDtmp).attr({ fill: cLinRX }) : false
+		
 		//*	COLORIR PENEIRADO
-		try { drawSQMA.select('#' + 'linPn1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'linPn2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'linPr1_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'linPr2_' + gIDtmp).attr({ stroke: cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'arwPn1_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'arwPn2_' + gIDtmp).attr({ fill  : cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'PnD1_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
-		try { drawSQMA.select('#' + 'PnD2_' 	 + gIDtmp).attr({ fill  : patPn  }) } catch (error) {}
+		drawSQMA.select('#' + 'linPn1_' + gIDtmp) ?
+		drawSQMA.select('#' + 'linPn1_' + gIDtmp).attr({ stroke: cLinPN }) : false
+	
+		drawSQMA.select('#' + 'linPn2_' + gIDtmp) ?
+		drawSQMA.select('#' + 'linPn2_' + gIDtmp).attr({ stroke: cLinPN }) : false
+	
+		drawSQMA.select('#' + 'linPr1_' + gIDtmp) ?
+		drawSQMA.select('#' + 'linPr1_' + gIDtmp).attr({ stroke: cLinPN }) : false
+	
+		drawSQMA.select('#' + 'linPr2_' + gIDtmp) ?
+		drawSQMA.select('#' + 'linPr2_' + gIDtmp).attr({ stroke: cLinPN }) : false
+		
+		drawSQMA.select('#' + 'arwPn1_' + gIDtmp) ?
+		drawSQMA.select('#' + 'arwPn1_' + gIDtmp).attr({ fill: cLinPN }) : false
+		
+		drawSQMA.select('#' + 'arwPn2_' + gIDtmp) ?
+		drawSQMA.select('#' + 'arwPn2_' + gIDtmp).attr({ fill: cLinPN }) : false
+		
+		drawSQMA.select('#' + 'PnD1_' + gIDtmp) ?
+		drawSQMA.select('#' + 'PnD1_' + gIDtmp).attr({ fill: patPn }) : false
+		
+		drawSQMA.select('#' + 'PnD2_' + gIDtmp) ?
+		drawSQMA.select('#' + 'PnD2_' + gIDtmp).attr({ fill: patPn }) : false
+		
 		//*	COLORIR CPoints
-		try { drawSQMA.select('#' + 'CP_Rx_'  + gIDtmp).attr({ fill: cLinRX }) } catch (error) {}
-		try { drawSQMA.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
-		try { drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) } catch (error) {}
+		drawSQMA.select('#' + 'CP_Rx_' + gIDtmp) ?
+		drawSQMA.select('#' + 'CP_Rx_' + gIDtmp).attr({ fill: cLinRX }) : false
+		
+		drawSQMA.select('#' + 'CP_Pn1_' + gIDtmp) ?
+		drawSQMA.select('#' + 'CP_Pn1_' + gIDtmp).attr({ fill: cLinPN }) : false
+		
+		drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp) ?
+		drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) : false
+		
 	}
 
-	var res_recolorBTM   = await recolorBTM()
+	return 1
 }
 
 
@@ -210,18 +238,7 @@ function drwSliders() {
 
 
 
-//* -------------------------------------------------------------------------- */
-//*                      CALCULAR ALTURA TOTAL DAS GAVETAS                     */
-//* -------------------------------------------------------------------------- */
-async function calcHtotal() {
-	//* ÚLTIMA GAVETA
-	mESQ[nGavs][0][0] = 32
-	hTotal = 0
-	for (let g = 1; g <= nGavs; g++) {
-		hTotal += mESQ[g][0][0]
-		//_if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
-	}
-}
+
 
 
 
@@ -379,15 +396,15 @@ function showGuias() {
 	}
 }
 
-function hideGuias() {
+async function hideGuias() {
 	//_ console.log('hideGuias()')
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		try {
-			drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 })
-		} catch (error) {}
+		drawSQMA.select('#' + 'Guia_' + gIDtmp) ?
+		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 }) : false
 	}
+	return 1
 }
 
 
@@ -410,6 +427,7 @@ var cpPnMove = async function (dx, dy) {
 	yi = bb.cy
 	let s = this.attr('id')
 	s = s.substr(s.length - 3)
+	return 1
 }
 
 
@@ -426,7 +444,7 @@ var cpPnMoveStart = async function () {
 	mESQ[nGav0][1 + nPn][0]>0 ? nLado_0 = mESQ[nGav0][1 + nPn][0] : false
 	mESQ[nGav0][1 + nPn][1]>0 ? nGav_0 = mESQ[nGav0][1 + nPn][1] : false
 
-
+	return 1
 }
 
 
@@ -471,8 +489,11 @@ var cpPnMoveStop = async function () {
 	}
 
 	//_setUsed(this.attr('id'))
-	var res_recalcUsed   = await recalcUsed()
-	var res_recolorBTM   = await recolorBTM()
+	const res_recalcProd   = await recalcProd  ()
+	const res_recalcUsed   = await recalcUsed  ()
+	const res_recalcDV     = await recalcDV    ()
+	const res_recalcDINF   = await recalcDINF  ()
+	const res_recolorBTM   = await recolorBTM  ()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -490,6 +511,7 @@ var cpPnMoveStop = async function () {
 	var res_showCtrlPts  = await showCtrlPts()
 	var res_calcHtotal   = await calcHtotal()
 	var res_rebuildGPF   = await rebuildGPF()
+	return 1
 }
 
 
@@ -514,7 +536,7 @@ var cpRxMove = async function (dx, dy) {
 	s = s.substr(s.length - 3)
 
 	
-
+	return 1
 }
 
 
@@ -528,7 +550,8 @@ var cpRxMoveStart = async function () {
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][1][1])][0][1] = '' }
 	//_removUsed(this.attr('id'))
 	mESQ[nGav0][1][0]>0 ? nLado_0 = mESQ[nGav0][1][0] : false
-	mESQ[nGav0][1][1]>0 ? nGav_0 = mESQ[nGav0][1][1] : false
+	mESQ[nGav0][1][1] > 0 ? nGav_0 = mESQ[nGav0][1][1] : false
+	return 1
 }
 
 
@@ -572,8 +595,11 @@ var cpRxMoveStop = async function () {
 		mESQ[nGav0][1][3] = 0
 	}
 	//_setUsed(this.attr('id'))
-	var res_recalcUsed   = await recalcUsed()
-	var res_recolorBTM   = await recolorBTM()
+	const res_recalcProd   = await recalcProd  ()
+	const res_recalcUsed   = await recalcUsed  ()
+	const res_recalcDV     = await recalcDV    ()
+	const res_recalcDINF   = await recalcDINF  ()
+	const res_recolorBTM   = await recolorBTM  ()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -592,6 +618,7 @@ var cpRxMoveStop = async function () {
 	var res_showCtrlPts  = await showCtrlPts()
 	var res_calcHtotal   = await calcHtotal()
 	var res_rebuildGPF   = await rebuildGPF()
+	return 1
 }
 
 
@@ -612,6 +639,7 @@ var cpPrMove = async function (dx, dy) {
 	yi = bb.cy
 	let s = this.attr('id')
 	s = s.substr(s.length - 1)
+	return 1
 }
 
 
@@ -639,6 +667,7 @@ var cpPrMoveStart = async function () {
 	if (nGav != nGav0) { mESQ[(mESQ[nGav0][nAB][1])][0][1] = '' } 
 	$('#z-flow-prod span').html(s = s.substr(s.length - 1))
 	//_removUsed(this.attr('id'))
+	return 1
 }
 
 
@@ -677,9 +706,11 @@ var cpPrMoveStop = async function () {
 	mESQ[nGav0][nAB][2] = 1			//> nIE [Sempre externo]
 
 	//_setUsed(this.attr('id'))
-	var res_recalcUsed   = await recalcUsed()
-	var res_recalcProd   = await recalcProd()
-	var res_recolorBTM   = await recolorBTM()
+	const res_recalcProd   = await recalcProd  ()
+	const res_recalcUsed   = await recalcUsed  ()
+	const res_recalcDV     = await recalcDV    ()
+	const res_recalcDINF   = await recalcDINF  ()
+	const res_recolorBTM   = await recolorBTM  ()
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')
@@ -708,6 +739,7 @@ var cpPrMoveStop = async function () {
 	var res_showCtrlPts  = await showCtrlPts()
 	var res_calcHtotal   = await calcHtotal()
 	var res_rebuildGPF   = await rebuildGPF()
+	return 1
 }
 
 //* -------------------------------------------------------------------------- */
@@ -885,7 +917,7 @@ async function showCtrlPts() {
 			.attr({ visibility: 'visible' })
 			.appendTo(drawSQMA)
 		}
-		
+	return 1
 }
 
 
@@ -917,6 +949,7 @@ async function hideCtrlPts() {
 						.appendTo(drawSQMA) : false
 				}
 		}
+	return 1
 }
 
 
@@ -1060,6 +1093,7 @@ async function hideGPF() {
 	//* Ocultar Be
 		drawSQMA.select('#Be') ?
 		drawSQMA.select('#Be').attr({ visibility: 'hidden' }) : false
+	return 1
 }
 
 async function showGPF() {
@@ -1098,6 +1132,7 @@ async function showGPF() {
 	//* Exibir Be
 		drawSQMA.select('#Be') ?
 		drawSQMA.select('#Be').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
+	return 1
 }
 
 // Função desenhar chaminé
@@ -1232,7 +1267,7 @@ function drwRX() {
 		vLinB.push(mG[nGav][nLado][tmpIE][1]+yOff/4)	//> Distanciar seta
 	}
 	
-	try {vSelLin = vLin} catch (error) {console.log(error)}
+		vSelLin.length > 0 ? vSelLin = vLin : false
 	//*	DESENHAR LINHAS
 	chkProdColor()
 	//>	Linha Branca
@@ -1394,7 +1429,7 @@ function drwRX() {
 //* -------------------------------------------------------------------------- */
 //*                         DESENHAR LINHA DE PENEIRADO                        */
 //* -------------------------------------------------------------------------- */
-function drwPN() {
+async function drwPN() {
 	//_ console.log('drwPN() ; iGav='+pad(nGav0))
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
@@ -1428,7 +1463,7 @@ function drwPN() {
 		vLinB.push(mG[nGav0][nLado][tmpIE][1] + Alt)
 
 		if (nGav0 != nGav) {
-			try {
+			//_try {
 				vLinPr.push(mG[nGav0][nLado][tmpIE][0])
 				vLinPr.push(mG[nGav0][nLado][tmpIE][1] + Alt)
 				vLinPr.push(mG[nGav][nLado][tmpIE][0])
@@ -1439,7 +1474,7 @@ function drwPN() {
 				vLinB.push(vLinPr[2])
 				vLinB.push(vLinPr[3])
 				
-			} catch (error) {console.log(error)}
+			//_} catch (error) {console.log(error)}
 		}
 
 	}
@@ -1507,9 +1542,7 @@ function drwPN() {
 
 	vSelLin = []
 	vSelLin.push(vLinPn)
-	try {
-		vSelLin.push(vLinPr)
-	} catch (error) {}
+	vLinPr.length > 0 ? vSelLin.push(vLinPr) : false
 	//*	DESENHAR LINHAS
 	chkProdColor()
 	//> Linha Branca
@@ -1643,13 +1676,14 @@ function drwPN() {
 	if (nIE == 1 && nGav0 != nGav) {
 		drwSeta(vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID, 'arwPn'+nPn+'_' + gID)
 	}
+	return 1
 }
 
 
 //* -------------------------------------------------------------------------- */
 //*                         DESENHAR LINHAS DE PRODUTO                         */
 //* -------------------------------------------------------------------------- */
-function drwAi() {
+async function drwAi() {
 	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
 
 	var gAi = drawSQMA.group() //Cria Grupo
@@ -1689,10 +1723,10 @@ function drwAi() {
 		},
 		Anim2
 	)
-
+		return 1
 }
 
-function drwAe() {
+async function drwAe() {
 	//_ console.log('drwAe()')
 	drawSQMA.select('#Ae') ? 
 	drawSQMA.select('#Ae').remove() : false //Apaga grupo existente
@@ -1744,8 +1778,7 @@ function drwAe() {
 		vLin.push(mG[nGav][0][0][1])
 	}
 	
-	
-	try { vSelLin = vLin } catch (error) { console.log(error) }
+	vSelLin.length > 0 ? vSelLin = vLin : false
 	
 	//*	DESENHAR LINHAS
 	//_chkProdColor()
@@ -1804,10 +1837,10 @@ function drwAe() {
 	)
 
 
-
+		return 1
 }
 
-function drwBe() {
+async function drwBe() {
 	//_ console.log('drwBe()')
 	drawSQMA.select('#Be')? 
 	drawSQMA.select('#Be').remove() : false //Apaga grupo existente
@@ -1876,8 +1909,8 @@ function drwBe() {
 		vLin.push(mG[nGav][0][0][1])
 	}
 	
+	vSelLin.length > 0 ? vSelLin = vLin : false
 	
-	try {vSelLin = vLin} catch (error) {console.log(error)}
 	//*	DESENHAR LINHAS
 	//_chkProdColor()
 	cLinPR = cLinPRb 
@@ -1935,7 +1968,7 @@ function drwBe() {
 	)
 
 
-
+		return 1
 }
 
 
@@ -1945,12 +1978,18 @@ function drwBe() {
 
 function drwSelLin() {
 	//_ console.log('drwSelLin()')
-	try {
-		drawSQMA.select('#circleSel1').remove() 
-		drawSQMA.select('#SelLin').remove() 		//> Apaga grupo existente
-		drawSQMA.select('#maskSelLin').remove() //> Apaga grupo existente
-		drawSQMA.select('#SelCir').remove() 		//> Apaga grupo existente
-	} catch (error) {}
+	drawSQMA.select('#circleSel1') ? 
+		drawSQMA.select('#circleSel1').remove() : false
+	
+	drawSQMA.select('#SelLin') ? 		
+		drawSQMA.select('#SelLin').remove() : false		
+	
+	drawSQMA.select('#maskSelLin') ?
+		drawSQMA.select('#maskSelLin').remove() : false
+	
+	drawSQMA.select('#SelCir') ?
+		drawSQMA.select('#SelCir').remove() : false
+	
 
 	var gSL = drawSQMA.group() 				//> Cria Grupo
 	gSL.attr({ id: 'SelLin' }) 		//> Atribui nome
@@ -2143,8 +2182,8 @@ function gHoverOUT() {
 	// sGavHover.attr({ text: '' })
 }
 
-var clkSelGav = async function () {
-	gID = this.attr('id')
+async function clkSelGav(gID) {
+	// gID = this.attr('id')
 	// Se estiver em EditMode, sai:
 	if (bEditMode) {
 		hideGuias()
@@ -2155,9 +2194,11 @@ var clkSelGav = async function () {
 	} else {
 		showGuias()
 		showCtrlPts()
-		iGavSel = this.attr('id')
+		// iGavSel = this.attr('id')
+		iGavSel = gID
 		bEditMode = true
 	}
+	return 1
 }
 
 
@@ -2178,6 +2219,7 @@ async function hideSlider() {
 		let rng = document.getElementById(sName)
 		rng.style.display = 'none'
 	}
+	return 1
 }
 //Mostrar slidersDiv
 async function showSlider() {
@@ -2212,6 +2254,7 @@ async function showSlider() {
 			target.innerHTML = 32
 		}
 	}
+	return 1
 }
 
 
@@ -2238,6 +2281,7 @@ function drwSeta(x, y, w, h, clr, grp, id) {
 //*                                 RECONSTRUIR                                */
 //* -------------------------------------------------------------------------- */
 async function rebuildGPF() {
+	console.log('rebuildGPF(): start')
 	//*	Oculta tudo
 	var res_hideGPF = await hideGPF()
 	var res_hideGuias = await hideGuias()
@@ -2267,23 +2311,21 @@ async function rebuildGPF() {
 		let nGPF = pad(index)
 		let source = document.getElementById('rngG' + nGPF)
 		let j = 1 * index
-		try {
 			//_mESQ[j][0][0] = parseInt(source.value, 10)
-			$('#codGPF' + pad(index)).html(calcCOD(index))
-			$('#matGPF' + pad(index))
-			.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
-			$('#matCUT' + pad(index))
-			.html(mCOD1[index][0]+'<br>'+mCOD1[index][1]+'<br>'+mCOD1[index][2]+'<br>'+mCOD1[index][3])
-			
-			//> Código incompleto
-			if (mESQ[index][1][0] == 0 || (mESQ[index][2][0] == 0 && mESQ[index][3][0] == 0)
-				|| ((mESQ[index][2][1] == index && mESQ[index][2][2] == 0) &&
-					(mESQ[index][3][1] == index && mESQ[index][3][2] == 0))) {
-				$('#codGPF' + pad(index)).css('opacity', 0.1)
-			} else {
-				$('#codGPF' + pad(index)).css('opacity', 1)
-			}
-		} catch (error) { }
+		$('#codGPF' + pad(index)).html(calcCOD(index))
+		$('#matGPF' + pad(index))
+		.html(mESQ[index][0]+'<br>'+mESQ[index][1]+'<br>'+mESQ[index][2]+'<br>'+mESQ[index][3])
+		$('#matCUT' + pad(index))
+		.html(mCOD1[index][0]+'<br>'+mCOD1[index][1]+'<br>'+mCOD1[index][2]+'<br>'+mCOD1[index][3])
+		
+		//> Código incompleto
+		if (mESQ[index][1][0] == 0 || (mESQ[index][2][0] == 0 && mESQ[index][3][0] == 0)
+			|| ((mESQ[index][2][1] == index && mESQ[index][2][2] == 0) &&
+				(mESQ[index][3][1] == index && mESQ[index][3][2] == 0))) {
+			$('#codGPF' + pad(index)).css('opacity', 0.1)
+		} else {
+			$('#codGPF' + pad(index)).css('opacity', 1)
+		}
 	}
 		
 	//* ÚLTIMA	
@@ -2302,6 +2344,8 @@ async function rebuildGPF() {
 	$(`#valH${pad(nGavs)}`).html('32')
 	$('#hTotal').html('&nbsp' + hTotal + 'mm');
 	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
+	console.log('rebuildGPF(): end')
+	return 1
 }
 
 
@@ -2312,10 +2356,8 @@ async function rebuildGPF() {
 //*                                    INIT                                    */
 //* -------------------------------------------------------------------------- */
 
-try {
 	isDev ? $('#divMAT').show() : $('#divMAT').hide()
 	isDev ? $('#divCUT').show() : $('#divCUT').hide()
-} catch (error) {}
 
 //*	ITERAÇÕES
 
@@ -2332,7 +2374,7 @@ try {
 		gGav.attr({ id: gID })
 		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
 		drawSQMA.select('#' + gID).hover(gHoverIN, gHoverOUT)
-		drawSQMA.select('#' + gID).click(clkSelGav)
+		drawSQMA.select('#' + gID).click(() => { clkSelGav(gID) })
 		
 		//* --------- POSITION ---------- */
 		drwAreas()
@@ -2361,12 +2403,10 @@ try {
 		vnGav.innerHTML = pad(nGavs)
 		var res_calcHtotal   = await calcHtotal()
 		var res_rebuildGPF   = await rebuildGPF()
+		return 1
 	})
 	
 	
-	function fTeste() {
-		console.log('Testando função...')
-	}
 
 	
 	

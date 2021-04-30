@@ -123,6 +123,20 @@ function ladoHoverOUT() {
 }
 
 
+//* -------------------- CALCULAR ALTURA TOTAL DAS GAVETAS ------------------- */
+async function calcHtotal() {
+	console.log('calcHtotal(): start')
+	//* ÚLTIMA GAVETA
+	mESQ[nGavs][0][0] = 32
+	hTotal = 0
+	for (let g = 1; g <= nGavs; g++) {
+		hTotal += mESQ[g][0][0]
+		//_if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
+	}
+	console.log('calcHtotal(): end')
+	return 1
+}
+
 //* ------------------------- CHECAR LETRA DO PRODUTO ------------------------ */
 async function chkProdColor() {
 	switch (mESQ[nGav0][0][1]) {
@@ -145,7 +159,7 @@ async function chkProdColor() {
 			patPn	 =	patPn0
 			break;
 	}
-		
+	return 1
 }
 
 
@@ -332,12 +346,12 @@ function calcCOD(nGav) {
 
 	let parc = 3 
 	//*	1 - Quando o Rx da de baixo sai pelo canal
-				//> LEMBRETE: Pode haver corte parcial
-				//> LEMBRETE: Corte parc SEMPRE indica DV
-	try {
-		//> Rx FND e nGav < nGavs
-		//> (Rx externo retornando não gera parcial)
-		if (mESQ[nGav][1][0] > 0 && mESQ[nGav + 1][1][2] == 1 && nGav < nGavs) {	
+		//> LEMBRETE: Pode haver corte parcial
+		//> LEMBRETE: Corte parc SEMPRE indica DV
+	//> Rx FND e nGav < nGavs
+	//> (Rx externo retornando não gera parcial)
+	if(nGav < nGavs) {
+		if (mESQ[nGav][1][0] > 0 && mESQ[nGav + 1][1][2] == 1) {	
 			if (aDESV[mESQ[nGav + 1][1][0]][0] == 1 &&
 				aDESV[mESQ[nGav + 1][1][0]][1] == 1) {			//> Se DesV act E selec (L1 e L2 selec)
 				for (let i = 0; i <= 1; i++) {
@@ -350,7 +364,7 @@ function calcCOD(nGav) {
 			u += parc * 10 ** (4 - mESQ[nGav + 1][1][0])
 			mCOD1[nGav][0][(mESQ[nGav + 1][1][0])] = parc
 		}
-	} catch (error) {console.log('ERRO EM calcCOD(nGav); nGav=' + nGav)}
+	}
 	
 	//*	2 - Quando algum Rx||Pn de cima chega na de baixo
 				//> LEMBRETE: Nesse caso nunca há corte parcial
@@ -389,6 +403,38 @@ function calcCOD(nGav) {
 }
 
 
+//* -------------------------------------------------------------------------- */
+//*                     LOG DAS INFORMAÇÕES DE RECONSTRUÇÃO                    */
+//* -------------------------------------------------------------------------- */
+
+async function logMatESQ() {
+	console.log('logMatESQ(): start')
+	var file = fs.createWriteStream(`./logs/m${Date.now()}.txt`)
+	file.on('error', function (err) { /* error handling */ })
+	file.write( Date(Date.now()) + '\n' + '\n'+'mESQ - Matriz Esquema'+ '\n')
+	
+	let cont
+	cont = 0
+	mESQ.forEach(function (v) {
+		file.write(pad(cont) + ' -    ' + v.join('   ').split(',').join('	') + '\n')
+		cont++
+	})
+	file.write('\n' + '\n' + 'mActBTM - Matriz de Fundo'+ '\n')
+	mActBTM.forEach(function (v) { file.write(v.join('   ') + '\n') })
+	
+	file.write('\n' + '\n' + 'aDESV - Desvios Verticais' + '\n')
+	aDESV.forEach(function (v) { file.write(v.join('   ') + '\n') })
+	
+	file.write('\n' + '\n' + 'aDINF - Desvios Inferiores' + '\n')
+	aDINF.forEach(function (v) { file.write(v.join('   ') + '\n') })
+	
+	
+	file.end()
+	console.log('logMatESQ(): end')
+	return 1
+}
+
+
 
 //* -------------------------------------------------------------------------- */
 //*                            LIMPAR ESQUEMA (NOVO)                           */
@@ -409,72 +455,78 @@ async function ResetSQMA() {
 	
 
 	//> Ponto do produto A
-	try {
+		drawSQMA.select('#CP_A') ? 
 		objCP = drawSQMA.select('#CP_A')
-		.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]*0.75))
-	} catch (error) {}
+		.transform('t' + (mG[1][0][0][0]) + ',' + (mG[1][0][0][1]*0.75)) : false
 	//> Ponto do produto B
-	try {
+		drawSQMA.select('#CP_B') ?
 		objCP = drawSQMA.select('#CP_B')
-		.transform('t' + (mG[1][0][0][0]) + ',10') //  (mG[1][0][0][1]/3))
-	} catch (error) {}
-	//> Linha Ae
-	try {
-		drawSQMA.select('#Ae').remove() //Apaga grupo existente
-		drawSQMA.select('#maskAe').remove() //Apaga grupo existente
-	} catch (error) {}
+		.transform('t' + (mG[1][0][0][0]) + ',10') : false //  (mG[1][0][0][1]/3))
+	
+		//> Linha Ae
+		drawSQMA.select('#Ae') ?
+		drawSQMA.select('#Ae').remove() : false
+		drawSQMA.select('#maskAe') ?
+		drawSQMA.select('#maskAe').remove() : false
 
 	//> Linha Be
-	try {
-		drawSQMA.select('#Be').remove() //Apaga grupo existente
-		drawSQMA.select('#maskBe').remove() //Apaga grupo existente
-	} catch (error) {}
+		drawSQMA.select('#Be') ?
+		drawSQMA.select('#Be').remove() : false
+		drawSQMA.select('#maskBe') ?
+		drawSQMA.select('#maskBe').remove() : false
 	
 	//> Sel Lin
-	try {
-		drawSQMA.select('#circleSel1').remove() 
-		drawSQMA.select('#SelLin').remove() 		// Apaga grupo existente
-		drawSQMA.select('#maskSelLin').remove() // Apaga grupo existente
-		drawSQMA.select('#SelCir').remove() 		// Apaga grupo existente
-	} catch (error) {}
+		drawSQMA.select('#circleSel1') ?
+			drawSQMA.select('#circleSel1').remove() : false
+		drawSQMA.select('#SelLin') ?
+			drawSQMA.select('#SelLin').remove() : false
+		drawSQMA.select('#maskSelLin') ?
+			drawSQMA.select('#maskSelLin').remove() : false
+		drawSQMA.select('#SelCir') ?
+			drawSQMA.select('#SelCir').remove() : false
 
 	for (let g = 1; g <= 32; g++) {
 		iGav = g
 		gID = 'G' + pad(iGav)
 		
 		//> Ponto de Rechaço
-		try {objCP = drawSQMA.select('#CP_Rx_' + gID)
-			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1])
-		} catch (error) {}
+		drawSQMA.select('#CP_Rx_' + gID) ?
+			objCP = drawSQMA.select('#CP_Rx_' + gID)
+			.transform('t' + mG[g][0][0][0] + ',' + mG[g][0][0][1]) : false
 		
 		//> Pontos de Peneirado
-		try {objCP = drawSQMA.select('#CP_Pn1_' + gID)
-			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1])
-		} catch (error) {}
-		try {objCP = drawSQMA.select('#CP_Pn2_' + gID)
-			.transform('t' + (mG[g][0][0][0] + Larg / 5) + ',' + mG[g][0][0][1])
-		} catch (error) {}
+		drawSQMA.select('#CP_Pn1_' + gID) ?
+			objCP = drawSQMA.select('#CP_Pn1_' + gID)
+			.transform('t' + (mG[g][0][0][0] - Larg / 5) + ',' + mG[g][0][0][1]) : false
+
+		drawSQMA.select('#CP_Pn2_' + gID) ?
+			objCP = drawSQMA.select('#CP_Pn2_' + gID)
+			.transform('t' + (mG[g][0][0][0] + Larg / 5) + ',' + mG[g][0][0][1]) : false
 	
 		//> Linha de Rechaço
-		try {
-			drawSQMA.select('#Rx_' + gID).remove() 			//Apaga grupo existente
-			drawSQMA.select('#maskRx_' + gID).remove() 	//Apaga grupo existente
-		} catch (error) {}
+		drawSQMA.select('#Rx_' + gID) ?
+			drawSQMA.select('#Rx_' + gID).remove() : false
+		
+		drawSQMA.select('#maskRx_' + gID) ?
+			drawSQMA.select('#maskRx_' + gID).remove() : false
 
 		//> Linhas de Peneirado
-		try {
-			drawSQMA.select('#Pn1_' + gID).remove()				//Apaga grupo existente
-			drawSQMA.select('#maskPn1_' + gID).remove()		//Apaga grupo existente
-		} catch (error) {} 
-		try {
-			drawSQMA.select('#Pn2_' + gID).remove()				//Apaga grupo existente
-			drawSQMA.select('#maskPn2_' + gID).remove()		//Apaga grupo existente
-		} catch (error) {} 
+		drawSQMA.select('#Pn1_' + gID) ?
+			drawSQMA.select('#Pn1_' + gID).remove() : false
+			
+		drawSQMA.select('#maskPn1_' + gID) ?
+			drawSQMA.select('#maskPn1_' + gID).remove() : false
+		
+		drawSQMA.select('#Pn2_' + gID) ?
+			drawSQMA.select('#Pn2_' + gID).remove() : false
+		
+		drawSQMA.select('#maskPn2_' + gID) ?
+			drawSQMA.select('#maskPn2_' + gID).remove() : false
+		
 	
 		//> Chaminé
-		try {
-			drawSQMA.select('#Cham_' + gID).remove() //Apaga grupo existente
-		} catch (error) {}
+		drawSQMA.select('#Cham_' + gID) ?
+			drawSQMA.select('#Cham_' + gID).remove() : false
 
 	}
 
@@ -486,7 +538,7 @@ async function ResetSQMA() {
 	$('#z-flow-type span').html('')
 	$('#z-flow-from span').html('')
 	$('#z-flow-to span').html('')
-
+	return 1
 }
 
 
@@ -496,392 +548,19 @@ async function ResetSQMA() {
 
 async function LoadSQMA() {
 	console.log('LoadSQMA()')
-	//* Teste
-	// nSQMA = 2188
-	// nRev = 0
-
-	var res_LoadSQMAdata = await LoadSQMAdata()
-	var res_calcHtotal   = await calcHtotal()
-	var res_recalcProd   = await recalcProd()
-	var res_recalcUsed   = await recalcUsed()
-	var res_recalcDV     = await recalcDV()
-	var res_recalcDINF   = await recalcDINF()
-	var res_recolorBTM   = await recolorBTM()
-	var res_rebuildGPF   = await rebuildGPF()
-
+	const res_LoadSQMAdata = await LoadSQMAdata()
+	const res_calcHtotal   = await calcHtotal  ()
+	const res_recalcProd   = await recalcProd  ()
+	const res_recalcUsed   = await recalcUsed  ()
+	const res_recalcDV     = await recalcDV    ()
+	const res_recalcDINF   = await recalcDINF  ()
+	const res_recolorBTM   = await recolorBTM  ()
+	const res_rebuildGPF   = await rebuildGPF  ()
+	// const res_logMatESQ    = await logMatESQ   ()
+	return 1
 }
 
 
-
-	
-async function LoadSQMAdata() {
-	ResetSQMA()
-
-	var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
-	if (err) { console.error(err.message) }
-	else { console.log('Connected to the Plansichter database.') }
-	})
-
-	var dataSQMA = []
-	//*	Reg_SQMA
-	sSQL = `SELECT * FROM Reg_SQMA WHERE Key LIKE '%${nSQMA}${nRev}%'`
-	var resReg_SQMA = await
-	db.get(sSQL, [], (err, row) => {
-		if (err) { throw err }
-		else {
-			dataSQMA.push(row)
-			nGavs = parseInt(row.nGav, 10)
-			
-			//*	Ai
-			if (row.Abert1 != '') {
-				//_console.log(`nLado Ai: ${row.Abert1} (${nLadoStr2Int(row.Abert1)})`)
-				nGav0 = 1
-				nGav = 1
-				nLado = nLadoStr2Int(row.Abert1)
-				nPara = 1
-				nIE = 0
-				mESQ[1][1][0] = nLado	//> nLado
-				mESQ[1][1][1] = nPara									//> nPara
-				mESQ[1][1][2] = nIE									//> nIE
-				objCP = drawSQMA
-					.select('#CP_Rx_G01')
-					.transform('t' + mG[1][nLado][nIE][0] + ',' + mG[1][nLado][nIE][1])
-				drwCham()
-				propagate()
-				reColor()
-				drwRX()
-			}
-			//*	Ae
-			if (row.Abert2 != '') {
-				//_console.log(`nLado Ai: ${row.Abert1} (${nLadoStr2Int(row.Abert1)})`)
-				nGav0 = 0
-				nLado = nLadoStr2Int(row.Abert2)
-				nPara = row.Para2
-				nPara = parseInt(nPara.substr(1), 10)
-				nIE = 1
-				nGav = nPara
-				sCPtype = 'Pr'
-				//_ console.log(`Ae: nLado ${row.Abert2} (${nLadoStr2Int(row.Abert2)})`)
-				//_ console.log(`Ae: nPara ${nPara}`)
-				mESQ[0][1][0] = nLado	//> nLado
-				mESQ[0][1][1] = nPara	//> nPara
-				mESQ[0][1][2] = nIE		//> nIE
-				objCP = drawSQMA
-					.select('#CP_A')
-					.transform('t' + mG[nPara][nLado][0][0] + ',' + mG[nPara][nLado][0][1])
-				propagate()
-				reColor()
-				drwAe()
-			}
-			//*	Be
-			if (row.Abert3 != '') {
-				//_console.log(`nLado Ai: ${row.Abert1} (${nLadoStr2Int(row.Abert1)})`)
-				nGav0 = 0
-				nLado = nLadoStr2Int(row.Abert3)
-				nPara = row.Para3
-				nPara = parseInt(nPara.substr(1), 10)
-				nIE = 1
-				nGav = nPara
-				sCPtype = 'Pr'
-				//_ console.log(`Ae: nLado ${row.Abert2} (${nLadoStr2Int(row.Abert2)})`)
-				//_ console.log(`Ae: nPara ${nPara}`)
-				mESQ[0][2][0] = nLado	//> nLado
-				mESQ[0][2][1] = nPara	//> nPara
-				mESQ[0][2][2] = nIE		//> nIE
-				objCP = drawSQMA
-					.select('#CP_B')
-					.transform('t' + mG[nPara][nLado][0][0] + ',' + mG[nPara][nLado][0][1])
-				propagate()
-				reColor()
-				drwBe()
-			}
-
-			//*	Desvios Verticais
-			if (row.F1 == row.F2 && row.F1!='' && row.F2!='') { aDESV[1] = [1, 0, 0] }
-			if (row.D1 == row.D2 && row.D1!='' && row.D2!='') { aDESV[2] = [1, 0, 0] }
-			if (row.E1 == row.E2 && row.E1!='' && row.E2!='') { aDESV[3] = [1, 0, 0] }
-			if (row.T1 == row.T2 && row.T1!='' && row.T2!='') { aDESV[4] = [1, 0, 0] }
-			
-			//*	Fundo
-			if (row.F1 != '') {
-				mActBTM[1][0][0] = 1
-				mActBTM[1][0][1] = 1
-				mActBTM[1][0][6] = row.F1
-			}
-			if (row.F2 != '') {
-				mActBTM[1][1][0] = 1
-				mActBTM[1][1][1] = 1
-				mActBTM[1][1][6] = row.F2
-			}
-			if (row.D1 != '') {
-				mActBTM[2][0][0] = 1
-				mActBTM[2][0][1] = 1
-				mActBTM[2][0][6] = row.D1
-			}
-			if (row.D2 != '') {
-				mActBTM[2][1][0] = 1
-				mActBTM[2][1][1] = 1
-				mActBTM[2][1][6] = row.D2
-			}
-			if (row.E1 != '') {
-				mActBTM[3][0][0] = 1
-				mActBTM[3][0][1] = 1
-				mActBTM[3][0][6] = row.E1
-			}
-			if (row.E2 != '') {
-				mActBTM[3][1][0] = 1
-				mActBTM[3][1][1] = 1
-				mActBTM[3][1][6] = row.E2
-			
-			}
-			if (row.T1 != '') {
-				mActBTM[4][0][0] = 1
-				mActBTM[4][0][1] = 1
-				mActBTM[4][0][6] = row.T1
-			}
-			if (row.T2 != '') {
-				mActBTM[4][1][0] = 1
-				mActBTM[4][1][1] = 1
-				mActBTM[4][1][6] = row.T2
-			}
-
-			//_ calcHtotal()
-			//_ rebuildGPF()
-			$('#nGavs').html(`${pad(nGavs)}`)
-			$('#nGav-slider').val(nGavs)
-		}
-	})
-	
-
-	//*	Reg_SQMA_GPF
-	var dataGPF = [{},]
-	sSQL = `SELECT * FROM Reg_SQMA_GPF WHERE Key LIKE '${nSQMA}${nRev}%'`
-	var resReg_SQMA_GPFall = await
-	db.all(sSQL, [], (err, rows) => {
-		if (err) { throw err }
-		else {
-			rows.forEach((row)=>{
-				dataGPF.push(row)
-    		})
-		 }
-	})
-
-
-	var resReg_SQMA_GPF = await
-	db.each(sSQL, [], (err, row) => {
-		if (err) { throw err }
-		else {
-			let hGav = parseInt(row.HGav, 10)
-			let g = parseInt(row.NoGAV, 10)
-			//_console.log(`Carregando G${pad(g)}`)
-			mESQ[g][0][0] = hGav
-			let sCod = row.CodGav
-			nGav0 = g
-			//* Rx
-			if (g >= 2 && g<=nGavs) {	//> A partir da G02
-				nLado = row.RxPos
-				nLado = nLadoStr2Int(nLado.charAt(0))
-				nPara = row.RxPara
-				nIE = 0
-				nFND = 0
-				//> Traduzir metodologia Excel --> Electron
-				if (row.RxPos.charAt(1) == 'E') {
-					if (nPara.charAt(0) != 'G') {		//> Se manda para o fundo
-						nIE = 1
-						nGav = g + 1 //! Verificar 
-						if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {
-							nFND = 100*nLado+3
-						} else {
-							nFND = 100*nLado + parseInt(nPara.charAt(1),10)
-						}
-						nPara = nGav
-						sAB = ''
-						//_g == 6 ? console.log(`sAB = ${sAB}`) : false
-						//_console.log(`dataSQMA[${g}][${row.RxPos.charAt(0)+'1'}] = ${dataSQMA[0][row.RxPos.charAt(0)+'1']}`)
-						// dataSQMA[0][row.RxPos.charAt(0) + '1']
-						
-
-						// mActBTM[nLado][tmp12][1] = 1		//> Set selec
-						// mActBTM[nLado][tmp12][2] = 'Rx'	//> Set Prod
-						// mActBTM[nLado][tmp12][3] = sAB		//> Set A|B
-						// mActBTM[nLado][tmp12][4] = g		//> Set Orig
-						// mActBTM[nLado][tmp12][5] = nIE	//> Set IE
-					} else {									//> Se manda para G##
-						nGav = parseInt(nPara.substr(1), 10)
-						if (dataGPF[nGav].Pr1Pos != `${row.RxPos.charAt(0)}E` &&	//>Se dest não recebe RxExt
-						dataGPF[nGav].Pr2Pos != `${row.RxPos.charAt(0)}E`) {
-							nIE = 1
-							if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
-								nFND = 100*nLado+3
-							} else {
-								nFND = 100*nLado + parseInt(dataGPF[nGav].RxPara.substr(1),10)
-							}
-							nGav++
-							nPara = nGav
-						} else {
-							nPara = nGav
-						}
-					}
-
-				} else { nPara = g; nGav = nPara }
-				mESQ[g][1][0] = nLado
-				mESQ[g][1][1] = nPara
-				mESQ[g][1][2] = nIE
-				mESQ[g][1][3] = nFND
-
-				objCP = drawSQMA
-					.select(`#CP_Rx_G${pad(g)}`)
-					.transform('t' + mG[nPara][nLado][nIE][0] + ',' + mG[nPara][nLado][nIE][1])
-				drwCham()
-				propagate()
-				reColor()
-				drwRX()
-			}
-			
-			
-			//*	Pn1
-			if (row.Pn1Pos != '') {
-				nPn = 1
-				nLado = row.Pn1Pos
-				nLado = nLadoStr2Int(nLado.charAt(0))
-				nPara = row.Pn1Para
-				
-				if(nPara!='') {
-					nFND = 0
-					//> Traduzir metodologia Excel --> Electron
-					//_ if (row.Pn1Pos.charAt(1) == 'E') {
-						if (nPara.charAt(0) != 'G') {		//> Se manda para o fundo
-							nIE = 1
-							nGav = g //_ + 1
-							//_ if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {
-							//_ 	nFND = 100*nLado+3
-							//_ } else {
-							//_ 	nFND = 100*nLado + parseInt(nPara.charAt(1),10)
-							//_ }
-							nPara = nGav
-						} else {									//> Se manda para G##
-							nGav = parseInt(nPara.substr(1), 10)
-							if (dataGPF[nGav].Pr1Pos != `${row.Pn1Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
-							dataGPF[nGav].Pr2Pos != `${row.Pn1Pos.charAt(0)}E`) {
-								//_console.log(`   nGav = ${nGav}`)
-								nIE = 1
-								if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
-									nFND = 100*nLado+3
-								} else {
-									nFND = 100*nLado + parseInt(dataGPF[nGav].Pn1Para.substr(1),10)
-								}
-								// nGav++
-								nPara = nGav
-							} else {
-								nIE = 0
-								nPara = nGav
-							}
-						}
-	
-					//_ } else { nPara = g; nGav = nPara }
-				} else {
-					nIE = 1
-					nPara = g
-					nGav = nPara
-					
-				}
-					mESQ[g][2][0] = nLado
-					mESQ[g][2][1] = nPara
-					mESQ[g][2][2] = nIE
-					mESQ[g][2][3] = nFND
-					
-				objCP = drawSQMA
-					.select(`#CP_Pn1_G${pad(g)}`)
-					.transform('t' + mG[nPara][nLado][nIE][0] + ',' + mG[nPara][nLado][nIE][1])
-				propagate()
-				reColor()
-				drwPN()
-			}
-			
-			
-			//*	Pn2
-			if (row.Pn2Pos != '') {
-				nPn = 2
-				nLado = row.Pn2Pos
-				nLado = nLadoStr2Int(nLado.charAt(0))
-				nPara = row.Pn2Para
-				
-				if(nPara!='') {
-					nFND = 0
-					//> Traduzir metodologia Excel --> Electron
-					//_ if (row.Pn1Pos.charAt(1) == 'E') {
-						if (nPara.charAt(0) != 'G') {		//> Se manda para o fundo
-							nIE = 1
-							nGav = g + 1
-							if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {
-								nFND = 100*nLado+3
-							} else {
-								nFND = 100*nLado + parseInt(nPara.charAt(1),10)
-							}
-							nPara = nGav
-						} else {									//> Se manda para G##
-							nGav = parseInt(nPara.substr(1), 10)
-							if (dataGPF[nGav].Pr1Pos != `${row.Pn2Pos.charAt(0)}E` &&	//>Se dest não recebe Ext
-							dataGPF[nGav].Pr2Pos != `${row.Pn2Pos.charAt(0)}E`) {
-								//_console.log(`   nGav = ${nGav}`)
-								nIE = 1
-								if (aDESV[nLado][0]==1 && aDESV[nLado][1]==0) {		//> Se DV ativ+desselec
-									nFND = 100*nLado+3
-								} else {
-									nFND = 100*nLado + parseInt(dataGPF[nGav].Pn2Para.substr(1),10)
-								}
-								nGav++
-								nPara = nGav
-							} else {
-								nIE = 0
-								nPara = nGav
-							}
-						}
-	
-					//_ } else { nPara = g; nGav = nPara }
-				} else {
-					nIE = 1
-					nPara = g
-					nGav = nPara
-					
-				}
-					mESQ[g][3][0] = nLado
-					mESQ[g][3][1] = nPara
-					mESQ[g][3][2] = nIE
-					mESQ[g][3][3] = nFND
-					
-				objCP = drawSQMA
-					.select(`#CP_Pn2_G${pad(g)}`)
-					.transform('t' + mG[nPara][nLado][nIE][0] + ',' + mG[nPara][nLado][nIE][1])
-				propagate()
-				reColor()
-				drwPN()
-			}
-			
-
-
-			$(`#codGPF${pad(g)}`).html(sCod)								//> Código da gaveta
-			$(`#codGPF${pad(g)}`).css('opacity', 1)
-			$(`#rngG${pad(g)}`).val(hGav)									//> Slider
-			for (let index = 0; index < mH.length; index++) {		//> Txt Altura
-				if (hGav == mH[index][0]) {
-					let value = mH[index][1]
-					if (mH[index][2] > 0) {
-						value = ' <h5>+' + mH[index][2] + '</h5> ' + mH[index][1]
-					}
-					$(`#valH${pad(g)}`).html(value)
-					break
-				}
-			}
-
-		}
-	})
-
-	console.log(mESQ)
-	console.log(mActBTM)
-	db.close()
-	db = null
-}
 
 
 
@@ -890,10 +569,6 @@ async function LoadSQMAdata() {
 //* -------------------------------------------------------------------------- */
 function SaveSQMA() {
 	console.log('SaveSQMA()')
-	//_ resetMatESQ()
-	try {
-		window.open('', '_blank', 'top=500,left=200,frame=false,nodeIntegration=yes')
-	} catch (error) {}
 }
 
 function SaveAsSQMA() {
@@ -909,6 +584,7 @@ function SaveAsSQMA() {
 //* -------------------------------------------------------------------------- */
 
 async function recalcUsed() {
+	console.log('recalcUsed(): start')
 	//* Tem usinagem
 	for (let g = 1; g <= nGavs; g++) {
 		mCOD1[g][1] = [0, 0, 0, 0, 0]
@@ -946,4 +622,6 @@ async function recalcUsed() {
 			}
 		}
 	}
+	console.log('recalcUsed(): end')
+	return 1
 }

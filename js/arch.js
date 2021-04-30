@@ -4,12 +4,14 @@
 //*                                  MAIN DEFS                                 */
 //* -------------------------------------------------------------------------- */
 
+const fs = require('fs')
 const electron = require('electron')
 const { ipcRenderer } = require('electron')
 const ipc = require('electron').ipcRenderer
 const isDev = process.env.NODE_ENV !== 'production'
 
-
+const sqlite3 = require('sqlite3').verbose()
+const { open } = require('sqlite')
 
 
 const remote = electron.remote
@@ -166,31 +168,32 @@ $.get("./pages/rbn_defs1.html", function(data){
 //*                                 TESTES SQL                                 */
 //* -------------------------------------------------------------------------- */
 //! O banco não pode ser aberto por dois processos. Abrir apenas antes de executar e depois fechar
-const sqlite3 = require('sqlite3').verbose()
-var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
-	if (err) { console.error(err.message) }
-	else { console.log('Connected to the Plansichter database.') }
-})
-
-$('#wrp-chart').append(`<p>.<br><br><br></p>`)
-let sql = ''
-
-$('#wrp-chart').append(`<p>.<br><br><br></p>`)
-sql = `SELECT NoSQMN, Rev FROM Reg_SQMN`
-db.each(sql, [], (err, row) => {
-	if (err) {throw err}
-	$('#wrp-chart').append(`<p>Esquemino Nº ${row.NoSQMN}-${row.Rev} </p>`)
-})
 
 
-$('#wrp-defs1').append(`<p>.<br> <nbsp> <br> <nbsp> <br> <nbsp> </p>`)
-sql = `SELECT NoSQMA, Rev FROM Reg_SQMA`
-db.each(sql, [], (err, row) => {
-	if (err) {throw err}
-	$('#wrp-defs1').append(`<p>Esquema Nº ${row.NoSQMA}-${row.Rev} </p>`)
-})
+// var db = new sqlite3.Database('./data/SB_FTP_PLANSICHTER.db', sqlite3.OPEN_READWRITE, (err) => {
+// 	if (err) { console.error(err.message) }
+// 	else { console.log('Connected to the Plansichter database.') }
+// })
 
-db.close()
+// $('#wrp-chart').append(`<p>.<br><br><br></p>`)
+// let sql = ''
+
+// $('#wrp-chart').append(`<p>.<br><br><br></p>`)
+// sql = `SELECT NoSQMN, Rev FROM Reg_SQMN`
+// db.each(sql, [], (err, row) => {
+// 	if (err) {throw err}
+// 	$('#wrp-chart').append(`<p>Esquemino Nº ${row.NoSQMN}-${row.Rev} </p>`)
+// })
+
+
+// $('#wrp-defs1').append(`<p>.<br> <nbsp> <br> <nbsp> <br> <nbsp> </p>`)
+// sql = `SELECT NoSQMA, Rev FROM Reg_SQMA`
+// db.each(sql, [], (err, row) => {
+// 	if (err) {throw err}
+// 	$('#wrp-defs1').append(`<p>Esquema Nº ${row.NoSQMA}-${row.Rev} </p>`)
+// })
+
+// db.close()
 
 
 
@@ -238,5 +241,5 @@ ipc.on('loadSQMA', (event, message) => {
 	m = message.split("-")
 	nSQMA = parseInt(m[0],10)
 	nRev = parseInt(m[1], 10)
-	LoadSQMA()
+	LoadSQMA()	//.then(clkSelGav).finally(clkSelGav)
 })

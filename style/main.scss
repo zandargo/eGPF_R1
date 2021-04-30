@@ -50,6 +50,8 @@ $shadow2: 5px 5px 10px transparentize($color_d4, 0.5);
 $sldr_shadow: 2px 2px 5px transparentize($sldr_color, 0.5);
 $shadowscroll: 0px 0px 5px transparentize($color, 0.75);
 
+$stdRadius1: 10px;
+
 /*
 */
 @font-face {
@@ -65,14 +67,8 @@ $shadowscroll: 0px 0px 5px transparentize($color, 0.75);
 	margin: 0;
 	padding: 0;
 	border: none;
-	// vertical-align: baseline;
 	font-variant-caps: petite-caps;
 	box-sizing: border-box;
-
-	// &:before,
-	// &:after {
-	// 	box-sizing: inherit;
-	// }
 }
 
 //* -------------------------------------------------------------------------- */

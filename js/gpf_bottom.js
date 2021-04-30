@@ -444,10 +444,8 @@ function drwBTM() {
 						break;
 				}
 				i==1 ? sTransform += `r180,0,0` : false
-				try {
-					polyline.transform(sTransform)
-					polygon.transform(sTransform)
-				} catch (error) { }
+				polyline.transform(sTransform)
+				polygon.transform(sTransform)
 
 				
 
@@ -465,17 +463,19 @@ drwBTM()
 
 
 //* ---------------------------- RECOLORIR SAÍDAS ---------------------------- */
-recolorBTM()
+//_recolorBTM()
 async function recolorBTM() {
-	var res_recalcProd   = await recalcProd()
+	console.log('recolorBTM(): start')
+	//_var res_recalcProd = await recalcProd()
 	let tmpColor = null
 	
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {
 		for (let i = 0; i <= 1; i++) {
 			//_ try {
-			//> Se fundo sem nome, usa a nomenclatura
+			//> Se fundo sem nome, usa a nomenclatura?
 			if (mActBTM[tmpLado][i][6] == '') {
-				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: `${nLadoInt2Str(tmpLado)}${i + 1}` }) }
+				//_drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: `${nLadoInt2Str(tmpLado)}${i + 1}` }) }
+				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' }) }
 			else {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: mActBTM[tmpLado][i][6] })}
 			
 			//> Se L1=L2, não define nome no esquema
@@ -487,25 +487,24 @@ async function recolorBTM() {
 			
 			//* Reposicionar texto de fundo no esquema
 			for (let tmpLin = 1; tmpLin <= 3; tmpLin++) {
-				try {
-					if (mActBTM[tmpLado][i][1] == 1 &&
-						(mESQ[mActBTM[tmpLado][i][4]][tmpLin][3] == 100 * tmpLado + (i + 1) ||
-						mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]  == 100 * tmpLado + 3)) {
-						//_ console.log(`mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][3] = ${mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]}`)
+				if (mActBTM[tmpLado][i][1] == 1 &&
+					(mESQ[mActBTM[tmpLado][i][4]][tmpLin][3] == 100 * tmpLado + (i + 1) ||
+					mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]  == 100 * tmpLado + 3)) {
+					//_ console.log(`mESQ[mActBTM[${tmpLado}][${i}][4]][${tmpLin}][3] = ${mESQ[mActBTM[tmpLado][i][4]][tmpLin][3]}`)
 
-						let tmpXoff = 20
-						tmpXoff = (tmpLado%2)*2*(-tmpXoff)+tmpXoff
-						let tmpYoff = 10
-						tmpYoff = (tmpLado%2)*2*(+tmpYoff)-tmpYoff
+					let tmpXoff = 20
+					tmpXoff = (tmpLado%2)*2*(-tmpXoff)+tmpXoff
+					let tmpYoff = 10
+					tmpYoff = (tmpLado%2)*2*(+tmpYoff)-tmpYoff
 
-						let tmpIE = 0
-						mESQ[mActBTM[tmpLado][i][4]][tmpLin][2] == 1 ? tmpIE = 1 : tmpIE = 0
-						tmpIE == 0 ? tmpYoff += yOff : false
-						drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`)
-							.transform(`t${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][tmpIE][0] +tmpXoff},${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][tmpIE][1]+tmpYoff}`)
-							.appendTo(drawSQMA)
-					}
-				} catch (error) {}
+					let tmpIE = 0
+					mESQ[mActBTM[tmpLado][i][4]][tmpLin][2] == 1 ? tmpIE = 1 : tmpIE = 0
+					tmpIE == 0 ? tmpYoff += yOff : false
+					drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`) ?
+					drawSQMA.select(`#txtSQMAfnd_${nLadoInt2Str(tmpLado)}${i + 1}`)
+						.transform(`t${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][tmpIE][0] +tmpXoff},${mG[mESQ[mActBTM[tmpLado][i][4]][tmpLin][1]][tmpLado][tmpIE][1]+tmpYoff}`)
+						.appendTo(drawSQMA) : false
+				}
 			}
 		}
 	}
@@ -556,8 +555,8 @@ async function recolorBTM() {
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "1").attr({ opacity: oFND0, fill: cLinRX0 })
 			drawFND.select("#FND_" + nLadoInt2Str(tmpLado) + "2").attr({ opacity: oFND0, fill: cLinRX0 })
 			for (let i = 0; i <= 1; i++) {
-				try {drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' })
-				} catch (error) {}
+				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`) ?
+				drawFND.select(`#txtFND_${nLadoInt2Str(tmpLado)}${i + 1}`).attr({ text: '' }) : false
 			}
 			//> Ocultar DV
 			drawFND.select(`#dvFND_${nLadoInt2Str(tmpLado)}`)
@@ -568,20 +567,22 @@ async function recolorBTM() {
 		}
 
 		//*	Desvios inferiores
-		try {
-			for (let i = 0; i <= 1; i++) {			//> 1 ou 2
-				for (let ie = 0; ie <= 1; ie++) {	//> int ou ext
-					if (aDINF[tmpLado][i][ie]==1) {
-						drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
-						.attr({visibility: 'visible'})
-					} else {
-						drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
-						.attr({visibility: 'hidden'})
-					}
+		for (let i = 0; i <= 1; i++) {			//> 1 ou 2
+			for (let ie = 0; ie <= 1; ie++) {	//> int ou ext
+				if (aDINF[tmpLado][i][ie]==1) {
+					drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`) ? 
+					drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
+					.attr({visibility: 'visible'}) : false
+				} else {
+					drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`) ?
+					drawFND.select(`#arwFND_${nLadoInt2Str(tmpLado)}${i+1}${ie}`)
+					.attr({visibility: 'hidden'}) : false
 				}
 			}
-		} catch (error) {console.log(`recolorBTM(): Erro desv inf`)}
+		}
 	}
+	console.log('recolorBTM(): end')
+	return 1
 }
 
 
@@ -632,6 +633,7 @@ async function clickBTM(sSaida) {
 	var res_calcHtotal   = await calcHtotal()
 	var res_recalcProd   = await recalcProd()
 	var res_recolorBTM   = await recolorBTM()
+	return 1
 }
 
 
@@ -645,15 +647,15 @@ async function clickDV(tmpLado) {
 		} else {									//> Se usado
 			aDESV[tmpLado][1] = 0			//> Def não usado
 		}
-		try { var res_recolorBTM   = await recolorBTM() }
-		catch (error) { console.log(`clickDV(${tmpLado}): ERROR recolorBTM()`) }
+		var res_recolorBTM = await recolorBTM()
 	}
+	return 1
 }
 
 
 //* ---------------- RECALCULAR NOMES DOS PRODUTOS NAS SAÍDAS ---------------- */
 async function recalcProd() {
-	
+	console.log('recalcProd(): start')
 	mESQ[0][2][1] > 0 ? b2prod = true : b2prod = false								//> B foi usado?
 	
 	//*	Limpar nomes
@@ -755,11 +757,11 @@ async function recalcProd() {
 
 
 	//* Fim
-	var res_recalcDV     = await recalcDV()
-	var res_recalcDINF   = await recalcDINF()
-	try {
-		var res_calcHtotal   = await calcHtotal()
-	} catch (error) { }
+	// var res_recalcDV     = await recalcDV()
+	// var res_recalcDINF   = await recalcDINF()
+	// var res_calcHtotal = await calcHtotal()
+	console.log('recalcProd(): end')
+	return 1
 }
 
 
@@ -767,6 +769,7 @@ async function recalcProd() {
 
 //* ---------------------- RECALCULAR DESVIOS INFERIORES --------------------- */
 async function recalcDINF() {
+	console.log('recalcDINF(): start')
 	resetDINF()
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
 		if (aDESV[tmpLado][0] == 0) {								//> Se não tem DV
@@ -782,11 +785,14 @@ async function recalcDINF() {
 			}
 		}
 	}
+	console.log('recalcDINF(): end')
+	return 1
 }
 
 
 //* ---------- RECALCULAR ALTURAS DOS DV E MODIFICAR CÓD DAS GAVETAS --------- */
 async function recalcDV() {
+	console.log('recalcDV(): start')
 	let hAdic = 0
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {					//> Para cada lado
 		switch (tmpLado) {		//> Calcular hAdic do desvio
@@ -813,4 +819,6 @@ async function recalcDV() {
 
 		}
 	}
+	console.log('recalcDV(): end')
+	return 1
 }
