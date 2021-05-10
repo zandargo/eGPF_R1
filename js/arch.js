@@ -19,6 +19,9 @@ const BrowserWindow = remote.BrowserWindow
 // const mainWindow = BrowserWindow.mainWindow
 const mainWindow = remote.getCurrentWindow()
 
+var drawSQMA	//  = Snap('#svgESQ')
+var drawFND 	// = Snap('#svgFND')
+
 
 
 //* -------------------------------------------------------------------------- */

@@ -1,41 +1,47 @@
-const drawSQMA    = Snap('#svgESQ')
-const drawFND = Snap('#svgFND')
+// var drawSQMA = await Snap('#svgESQ').catch((e) => { console.log(e) })
+// var drawFND = await Snap('#svgFND').catch((e) => { console.log(e) })
+
+
+async function setDrawSQMA() { drawSQMA = Snap('#svgESQ'); return 1}
+async function setDrawFND() { drawFND = Snap('#svgFND'); return 1}
+
+
 
 //*	 Definições iniciais
-var A4x = 500
-var A4y = 2250
-var offP = 0
+const A4x = 500
+const A4y = 2250
+const offP = 0
 
-var x0p = offP
-var y0p = offP
-var x1p = A4x + offP
-var y1p = A4y + offP
+const x0p = offP
+const y0p = offP
+const x1p = A4x + offP
+const y1p = A4y + offP
 
 
 //*	 Definição geral da gaveta
-var nGavs     = 32 												//> Número de gavetas
-var Larg      = 150 												//> Largura da Gaveta
-var Alt       = 8 												//> Altura da gaveta
-var k         = 5 												//> Proporção Gaveta/Coluna
-var x0        = 200 												//> Posição inicial X
-var y0        = 54 												//> Posição inicial Y
-var yOff      = 64 												//> Offset entre gavetas
-var lwid      = 2 												//> Largura de linha geral
-var wLinBG	  = 3.2												//> Fator espessura da linha branca
-var oLinBG	  = 0.9												//> Opacidade da linha branca
-var oMskGPF	  = 0.9												//> Opacidade da máscara das linhas sob a gaveta
-var oFND0	  = 0.15												//> Opacidade fundo inativo
-var oFND1	  = 0.75												//> Opacidade fundo ativo
-var cor0 	  = 'white' 										//> Cor de fundo
-var cor1      = 'black' 										//> Cor de linha
-var bgcolor   = $('body').css('background-color')		//> Cor do fundo
-var sk        = 5 												//> Skew
-var kLin      = 3 												//> Expansão de linha fora da gaveta
-var kFT       = 2.25 											//> Fator de correção para as linhas Frente e Trás
-var kDE       = 1 												//> Fator de correção para as linhas Direita e Esquerda
-var strDashPR = 6 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODUTO
-var strDashRX = 5 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
-var strDashPN = 2 * lwid + ' ' + 4 * lwid 				//> Padrão de tracejado do PENEIRADO
+const maxGavs     = 32 												//> Número de gavetas
+const Larg      = 150 												//> Largura da Gaveta
+const Alt       = 8 												//> Altura da gaveta
+const k         = 5 												//> Proporção Gaveta/Coluna
+const x0        = 200 												//> Posição inicial X
+const y0        = 54 												//> Posição inicial Y
+const yOff      = 64 												//> Offset entre gavetas
+const lwid      = 2 												//> Largura de linha geral
+const wLinBG	  = 3.2												//> Fator espessura da linha branca
+const oLinBG	  = 0.9												//> Opacidade da linha branca
+const oMskGPF	  = 0.9												//> Opacidade da máscara das linhas sob a gaveta
+const oFND0	  = 0.15												//> Opacidade fundo inativo
+const oFND1	  = 0.75												//> Opacidade fundo ativo
+const cor0 	  = 'white' 										//> Cor de fundo
+const cor1      = 'black' 										//> Cor de linha
+const bgcolor   = $('body').css('background-color')		//> Cor do fundo
+const sk        = 5 												//> Skew
+const kLin      = 3 												//> Expansão de linha fora da gaveta
+const kFT       = 2.25 											//> Fator de correção para as linhas Frente e Trás
+const kDE       = 1 												//> Fator de correção para as linhas Direita e Esquerda
+const strDashPR = 6 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do PRODUTO
+const strDashRX = 5 * lwid + ' ' + 3 * lwid 				//> Padrão de tracejado do RECHAÇO
+const strDashPN = 2 * lwid + ' ' + 4 * lwid 				//> Padrão de tracejado do PENEIRADO
 
 var cpAlpha	= 0.65		//> Transparência dos CP
 
@@ -151,6 +157,8 @@ var hTotal = 0
 var sSQL = ''
 var nSQMA = 0
 var nRev = 0
+var dbSQMA = null
+var dbGPF = null
 
 //_var wf = 2.25 			//> Algo relacionado ao texto que aparece ao fazer hover sobre a GPF
 
@@ -165,8 +173,49 @@ var strokeWidth = 1.5 * lwid							//>	strokeWidth
 
 // 3 Pn fundo??? (cor A, cor B, cor desconectado)
 
-// function drwPnD() { }
-var patPn0 = drawSQMA
+var patPn = null
+var patPn0 = null
+var patPna = null
+var patPnb = null
+var patOffset = 0
+
+
+
+
+//*	MOSTRAR MENSAGENS START/END
+const bStatus = true
+function clgFncName(nSE) {
+	// sName = sName.substr('function '.length)
+	sName = clgFncName.caller.name
+	let sSE
+	switch (nSE) {
+		case 0:
+			sSE = '(): start'
+			break;
+		case 1:
+			sSE = '(): end'
+			break;
+		default:
+			sSE = '()'
+			break;
+	}
+	console.log(sName + sSE)
+	return sName + sSE
+}
+
+
+//* ------------------ FUNÇÃO UTILITÁRIA TRATAMENTO DE ERROS ----------------- */
+const handle = (promise) => {
+	return promise
+    .then(data => ([data, undefined]))
+    .catch(error => Promise.resolve([undefined, error]))
+}
+
+
+//* ----------------------- DESENHO PENEIRADO POR BAIXO ---------------------- */
+async function drwPnD() {
+
+	var patPn0 = drawSQMA
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPN0,
@@ -177,7 +226,7 @@ var patPn0 = drawSQMA
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-var patPna = drawSQMA
+	var patPna = drawSQMA
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPNa,
@@ -188,7 +237,7 @@ var patPna = drawSQMA
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-var patPnb = drawSQMA
+	var patPnb = drawSQMA
 	.line(1.5 * lwid, 1.5 * lwid, 1.5 * lwid, 900)
 	.attr({
 		stroke           : cLinPNb,
@@ -199,21 +248,26 @@ var patPnb = drawSQMA
 		'stroke-linejoin': 'round',
 	})
 	.pattern(0, 0, 3 * lwid, 900 + 3 * lwid)
-
-var patPn = patPn0
-
-var patOffset = 0
-
-animatePnD()
+	
+	patPn = patPn0
+	return 1
+}
 
 
-function animatePnD() {
+
+async function animatePnD() {
 	patOffset += 900000
 	patPn0.animate({ y: patOffset }, 50000000, mina.linear, animatePnD)
 	patPna.animate({ y: patOffset }, 50000000, mina.linear, animatePnD)
 	patPnb.animate({ y: patOffset }, 50000000, mina.linear, animatePnD)
+	return 1
 }
 
+const cPnD = async function () {
+	await drwPnD().catch((e)=>{console.log(e)})
+	await animatePnD().catch((e)=>{console.log(e)})
+	return 1
+}
 
 
 
@@ -282,21 +336,24 @@ var mF = [
 //* -------------------------------------------------------------------------- */
 // prettier-ignore
 var mG = []
-for (let g = 0; g <= 32; g++) {
-	let mGtmp = [
-		[[0, 0],[0, 0]], //0 Centro da Gaveta
-		[[0, 0],[0, 0]], //1 Pontos 'Fi' e 'Fe'
-		[[0, 0],[0, 0]], //2 Pontos 'Di' e 'De'
-		[[0, 0],[0, 0]], //3 Pontos 'Ei' e 'Ee'
-		[[0, 0],[0, 0]]] //4 Pontos 'Ti' e 'Te'
-	mG.push(mGtmp)	
+
+const resetmG = function () {
+	for (let g = 0; g <= 32; g++) {
+		let mGtmp = [
+			[[0, 0],[0, 0]], //0 Centro da Gaveta
+			[[0, 0],[0, 0]], //1 Pontos 'Fi' e 'Fe'
+			[[0, 0],[0, 0]], //2 Pontos 'Di' e 'De'
+			[[0, 0],[0, 0]], //3 Pontos 'Ei' e 'Ee'
+			[[0, 0],[0, 0]]] //4 Pontos 'Ti' e 'Te'
+		mG.push(mGtmp)	
+	}
 }
 
 
 //* -------------------------------------------------------------------------- */
 //*                        MATRIZ DE CÓDIGOS DAS GAVETAS                       */
 //* -------------------------------------------------------------------------- */
-var mCOD0 = [
+const mCOD0 = [
 	[120, 'D'],
 	[102, 'D'],
 	[130, 'E'],
@@ -354,7 +411,7 @@ var mCOD0 = [
 //* -------------------------------------------------------------------------- */
 //*                               MATRIZ DE CORTE                              */
 //* -------------------------------------------------------------------------- */
-var mCorte = [
+const mCorte = [
 	[10000, ''],
 	[20000, ''],
 	[30000, ''],
@@ -488,8 +545,10 @@ var arwHEADL = 0.5		//> M% (wFND)
 
 
 var mActBTM = []
-resetFND()		
+		
 async function resetFND() {
+	if (bStatus) { console.log(clgFncName(0)) }
+	
 	mActBTM = [		
 	[[0,0,'','',0,0,''],				//> 00 - Ativo, Selecionado, Origem
 	 [0,0,'','',0,0,'']],			//> ([nLado] [1|2] [Ativo|Selecionado|Tipo|Prod|Origem|IE|Nome])
@@ -504,9 +563,10 @@ async function resetFND() {
 	]	
 	nGav0 = 0
 	nGav = 0
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
-
+//_resetFND()
 
 //_var aPnA    = []
 //_var aRxA    = []
@@ -523,8 +583,10 @@ var aCont = [
 	]	
 
 var aDESV = []
-resetDESV()
+
+//_resetDESV()
 async function resetDESV() {
+	if (bStatus) { console.log(clgFncName(0)) }
 	aDESV = [
 		[0, 1, 0],		//> 	[nLado] [Ativo|Selecionado|Altura]
 		[0, 1, 0],		//>	F
@@ -532,11 +594,13 @@ async function resetDESV() {
 		[0, 1, 0],		//>	E
 		[0, 1, 0],		//>	T
 	]
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 var aDINF = []
 async function resetDINF() {
+	if (bStatus) { console.log(clgFncName(0)) }
 	aDINF = [
 		[[],		
 		 []],
@@ -549,6 +613,7 @@ async function resetDINF() {
 		[[0,0],	//> T1i T1e
 		 [0,0]],	//> T2i T2e
 	]
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -594,6 +659,7 @@ var aFnd = [
 //* ------------------ DEFINIÇÃO GERAL DA MATRIZ DE ESQUEMA ------------------ */
 var mESQ = []
 async function resetMatESQ() {
+	if (bStatus) { console.log(clgFncName(0)) }
 	mESQ = []
 	let mGav = []
 	//_ console.log(mESQ)
@@ -631,13 +697,14 @@ async function resetMatESQ() {
 		]
 	mESQ.push(mGav)
 
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
-resetMatESQ()
+//_resetMatESQ()
 
 //* ------------------------- MATRIZ CÓDIGO USINAGEM ------------------------- */
 var mCOD1 = []
-function resetMatCOD1() {
+async function resetMatCOD1() {
 	mCOD1 = []
 	let mCut = []
 
@@ -650,8 +717,9 @@ function resetMatCOD1() {
 		]
 		mCOD1.push(mCut)
 	}
+	return 1
 }
-resetMatCOD1()
+
 
 
 

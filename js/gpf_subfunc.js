@@ -19,6 +19,9 @@ function parseH(H) {
 	}
 }
 
+
+
+
 //*	LADO: STR TO INT
 function nLadoStr2Int(sLado) {
 	let nL = 0
@@ -125,7 +128,7 @@ function ladoHoverOUT() {
 
 //* -------------------- CALCULAR ALTURA TOTAL DAS GAVETAS ------------------- */
 async function calcHtotal() {
-	console.log('calcHtotal(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
 	//* ÚLTIMA GAVETA
 	mESQ[nGavs][0][0] = 32
 	hTotal = 0
@@ -133,7 +136,7 @@ async function calcHtotal() {
 		hTotal += mESQ[g][0][0]
 		//_if (mESQ[index][0][0]=== NaN)  { $('#z-flow-clog').html(index) } 
 	}
-	console.log('calcHtotal(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -408,7 +411,7 @@ function calcCOD(nGav) {
 //* -------------------------------------------------------------------------- */
 
 async function logMatESQ() {
-	console.log('logMatESQ(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
 	var file = fs.createWriteStream(`./logs/m${Date.now()}.txt`)
 	file.on('error', function (err) { /* error handling */ })
 	file.write( Date(Date.now()) + '\n' + '\n'+'mESQ - Matriz Esquema'+ '\n')
@@ -430,7 +433,7 @@ async function logMatESQ() {
 	
 	
 	file.end()
-	console.log('logMatESQ(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -441,17 +444,17 @@ async function logMatESQ() {
 //* -------------------------------------------------------------------------- */
 
 async function ResetSQMA() {
-	
-	// todo	Verificar pq precisa de 2 cliques
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	nGavs = 28
-	var res_resetFND 		= await resetFND()
-	var res_resetDESV 	= await resetDESV()
-	var res_resetDINF 	= await resetDINF()
-	var res_resetMatESQ 	= await resetMatESQ()
-	var res_recalcUsed   = await recalcUsed()
-	var res_calcHtotal   = await calcHtotal()
-	var res_rebuildGPF   = await rebuildGPF()
-	var res_recolorBTM   = await recolorBTM()
+	await resetFND().catch((e)=>{console.log(e)})
+	await resetDESV().catch((e)=>{console.log(e)})
+	await resetDINF().catch((e)=>{console.log(e)})
+	await resetMatESQ().catch((e)=>{console.log(e)})
+	await recalcUsed().catch((e)=>{console.log(e)})
+	await calcHtotal().catch((e)=>{console.log(e)})
+	await rebuildGPF().catch((e)=>{console.log(e)})
+	await recolorBTM().catch((e)=>{console.log(e)})
 	
 
 	//> Ponto do produto A
@@ -538,6 +541,7 @@ async function ResetSQMA() {
 	$('#z-flow-type span').html('')
 	$('#z-flow-from span').html('')
 	$('#z-flow-to span').html('')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -547,16 +551,18 @@ async function ResetSQMA() {
 //* -------------------------------------------------------------------------- */
 
 async function LoadSQMA() {
-	console.log('LoadSQMA()')
-	const res_LoadSQMAdata = await LoadSQMAdata()
-	const res_calcHtotal   = await calcHtotal  ()
-	const res_recalcProd   = await recalcProd  ()
-	const res_recalcUsed   = await recalcUsed  ()
-	const res_recalcDV     = await recalcDV    ()
-	const res_recalcDINF   = await recalcDINF  ()
-	const res_recolorBTM   = await recolorBTM  ()
-	const res_rebuildGPF   = await rebuildGPF  ()
+	if (bStatus) { console.log(clgFncName(0)) }
+	await LoadSQMAdata().catch((e)=>{console.log(e)})
+	await calcHtotal  ().catch((e)=>{console.log(e)})
+	await recalcProd  ().catch((e)=>{console.log(e)})
+	await recalcUsed  ().catch((e)=>{console.log(e)})
+	await recalcDV    ().catch((e)=>{console.log(e)})
+	await recalcDINF  ().catch((e)=>{console.log(e)})
+	await recolorBTM  ().catch((e)=>{console.log(e)})
+	await rebuildGPF  ().catch((e)=>{console.log(e)})
 	// const res_logMatESQ    = await logMatESQ   ()
+
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -584,7 +590,7 @@ function SaveAsSQMA() {
 //* -------------------------------------------------------------------------- */
 
 async function recalcUsed() {
-	console.log('recalcUsed(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
 	//* Tem usinagem
 	for (let g = 1; g <= nGavs; g++) {
 		mCOD1[g][1] = [0, 0, 0, 0, 0]
@@ -622,6 +628,6 @@ async function recalcUsed() {
 			}
 		}
 	}
-	console.log('recalcUsed(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }

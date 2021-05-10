@@ -21,7 +21,8 @@
 
 
 
-function drwGrps() {
+async function drwGrps() {
+	if (bStatus) { console.log(clgFncName(0)) }
 	for (var i = 1; i <= 32; i++) {
 		var gID = 'G' + pad(i)
 		var gRx = drawSQMA.group() 			//>	Cria Grupo
@@ -35,6 +36,8 @@ function drwGrps() {
 		gPn2.attr({ id: 'Pn2_' + gID }) 		//>	Atribui nome
 	}
 
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
 }
 	
 
@@ -42,8 +45,9 @@ function drwGrps() {
 
 
 //* ---------------------- PROPAGAR INFORMAÇÕES DE FLUXO --------------------- */
-function propagate() {
-	//_ console.log('propagate()')
+async function propagate() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	let dest = 0
 	//* DESCONECTAR PRODUTO
 	
@@ -90,12 +94,15 @@ function propagate() {
 			if (index == dest && mESQ[index][p][0] == 0) {mESQ[index + 1][0][1] = prod}
 		}														
 	}
+	if (bStatus) { console.log(clgFncName(0)) }
+	return 1
 }
 
 
 //* ----------------------- RECOLORIR LINHAS DO ESQUEMA ---------------------- */
 async function reColor() {
-	//_ console.log('reColor()')
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	for (let index = 1; index <= nGavs; index++) { 
 		switch (mESQ[index][0][1]) {
 		case 'A':
@@ -164,7 +171,7 @@ async function reColor() {
 		drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp).attr({ fill: cLinPN }) : false
 		
 	}
-
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -172,7 +179,9 @@ async function reColor() {
 //* -------------------------------------------------------------------------- */
 //*                               CREATE SLIDERS                               */
 //* -------------------------------------------------------------------------- */
-function drwSliders() {
+async function drwSliders() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
 
@@ -228,12 +237,15 @@ function drwSliders() {
 						break
 					}
 				}
-				var res_calcHtotal   = await calcHtotal()
-				var res_rebuildGPF   = await rebuildGPF()
+				var res_calcHtotal   = await calcHtotal().catch((e)=>{console.log(e)})
+				var res_rebuildGPF   = await rebuildGPF().catch((e)=>{console.log(e)})
 			},
 			true
 		)
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
 }
 
 
@@ -249,7 +261,9 @@ function drwSliders() {
 //*                             CÓDIGO DAS GAVETAS                             */
 //* -------------------------------------------------------------------------- */
 
-function drwCOD() {
+async function drwCOD() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	let nGPF = ''
 	//* Div Matriz Esquema
 		nGPF = pad(0)
@@ -319,8 +333,11 @@ function drwCOD() {
 
 
 
-
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
+	
 }
 
 
@@ -330,7 +347,8 @@ function drwCOD() {
 //*                          Função Guias (Edit Mode)                          */
 //* -------------------------------------------------------------------------- */
 
-function drwGuias() {
+async function drwGuias() {
+	if (bStatus) { console.log(clgFncName(0)) }
 	let swid = 0.5 * lwid
 	calcMat(x0, y0, Larg)
 
@@ -384,26 +402,34 @@ function drwGuias() {
 			.appendTo(drawSQMA.select('#' + 'Guia_' + gIDtmp))
 		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 })
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
 }
 
-function showGuias() {
-	//_ console.log('showGuias()')
+async function showGuias() {
+	if (bStatus) { console.log(clgFncName(0)) }
 
 	for (let j = nGavs; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
-		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 })
+		drawSQMA.select('#' + 'Guia_' + gIDtmp) ?
+		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 1 }) : false
 	}
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
 }
 
 async function hideGuias() {
-	//_ console.log('hideGuias()')
+	if (bStatus) { console.log(clgFncName(0)) }
 	for (let j = 32; j >= 0; j--) {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		drawSQMA.select('#' + 'Guia_' + gIDtmp) ?
 		drawSQMA.select('#' + 'Guia_' + gIDtmp).attr({ opacity: 0 }) : false
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -414,6 +440,7 @@ async function hideGuias() {
 //* -------------------------------------------------------------------------- */
 
 var cpPnMove = async function (dx, dy) {
+
 	this.attr({
 		transform:
 			this.data('origTransform') +
@@ -427,12 +454,13 @@ var cpPnMove = async function (dx, dy) {
 	yi = bb.cy
 	let s = this.attr('id')
 	s = s.substr(s.length - 3)
+
 	return 1
 }
 
 
 var cpPnMoveStart = async function () {
-	//_ console.log('cpPnMoveStart()')
+
 	this.data('origTransform', this.transform().local)
 	let s = this.attr('id')
 	//_ console.log('cpPnMoveStart: id=' + s)
@@ -449,7 +477,8 @@ var cpPnMoveStart = async function () {
 
 
 var cpPnMoveStop = async function () {
-	//_ console.log('cpPnMoveStop()')
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	sCPtype = 'Pn'
 	nLin0 = parseInt(this.attr('id').charAt(5),10)+1
 	var bb = this.getBBox()
@@ -489,11 +518,11 @@ var cpPnMoveStop = async function () {
 	}
 
 	//_setUsed(this.attr('id'))
-	const res_recalcProd   = await recalcProd  ()
-	const res_recalcUsed   = await recalcUsed  ()
-	const res_recalcDV     = await recalcDV    ()
-	const res_recalcDINF   = await recalcDINF  ()
-	const res_recolorBTM   = await recolorBTM  ()
+	const res_recalcProd   = await recalcProd  ().catch((e)=>{console.log(e)})
+	const res_recalcUsed   = await recalcUsed  ().catch((e)=>{console.log(e)})
+	const res_recalcDV     = await recalcDV    ().catch((e)=>{console.log(e)})
+	const res_recalcDINF   = await recalcDINF  ().catch((e)=>{console.log(e)})
+	const res_recolorBTM   = await recolorBTM  ().catch((e)=>{console.log(e)})
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Peneirado ' + nPn)
@@ -508,9 +537,11 @@ var cpPnMoveStop = async function () {
 	drwSelLin()
 	propagate()
 	reColor()
-	var res_showCtrlPts  = await showCtrlPts()
-	var res_calcHtotal   = await calcHtotal()
-	var res_rebuildGPF   = await rebuildGPF()
+	var res_showCtrlPts  = await showCtrlPts().catch((e)=>{console.log(e)})
+	var res_calcHtotal   = await calcHtotal().catch((e)=>{console.log(e)})
+	var res_rebuildGPF = await rebuildGPF().catch((e)=>{console.log(e)})
+	
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -556,7 +587,7 @@ var cpRxMoveStart = async function () {
 
 
 var cpRxMoveStop = async function () {
-	//_ console.log('cpRxMoveStop()')
+	if (bStatus) { console.log(clgFncName(0)) }
 	sCPtype = 'Rx'
 	nLin0 = 1
 	var bb = this.getBBox()
@@ -595,11 +626,11 @@ var cpRxMoveStop = async function () {
 		mESQ[nGav0][1][3] = 0
 	}
 	//_setUsed(this.attr('id'))
-	const res_recalcProd   = await recalcProd  ()
-	const res_recalcUsed   = await recalcUsed  ()
-	const res_recalcDV     = await recalcDV    ()
-	const res_recalcDINF   = await recalcDINF  ()
-	const res_recolorBTM   = await recolorBTM  ()
+	const res_recalcProd   = await recalcProd  ().catch((e)=>{console.log(e)})
+	const res_recalcUsed   = await recalcUsed  ().catch((e)=>{console.log(e)})
+	const res_recalcDV     = await recalcDV    ().catch((e)=>{console.log(e)})
+	const res_recalcDINF   = await recalcDINF  ().catch((e)=>{console.log(e)})
+	const res_recolorBTM   = await recolorBTM  ().catch((e)=>{console.log(e)})
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Rechaço')
@@ -615,9 +646,10 @@ var cpRxMoveStop = async function () {
 
 	drwRX() //! ==================================> Deve ficar depois do if, pois muda o valor de nGav
 	drwSelLin()
-	var res_showCtrlPts  = await showCtrlPts()
-	var res_calcHtotal   = await calcHtotal()
-	var res_rebuildGPF   = await rebuildGPF()
+	var res_showCtrlPts  = await showCtrlPts().catch((e)=>{console.log(e)})
+	var res_calcHtotal   = await calcHtotal().catch((e)=>{console.log(e)})
+	var res_rebuildGPF   = await rebuildGPF().catch((e)=>{console.log(e)})
+	if (bStatus) { console.log(clgFncName(0)) }
 	return 1
 }
 
@@ -672,7 +704,7 @@ var cpPrMoveStart = async function () {
 
 
 var cpPrMoveStop = async function () {
-	//_ console.log('cpPrMoveStop()')
+	if (bStatus) { console.log(clgFncName(0)) }
 	sCPtype = 'Pr'
 	var bb = this.getBBox()
 	xf = bb.cx
@@ -706,11 +738,11 @@ var cpPrMoveStop = async function () {
 	mESQ[nGav0][nAB][2] = 1			//> nIE [Sempre externo]
 
 	//_setUsed(this.attr('id'))
-	const res_recalcProd   = await recalcProd  ()
-	const res_recalcUsed   = await recalcUsed  ()
-	const res_recalcDV     = await recalcDV    ()
-	const res_recalcDINF   = await recalcDINF  ()
-	const res_recolorBTM   = await recolorBTM  ()
+	const res_recalcProd   = await recalcProd  ().catch((e)=>{console.log(e)})
+	const res_recalcUsed   = await recalcUsed  ().catch((e)=>{console.log(e)})
+	const res_recalcDV     = await recalcDV    ().catch((e)=>{console.log(e)})
+	const res_recalcDINF   = await recalcDINF  ().catch((e)=>{console.log(e)})
+	const res_recolorBTM   = await recolorBTM  ().catch((e)=>{console.log(e)})
 
 	$('#z-flow-prod span').html(mESQ[nGav][0][1])
 	$('#z-flow-type span').html('Produto')
@@ -736,16 +768,19 @@ var cpPrMoveStop = async function () {
 		}
 	drwSelLin()
 
-	var res_showCtrlPts  = await showCtrlPts()
-	var res_calcHtotal   = await calcHtotal()
-	var res_rebuildGPF   = await rebuildGPF()
+	var res_showCtrlPts  = await showCtrlPts().catch((e)=>{console.log(e)})
+	var res_calcHtotal   = await calcHtotal().catch((e)=>{console.log(e)})
+	var res_rebuildGPF   = await rebuildGPF().catch((e)=>{console.log(e)})
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 //* -------------------------------------------------------------------------- */
 //*                   DESENHAR PONTOS DE CONTROLE (Edit Mode)                  */
 //* -------------------------------------------------------------------------- */
-function drwCtrlPts() {
+async function drwCtrlPts() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	//* Grupo 0
 	var gCP = drawSQMA.group()
 	gCP.attr({ id: 'CP_G00'})
@@ -827,10 +862,14 @@ function drwCtrlPts() {
 			.appendTo(drawSQMA.select('#' + 'CP_' + gIDtmp))
 			.drag(cpPnMove, cpPnMoveStart, cpPnMoveStop)
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
 }
 
 async function showCtrlPts() {
-	//_ console.log('showCtrlPts() ; iGav='+pad(iGav))
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	//*	G00
 		drawSQMA.select('#CP_G00') ? 
 		drawSQMA.select('#CP_G00').appendTo(drawSQMA) : false
@@ -903,26 +942,32 @@ async function showCtrlPts() {
 		iGav = j
 		var gIDtmp = 'G' + pad(iGav)
 		//* Pontos de Peneirado
+		drawSQMA.select('#' + 'CP_Pn1_' + gIDtmp) ?
 		drawSQMA
 			.select('#' + 'CP_Pn1_' + gIDtmp)
 			.attr({ visibility: 'visible' })
-			.appendTo(drawSQMA)
+			.appendTo(drawSQMA) : false
+		drawSQMA.select('#' + 'CP_Pn2_' + gIDtmp) ?
 		drawSQMA
 			.select('#' + 'CP_Pn2_' + gIDtmp)
 			.attr({ visibility: 'visible' })
-			.appendTo(drawSQMA)
+			.appendTo(drawSQMA) : false
 		//*	Ponto de Rechaço
+		drawSQMA.select('#' + 'CP_Rx_' + gIDtmp) ?
 		drawSQMA
 			.select('#' + 'CP_Rx_' + gIDtmp)
 			.attr({ visibility: 'visible' })
-			.appendTo(drawSQMA)
-		}
+			.appendTo(drawSQMA) : false
+	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 
 async function hideCtrlPts() {
-	//_ console.log('hideCtrlPts() ; iGav='+pad(iGav))
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	//* 	Lin Selec
 		drawSQMA.select('#SelLin') ? 
 		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' }) : false
@@ -948,7 +993,9 @@ async function hideCtrlPts() {
 						.attr({ visibility: 'hidden' })
 						.appendTo(drawSQMA) : false
 				}
-		}
+	}
+	
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -958,108 +1005,113 @@ async function hideCtrlPts() {
 //* -------------------------------------------------------------------------- */
 
 function drwGPF(xC, yC, L, H) {
-	//_ console.log('drwGPF() ; iGav='+pad(iGav))
-	//Borda
-	var brdGav = drawSQMA
-		.rect(xC - 1.25 * Larg, yC - yOff / 2, 2.5 * Larg, yOff, 5)
-		.attr({
-			fill: 'none',
-			'fill-opacity': 0,
-			stroke: 'lightgray',
-			'stroke-width': 0,
-		})
-	brdGav.attr({ id: 'brd' + gID })
-	brdGav.appendTo(drawSQMA.select('#' + gID))
-	//_ brdGav.hover(brdHoverIN, brdHoverOUT)
-
-	//* Contorno principal
-	var x1 = mP[0][1][0]
-	var y1 = mP[0][1][1] //1
-	var x2 = mP[0][2][0]
-	var y2 = mP[0][2][1] //2
-	var x3 = mP[0][3][0]
-	var y3 = mP[0][3][1] //3
-	var x4 = x3
-	var y4 = y3 + H //4
-	var x5 = mP[0][4][0]
-	var y5 = mP[0][4][1] + H //5
-	var x6 = x1
-	var y6 = y1 + H //6
-	var polygon = drawSQMA
-		.polygon(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6)
-		.attr({
+	try {
+		
+		//Borda
+		var brdGav = drawSQMA
+			.rect(xC - 1.25 * Larg, yC - yOff / 2, 2.5 * Larg, yOff, 5)
+			.attr({
+				fill: 'none',
+				'fill-opacity': 0,
+				stroke: 'lightgray',
+				'stroke-width': 0,
+			})
+		brdGav.attr({ id: 'brd' + gID })
+		brdGav.appendTo(drawSQMA.select('#' + gID))
+		//_ brdGav.hover(brdHoverIN, brdHoverOUT)
+	
+		//* Contorno principal
+		var x1 = mP[0][1][0]
+		var y1 = mP[0][1][1] //1
+		var x2 = mP[0][2][0]
+		var y2 = mP[0][2][1] //2
+		var x3 = mP[0][3][0]
+		var y3 = mP[0][3][1] //3
+		var x4 = x3
+		var y4 = y3 + H //4
+		var x5 = mP[0][4][0]
+		var y5 = mP[0][4][1] + H //5
+		var x6 = x1
+		var y6 = y1 + H //6
+		var polygon = drawSQMA
+			.polygon(x1, y1, x2, y2, x3, y3, x4, y4, x5, y5, x6, y6)
+			.attr({
+				fill: 'white',
+				stroke: 'black',
+				'stroke-width': lwid,
+				'stroke-linecap': 'round',
+				'stroke-linejoin': 'round',
+			})
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	
+		//* Linhas internas
+		xi = mP[0][4][0]
+		yi = mP[0][4][1] //i
+		var polygon = drawSQMA.polygon(x6, y6, x1, y1, xi, yi, x5, y5).attr({
 			fill: 'white',
 			stroke: 'black',
 			'stroke-width': lwid,
 			'stroke-linecap': 'round',
 			'stroke-linejoin': 'round',
 		})
-	polygon.appendTo(drawSQMA.select('#' + gID))
-
-	//* Linhas internas
-	xi = mP[0][4][0]
-	yi = mP[0][4][1] //i
-	var polygon = drawSQMA.polygon(x6, y6, x1, y1, xi, yi, x5, y5).attr({
-		fill: 'white',
-		stroke: 'black',
-		'stroke-width': lwid,
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	})
-	polygon.appendTo(drawSQMA.select('#' + gID))
-
-	var polygon = drawSQMA.polygon(xi, yi, x3, y3, x4, y4, x5, y5).attr({
-		fill: 'white',
-		stroke: 'black',
-		'stroke-width': lwid,
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	})
-	polygon.appendTo(drawSQMA.select('#' + gID))
-
-	//Canto 1
-	var polygon = drawSQMA.polygon(mP[1].slice(1, 5)).attr({
-		fill: 'black',
-		stroke: 'black',
-		'stroke-width': lwid,
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	})
-	polygon.appendTo(drawSQMA.select('#' + gID))
-
-	//Canto 2
-	var polygon = drawSQMA.polygon(mP[2].slice(1, 5)).attr({
-		fill: 'black',
-		stroke: 'black',
-		'stroke-width': lwid,
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	})
-	polygon.appendTo(drawSQMA.select('#' + gID))
-
-	//Canto 3
-	var polygon = drawSQMA.polygon(mP[3].slice(1, 5)).attr({
-		fill: 'black',
-		stroke: 'black',
-		'stroke-width': lwid,
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	})
-	polygon.appendTo(drawSQMA.select('#' + gID))
-
-	//Canto 4
-	var polygon = drawSQMA.polygon(mP[4].slice(1, 5)).attr({
-		fill: 'black',
-		stroke: 'black',
-		'stroke-width': lwid,
-		'stroke-linecap': 'round',
-		'stroke-linejoin': 'round',
-	})
-	polygon.appendTo(drawSQMA.select('#' + gID))
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	
+		var polygon = drawSQMA.polygon(xi, yi, x3, y3, x4, y4, x5, y5).attr({
+			fill: 'white',
+			stroke: 'black',
+			'stroke-width': lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	
+		//Canto 1
+		var polygon = drawSQMA.polygon(mP[1].slice(1, 5)).attr({
+			fill: 'black',
+			stroke: 'black',
+			'stroke-width': lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	
+		//Canto 2
+		var polygon = drawSQMA.polygon(mP[2].slice(1, 5)).attr({
+			fill: 'black',
+			stroke: 'black',
+			'stroke-width': lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	
+		//Canto 3
+		var polygon = drawSQMA.polygon(mP[3].slice(1, 5)).attr({
+			fill: 'black',
+			stroke: 'black',
+			'stroke-width': lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	
+		//Canto 4
+		var polygon = drawSQMA.polygon(mP[4].slice(1, 5)).attr({
+			fill: 'black',
+			stroke: 'black',
+			'stroke-width': lwid,
+			'stroke-linecap': 'round',
+			'stroke-linejoin': 'round',
+		})
+		polygon.appendTo(drawSQMA.select('#' + gID))
+	} catch (err) {
+		console.log(err)
+	}
 }
 
 async function hideGPF() {
-	//_ console.log('hideGPF() ; iGav='+pad(iGav))
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	//* Ocultar Lin Selec
 		drawSQMA.select('#SelLin') ?
 		drawSQMA.select('#SelLin').attr({ visibility: 'hidden' }) : false
@@ -1093,11 +1145,14 @@ async function hideGPF() {
 	//* Ocultar Be
 		drawSQMA.select('#Be') ?
 		drawSQMA.select('#Be').attr({ visibility: 'hidden' }) : false
+	
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 async function showGPF() {
-	//_ console.log('showGPF() ; iGav='+pad(iGav))
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	//* Ocultar Lin Selec
 		drawSQMA.select('#SelLin') ?
 		drawSQMA.select('#SelLin').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
@@ -1121,6 +1176,7 @@ async function showGPF() {
 		//* Exibir Pn2
 			drawSQMA.select('#Pn2_' + gIDtmp) ?
 			drawSQMA.select('#Pn2_' + gIDtmp).attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
+	
 	}
 
 	//* Exibir Ai
@@ -1132,18 +1188,20 @@ async function showGPF() {
 	//* Exibir Be
 		drawSQMA.select('#Be') ?
 		drawSQMA.select('#Be').attr({ visibility: 'visible' }).appendTo(drawSQMA) : false
+	
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 // Função desenhar chaminé
-function drwCham() {
+async function drwCham() {
 	//_ console.log('drwCham() ; iGav='+pad(iGav))
-	var gID = 'G' + pad(nGav0) //ID da Gaveta
-		drawSQMA.select('#Cham_' + gID) ? 
-		drawSQMA.select('#Cham_' + gID).remove() : false //Apaga grupo existente
-	calcMat(x0, y0 + nGav0 * yOff, Larg) //Calcula os pontos de desenho
-	var gCham = drawSQMA.group() //Cria Grupo Chaminé
-	gCham.attr({ id: 'Cham_' + gID }) //Atribui nome
+	var gID = 'G' + pad(nGav0) 									//> ID da Gaveta
+	drawSQMA.select('#Cham_' + gID) ? 
+		drawSQMA.select('#Cham_' + gID).remove() : false 	//> Apaga grupo existente
+	calcMat(x0, y0 + nGav0 * yOff, Larg) 						//> Calcula os pontos de desenho
+	var gCham = drawSQMA.group() 									//> Cria Grupo Chaminé
+	gCham.attr({ id: 'Cham_' + gID }) 							//> Atribui nome
 
 	var polygon = drawSQMA
 		.polygon(mC[nLado].slice(1, 5))
@@ -1159,6 +1217,7 @@ function drwCham() {
 		// polygon.attr({ fill: 'darkred' })
 		polygon.attr({ fill: cCham })
 	}
+	return 1
 }
 
 //* -------------------------------------------------------------------------- */
@@ -1168,9 +1227,9 @@ function drwCham() {
 function drwRX() {
 	//_ console.log('drwRX() ; iGav='+pad(nGav0))
 	var gID = 'G' + pad(nGav0) //ID da Gaveta
-		drawSQMA.select('#Rx_' + gID) ?
+	drawSQMA.select('#Rx_' + gID) ?
 		drawSQMA.select('#Rx_' + gID).remove() : false //Apaga grupo existente
-		drawSQMA.select('#maskRx_' + gID) ? 
+	drawSQMA.select('#maskRx_' + gID) ? 
 		drawSQMA.select('#maskRx_' + gID).remove() : false //Apaga grupo existente
 
 	var gRx = drawSQMA.group() //Cria Grupo
@@ -1422,14 +1481,14 @@ function drwRX() {
 		drwSeta(vLin[4], vLin[5], 1.2 * Alt, 2.5 * Alt, cLinRX, '#Rx_' + gID, 'arwRx_' + gID)		
 	}
 
-
+	// return 1
 }
 
 
 //* -------------------------------------------------------------------------- */
 //*                         DESENHAR LINHA DE PENEIRADO                        */
 //* -------------------------------------------------------------------------- */
-async function drwPN() {
+function drwPN() {
 	//_ console.log('drwPN() ; iGav='+pad(nGav0))
 	cLinBG = bgcolor
 	var gID = 'G' + pad(nGav0) 					//>	ID da Gaveta
@@ -1676,14 +1735,14 @@ async function drwPN() {
 	if (nIE == 1 && nGav0 != nGav) {
 		drwSeta(vLinPr[2], vLinPr[3], 1.2 * Alt, 2.5 * Alt, cLinPN, '#Pn' + nPn + '_' + gID, 'arwPn'+nPn+'_' + gID)
 	}
-	return 1
+	// return 1
 }
 
 
 //* -------------------------------------------------------------------------- */
 //*                         DESENHAR LINHAS DE PRODUTO                         */
 //* -------------------------------------------------------------------------- */
-async function drwAi() {
+function drwAi() {
 	//*	DEFINE G00 - GAVETA 0: ENTRADAS DE PRODUTO NO CANAL (Ai, Ae, Be)
 
 	var gAi = drawSQMA.group() //Cria Grupo
@@ -1723,10 +1782,10 @@ async function drwAi() {
 		},
 		Anim2
 	)
-		return 1
+		// return 1
 }
 
-async function drwAe() {
+function drwAe() {
 	//_ console.log('drwAe()')
 	drawSQMA.select('#Ae') ? 
 	drawSQMA.select('#Ae').remove() : false //Apaga grupo existente
@@ -1837,10 +1896,10 @@ async function drwAe() {
 	)
 
 
-		return 1
+		// return 1
 }
 
-async function drwBe() {
+function drwBe() {
 	//_ console.log('drwBe()')
 	drawSQMA.select('#Be')? 
 	drawSQMA.select('#Be').remove() : false //Apaga grupo existente
@@ -1968,7 +2027,7 @@ async function drwBe() {
 	)
 
 
-		return 1
+		// return 1
 }
 
 
@@ -2125,7 +2184,7 @@ function drwSelLin() {
 //* -------------------------------------------------------------------------- */
 //*                          DESENHAR ÁREAS DE POSIÇÃO                         */
 //* -------------------------------------------------------------------------- */
-function drwAreas() {
+async function drwAreas() {
 	var r = 8
 	let dOp = 0
 	var circle = drawSQMA
@@ -2169,8 +2228,8 @@ function drwAreas() {
 		.attr({ fill: 'gray', stroke: 'none', 'stroke-width': 0, opacity: dOp }) //Verificar
 		.hover(TeHoverIN, ladoHoverOUT)
 		.appendTo(drawSQMA.select('#' + gID))
+	return 1		
 }
-
 
 function gHoverIN() {
 	gIDhover = this.attr('id')
@@ -2183,21 +2242,24 @@ function gHoverOUT() {
 }
 
 async function clkSelGav(gID) {
-	// gID = this.attr('id')
-	// Se estiver em EditMode, sai:
+	console.log(`clkSelGav(${gID}): start`)
+	//_ gID = this.attr('id')
+	//> Se estiver em EditMode, sai:
 	if (bEditMode) {
-		hideGuias()
-		hideCtrlPts()
+		await hideGuias().catch((e)=>{console.log(e)})
+		await hideCtrlPts().catch((e)=>{console.log(e)})
 		iGavSel = null
 		bEditMode = false
-		// Se não:
+		//> Se não:
 	} else {
-		showGuias()
-		showCtrlPts()
-		// iGavSel = this.attr('id')
+		await showGuias().catch((e)=>{console.log(e)})
+		await showCtrlPts().catch((e)=>{console.log(e)})
+		//_ iGavSel = this.attr('id')
 		iGavSel = gID
 		bEditMode = true
 	}
+	
+	console.log(`clkSelGav(${gID}): end`)
 	return 1
 }
 
@@ -2205,6 +2267,8 @@ async function clkSelGav(gID) {
 
 //Ocultar slidersDiv
 async function hideSlider() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	for (let index = 1; index <= 32; index++) {
 		let nGPF = pad(index)
 		let sName = 'sliderGPF' + nGPF
@@ -2219,10 +2283,14 @@ async function hideSlider() {
 		let rng = document.getElementById(sName)
 		rng.style.display = 'none'
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 //Mostrar slidersDiv
 async function showSlider() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	for (let index = 1; index <= nGavs; index++) {
 		let nGPF = pad(index)
 		let sName = 'sliderGPF' + nGPF
@@ -2254,6 +2322,8 @@ async function showSlider() {
 			target.innerHTML = 32
 		}
 	}
+
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -2276,27 +2346,59 @@ function drwSeta(x, y, w, h, clr, grp, id) {
 		.appendTo(drawSQMA.select(grp))
 }
 
+async function drwAllAreas() {
+	if (bStatus) { console.log(clgFncName(0)) }
+
+	// for (var i = nGavs; i >= 1; i--) {
+	for (var i = 32; i >= 1; i--) {
+		iGav = i
+		var gID = 'G' + pad(iGav)
+		
+		//* --------- POINTS ---------- */
+		calcMat(x0, y0 + yOff * i, Larg, i)
+		
+		//* --------- BLANK ---------- */
+		var gGav = drawSQMA.group()
+		gGav.attr({ id: gID })
+		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
+		//* --------- POSITION ---------- */
+		// await drwAreas().catch((e)=>{console.log(e)})
+		drawSQMA.select('#' + gID).hover(gHoverIN, gHoverOUT)
+		// drawSQMA.select('#' + gID).click(() => { clkSelGav(gID) })
+		drawSQMA.select('#' + gID).click(function(e) { clkSelGav(gID) })
+		drwAreas()
+		drawSQMA.select('#' + gID) ? true : console.log('Error select #' + gID)
+	}
+	
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
+}
+
 
 //* -------------------------------------------------------------------------- */
 //*                                 RECONSTRUIR                                */
 //* -------------------------------------------------------------------------- */
 async function rebuildGPF() {
-	console.log('rebuildGPF(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
 	//*	Oculta tudo
-	var res_hideGPF = await hideGPF()
-	var res_hideGuias = await hideGuias()
-	var res_hideCtrlPts = await hideCtrlPts()
-	var res_hideSlider = await hideSlider()
+	//_ var res_hideGPF = await hideGPF()
+	//_ var res_hideGuias = await hideGuias()
+	//_ var res_hideCtrlPts = await hideCtrlPts()
+	//_ var res_hideSlider = await hideSlider()
+	await hideGPF().catch((e)=>{console.log(e)})
+	await hideGuias().catch((e)=>{console.log(e)})
+	await hideCtrlPts().catch((e)=>{console.log(e)})
+	await hideSlider().catch((e)=>{console.log(e)})
+		//*	Exibe o que precisa
 	
-	//*	Exibe o que precisa
-	var res_showSlider = showSlider()
-	var res_showGPF = showGPF()
-	var res_showGuias = showGuias()
-	var res_showCtrlPts = showCtrlPts()
+	await showSlider().catch((e)=>{console.log(e)})
+	await showGPF().catch((e)=>{console.log(e)})
+	await showGuias().catch((e)=>{console.log(e)})
+	await showCtrlPts().catch((e)=>{console.log(e)})
 	//!	Colocado nessa ordem, para resolver o prob da linha de Pn acima da gaveta
 	if (bEditMode == false) {		
-		var res_hideGuias = await hideGuias()
-		var res_hideCtrlPts = await hideCtrlPts()
+		await hideGuias().catch((e)=>{console.log(e)})
+		await hideCtrlPts().catch((e)=>{console.log(e)})
 	}
 
 
@@ -2344,67 +2446,77 @@ async function rebuildGPF() {
 	$(`#valH${pad(nGavs)}`).html('32')
 	$('#hTotal').html('&nbsp' + hTotal + 'mm');
 	$('#divESQ').css({ 'height': 220 + yOff * nGavs + "px" })
-	console.log('rebuildGPF(): end')
+	
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 
+async function thisThrows() {
+	throw new Error("Thrown from thisThrows()")
+
+}
 
 
 
 //* -------------------------------------------------------------------------- */
 //*                                    INIT                                    */
 //* -------------------------------------------------------------------------- */
+async function initGPF() {
+	if (bStatus) { console.log(clgFncName(0)) }
 
-	isDev ? $('#divMAT').show() : $('#divMAT').hide()
-	isDev ? $('#divCUT').show() : $('#divCUT').hide()
+		isDev ? $('#divMAT').show() : $('#divMAT').hide()
+		isDev ? $('#divCUT').show() : $('#divCUT').hide()
 
-//*	ITERAÇÕES
+	// try { await thisThrows() } catch (e) { console.error(e) }
+
+	// let [user, userErr] = await handle(thisThrows())
+  	// if(userErr) throw new Error('Could not fetch user details')
+
+	// drawSQMA = Snap('#svgESQ')
+	// drawFND = Snap('#svgFND')
+	await setDrawSQMA()
+	await setDrawFND()
 
 
-	for (var i = nGavs; i >= 1; i--) {
-		iGav = i
-		var gID = 'G' + pad(iGav)
-		
-		//* --------- POINTS ---------- */
-		calcMat(x0, y0 + yOff * i, Larg, i)
-		
-		//* --------- BLANK ---------- */
-		var gGav = drawSQMA.group()
-		gGav.attr({ id: gID })
-		drwGPF(x0, y0 + yOff * i, Larg, Alt, i)
-		drawSQMA.select('#' + gID).hover(gHoverIN, gHoverOUT)
-		drawSQMA.select('#' + gID).click(() => { clkSelGav(gID) })
-		
-		//* --------- POSITION ---------- */
-		drwAreas()
-
-	}
-	// drwGrps()
-	drwGuias()
-	drwCtrlPts()
 	
+	//_await thisThrows  ().catch((e) => { console.log(e) })
+	await resetFND    ().catch((e) => { console.log(e) })
+	await resetMatCOD1().catch((e) => { console.log(e) })
 	
-	drwSliders()
-	drwCOD()
+	await resetDESV  ().catch((e)=>{ console.log(e) })
+	await resetDINF  ().catch((e)=>{ console.log(e) })
+	await resetMatESQ().catch((e)=>{ console.log(e) })
+		
+	await drwBTM      ().catch((e)=>{ console.log(e) })
+	await drwAllAreas ().catch((e)=>{ console.log(e) })
+	await drwGuias    ().catch((e)=>{ console.log(e) })
+	await drwCtrlPts  ().catch((e)=>{ console.log(e) })
+	await drwSliders  ().catch((e)=>{ console.log(e) })
+	await drwCOD      ().catch((e)=>{ console.log(e) })
+
 	nGavs = 28
-	calcHtotal()
-	rebuildGPF()
-
-
+	await calcHtotal().catch((e)=>{console.log(e)})
 	drwAi()
-	propagate()
-	reColor()
-
+	await propagate ().catch((e)=>{console.log(e)})
+	await reColor   ().catch((e)=>{console.log(e)})
+	await rebuildGPF().catch((e)=>{console.log(e)})
+	
+	
 	var slidernGavs = document.getElementById('nGav-slider')
 	slidernGavs.addEventListener('input', async function () {
 		nGavs = slidernGavs.value
 		let vnGav = document.getElementById('nGavs')
 		vnGav.innerHTML = pad(nGavs)
-		var res_calcHtotal   = await calcHtotal()
-		var res_rebuildGPF   = await rebuildGPF()
+		await calcHtotal().catch((e)=>{console.log(e)})
+		await rebuildGPF().catch((e)=>{console.log(e)})
 		return 1
 	})
+
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
+}
+initGPF().catch((e)=>{console.log(e)})
 	
 	
 

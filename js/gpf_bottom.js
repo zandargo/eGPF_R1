@@ -1,7 +1,7 @@
 
 
 //* ------------------------ CALCULAR PONTOS DO FUNDO ------------------------ */
-function calcmFND() {
+async function calcmFND() {
 	//*	GERAL
 	mFND[0][0][0] = xcFND - wFND/2
 	mFND[0][0][1] = ycFND + wFND/2
@@ -204,12 +204,15 @@ function calcmFND() {
 	mFND[21][3][0] = xcFND - offCH/2
 	mFND[21][3][1] = ycFND - wFND/2 - 2*offCH
 	
+	console.log(mFND)
+	return 1
 }
 
 
 //* ----------------------------- DESENHAR FUNDO ----------------------------- */
 
-function drwBTM() {
+async function drwBTM() {
+	if (bStatus) { console.log(clgFncName(0)) }
 	//* 	TESTE
 	// var circle = drawFND
 	// 	.circle(xcFND, ycFND, 4)
@@ -250,7 +253,9 @@ function drwBTM() {
 
 
 	//*	INÍCIO
+	// await calcmFND().catch((e) => { console.log(e) })
 	calcmFND()
+	
 	let mSai = ['PORTA','F1','F2','D1','D2','E1','E2','T1','T2']
 	let mDut = ['','Fi','Fe','Di','De','Ei','Ee','Ti','Te']
 	let aDomBL = ['','hanging','hanging','middle','middle','middle','middle','text-top','text-top']
@@ -456,16 +461,16 @@ function drwBTM() {
 		}
 	}
 
-
-
+	if (bStatus) { console.log(clgFncName(1)) }
+	return 1
 }
-drwBTM()
+//_drwBTM()
 
 
 //* ---------------------------- RECOLORIR SAÍDAS ---------------------------- */
 //_recolorBTM()
 async function recolorBTM() {
-	console.log('recolorBTM(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
 	//_var res_recalcProd = await recalcProd()
 	let tmpColor = null
 	
@@ -581,7 +586,7 @@ async function recolorBTM() {
 			}
 		}
 	}
-	console.log('recolorBTM(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -591,6 +596,7 @@ async function recolorBTM() {
 //> Ao clicar, SE ativo E bEditMode ENTÃO: Se ñ-selecionado, assume A|B, matSelecionado=1
 //>													 Else, assume cor neutra, matSelecionado=0
 async function clickBTM(sSaida) {
+	if (bStatus) { console.log(clgFncName(0)) }
 	let tmpLado = nLadoStr2Int(sSaida.charAt(0))
 	let tmp12 = parseInt(sSaida.charAt(1), 10) - 1
 	let sAB = mESQ[nGav0][0][1] + ''
@@ -630,9 +636,10 @@ async function clickBTM(sSaida) {
 	}
 
 
-	var res_calcHtotal   = await calcHtotal()
-	var res_recalcProd   = await recalcProd()
-	var res_recolorBTM   = await recolorBTM()
+	var res_calcHtotal   = await calcHtotal().catch((e)=>{console.log(e)})
+	var res_recalcProd   = await recalcProd().catch((e)=>{console.log(e)})
+	var res_recolorBTM = await recolorBTM().catch((e)=>{console.log(e)})
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -640,6 +647,7 @@ async function clickBTM(sSaida) {
 
 //* ------------------------ CLICAR NO DESVIO VERTICAL ----------------------- */
 async function clickDV(tmpLado) {
+	if (bStatus) { console.log(clgFncName(0)) }
 	//_ console.log(`clickDV(${tmpLado}): aDESV[${tmpLado}][1]==${aDESV[tmpLado][1]}`)
 	if (bEditMode) {
 		if (aDESV[tmpLado][1] == 0) {		//> Se não usado
@@ -647,15 +655,17 @@ async function clickDV(tmpLado) {
 		} else {									//> Se usado
 			aDESV[tmpLado][1] = 0			//> Def não usado
 		}
-		var res_recolorBTM = await recolorBTM()
+		var res_recolorBTM = await recolorBTM().catch((e)=>{console.log(e)})
 	}
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 
 //* ---------------- RECALCULAR NOMES DOS PRODUTOS NAS SAÍDAS ---------------- */
 async function recalcProd() {
-	console.log('recalcProd(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	mESQ[0][2][1] > 0 ? b2prod = true : b2prod = false								//> B foi usado?
 	
 	//*	Limpar nomes
@@ -675,10 +685,10 @@ async function recalcProd() {
 			//> Origens !=, E ambos externos
 			if (mActBTM[tmpLado][0][4] != mActBTM[tmpLado][1][4] &&
 				mActBTM[tmpLado][0][5] == 1 & mActBTM[tmpLado][1][5] == 1) {
-					aDESV[tmpLado][0] = 1
-			} else { aDESV[tmpLado][0] = 0 }
+				aDESV[tmpLado][0] = 1
+			} else { } //aDESV[tmpLado][0] = 0 }
 		}
-		else { aDESV[tmpLado][0] = 0 }
+		else { } //aDESV[tmpLado][0] = 0 }
 	}
 
 
@@ -760,7 +770,7 @@ async function recalcProd() {
 	// var res_recalcDV     = await recalcDV()
 	// var res_recalcDINF   = await recalcDINF()
 	// var res_calcHtotal = await calcHtotal()
-	console.log('recalcProd(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
@@ -769,7 +779,8 @@ async function recalcProd() {
 
 //* ---------------------- RECALCULAR DESVIOS INFERIORES --------------------- */
 async function recalcDINF() {
-	console.log('recalcDINF(): start')
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	resetDINF()
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {		//> De F1 até T2
 		if (aDESV[tmpLado][0] == 0) {								//> Se não tem DV
@@ -785,40 +796,44 @@ async function recalcDINF() {
 			}
 		}
 	}
-	console.log('recalcDINF(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
 
 
 //* ---------- RECALCULAR ALTURAS DOS DV E MODIFICAR CÓD DAS GAVETAS --------- */
 async function recalcDV() {
-	console.log('recalcDV(): start')
-	let hAdic = 0
+	if (bStatus) { console.log(clgFncName(0)) }
+
 	for (let tmpLado = 1; tmpLado <= 4; tmpLado++) {					//> Para cada lado
-		switch (tmpLado) {		//> Calcular hAdic do desvio
-			case 1:
-				hAdic = 54
-				break;
-			default:
-				hAdic = 80
-				break;
-		}
+		console.log(`   tmpLado = ${tmpLado}`)
 		if (aDESV[tmpLado][0] == 1 && aDESV[tmpLado][1] == 1) {		//> Se DV ativo e selec
 			let tmpGav =0
-			if (mActBTM[tmpLado][0][4]>mActBTM[tmpLado][1][4]) {		//> Gaveta mais baixa
-				tmpGav = mActBTM[tmpLado][1][4]
-			} else {
-				tmpGav = mActBTM[tmpLado][0][4]
+			let hDV = 0
+			switch (tmpLado) {		//> Calcular h inicial do desvio
+				case 1:
+					hDV = 54
+					break;
+				default:
+					hDV = 80
+					break;
 			}
-			for (let i = 0; i <= 1; i++) {
-				if (mActBTM[tmpLado][1][4]==tmpGav) {
-					
+				if (mActBTM[tmpLado][0][4]>mActBTM[tmpLado][1][4]) {		//> Gaveta mais baixa
+					tmpGav = mActBTM[tmpLado][0][4]
+				} else if (mActBTM[tmpLado][0][4]<mActBTM[tmpLado][1][4]) {
+					tmpGav = mActBTM[tmpLado][1][4]
 				}
-			}
-
-
+				// for (let i = 0; i <= 1; i++) {
+					// if (mActBTM[tmpLado][1][4]==tmpGav) {						//> 
+						for (let g = tmpGav; g <= nGavs; g++) {
+							hDV += mESQ[g][0][0]
+							console.log(`      G${pad(g)}: hDV = ${hDV}`)
+						}
+					// }
+				// }
+				aDESV[tmpLado][2] = hDV
 		}
 	}
-	console.log('recalcDV(): end')
+	if (bStatus) { console.log(clgFncName(1)) }
 	return 1
 }
